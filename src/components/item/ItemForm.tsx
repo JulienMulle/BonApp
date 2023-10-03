@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {createItem} from '../../api/endpointItem';
 import {ItemAddFormProps} from '../../interface/interfaces';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const ItemForm: FC<ItemAddFormProps> = ({isItemFormVisibile, onClose}) => {
   const [name, setName] = useState<string>('');

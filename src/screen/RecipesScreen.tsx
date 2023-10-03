@@ -1,8 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
-  FlatList,
-  RefreshControl,
   Animated,
   Dimensions,
   Platform,
@@ -11,10 +9,10 @@ import {
   Image,
   StyleSheet,
   Text,
+  RefreshControl,
 } from 'react-native';
-// @ts-ignore
+
 import Picture from '../assets/noImage.jpg';
-import RecipeCard from '../components/recipe/RecipeCard';
 import {Recipe} from '../interface/RecipeInterface';
 import {getRecipes} from '../api/endpointRecipe';
 const {width} = Dimensions.get('window');
@@ -100,6 +98,7 @@ const RecipesScreen: FC = () => {
           );
         }}
       />
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     </SafeAreaView>
   );
 };
