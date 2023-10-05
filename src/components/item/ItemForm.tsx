@@ -32,7 +32,7 @@ const ItemForm: FC<ItemAddFormProps> = ({isItemFormVisibile, onClose}) => {
           placeholder={'nouvel article'}
         />
         <TouchableOpacity onPress={onClose}>
-          <Icon size={30} name="remove" />
+          <Icon size={30} name="times-circle" />
         </TouchableOpacity>
         <Button title="Ajouter" onPress={() => NewItem(name)} />
       </View>

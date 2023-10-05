@@ -10,9 +10,9 @@ import {
 import ItemTile from '../components/item/ItemTile';
 import {Item} from '../interface/interfaces';
 import {deleteItem, getItems} from '../api/endpointItem';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import ItemForm from '../components/item/ItemForm';
 import EditedItemModal from '../components/item/EditedItemModal';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const ItemsList: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);

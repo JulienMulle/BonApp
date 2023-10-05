@@ -42,7 +42,7 @@ const EditedItemModal: FC<EditedItemModalProps> = ({
       {isEdit && (
         <View style={styles.modalView}>
           <TouchableOpacity onPress={() => setIsEdit(!isEdit)}>
-            <Icon name="trash" size={30} />
+            <Icon name="times-circle" size={30} />
           </TouchableOpacity>
           <TextInput
             value={editedName}

@@ -2,9 +2,9 @@ import {Category, Item} from './interfaces';
 
 export interface Recipe {
   id?: number;
-  name: string;
-  description: string;
-  image?: string;
+  title?: string;
+  description?: string;
+  picture?: string;
   items?: Item[];
   category?: Category[];
 }

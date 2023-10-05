@@ -8,22 +8,21 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  Text,
-  RefreshControl,
-} from 'react-native';
-
+  Text, FlatList, RefreshControl
+} from "react-native";
+// @ts-ignore
 import Picture from '../assets/noImage.jpg';
+
 import {Recipe} from '../interface/RecipeInterface';
 import {getRecipes} from '../api/endpointRecipe';
-const {width} = Dimensions.get('window');
+const {width} = Dimensions.get('screen');
 const SPACING = 10;
-const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.75;
+const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.8;
 const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
 const RecipesScreen: FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const scrollX = useRef(new Animated.Value(0)).current;
-
   const onRefresh = () => {
     setRefreshing(true);
     setRefreshing(false);
@@ -33,97 +32,52 @@ const RecipesScreen: FC = () => {
     console.log(recipesList);
     setRecipes(recipesList);
   };
-
   useEffect(() => {
-    return () => {
-      loadRecipes();
-    };
+    loadRecipes();
   }, []);
 
+  const renderRecipe = ({ item }: { item: Recipe }) => (
+    <TouchableOpacity style={styles.recipeCard}>
+      <Image source={{ uri: item.picture }} style={styles.recipeImage} />
+      <Text style={styles.recipeTitle}>{item.title}</Text>
+    </TouchableOpacity>
+  );
   return (
-    <SafeAreaView>
-      <Animated.FlatList
+    <SafeAreaView style={styles.container}>
+      <FlatList
         data={recipes}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        decelerationRate={Platform.OS === 'ios' ? 0 : 0.98}
-        renderToHardwareTextureAndroid
-        //contentContainerStyle={{alignItems: 'center'}}
-        snapToInterval={ITEM_SIZE}
-        snapToAlignment="start"
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
-          {useNativeDriver: false},
-        )}
-        scrollEventThrottle={16}
-        renderItem={({item, index}) => {
-          if (!item.image) {
-            return <View style={{width: EMPTY_ITEM_SIZE}} />;
-          }
-          const inputRange = [
-            (index - 2) * ITEM_SIZE,
-            (index - 1) * ITEM_SIZE,
-            index * ITEM_SIZE,
-          ];
-
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [100, 50, 100],
-            extrapolate: 'clamp',
-          });
-          return (
-            <TouchableOpacity>
-              <View style={{width: ITEM_SIZE}}>
-                <Animated.View
-                  style={{
-                    marginHorizontal: SPACING,
-                    padding: SPACING * 2,
-                    alignItems: 'center',
-                    transform: [{translateY}],
-                    backgroundColor: 'white',
-                    borderRadius: 34,
-                  }}>
-                  <Image
-                    resizeMode="cover"
-                    source={item.image ? item.image : Picture}
-                    style={styles.posterImage}
-                  />
-                  <Text style={{fontSize: 15}} numberOfLines={2}>
-                    {item.name}
-                  </Text>
-                </Animated.View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        renderItem={renderRecipe}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   container: {
     flex: 1,
   },
-  paragraph: {
-    margin: 20,
-    fontSize: 10,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  recipeCard: {
+    flex: 1,
+    margin: 8,
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    elevation: 4,
   },
-  posterImage: {
+  recipeImage: {
     width: '100%',
-    height: ITEM_SIZE * 1.2,
+    height: 150,
     resizeMode: 'cover',
-    borderRadius: 24,
-    margin: 0,
-    marginBottom: 10,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  recipeTitle: {
+    fontSize: 15,
   },
 });
+
 export default RecipesScreen;
