@@ -4,7 +4,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/RecipeInterface';
 
-const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
+const RecipeCard: FC<RecipesCardProps> = ({recipe, openModal}) => {
   return (
     <TouchableOpacity style= {styles.container}>
       <View style={styles.recipeCard}>

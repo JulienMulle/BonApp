@@ -1,29 +1,22 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
-  Animated,
-  Dimensions,
-  Platform,
-  View,
-  TouchableOpacity,
-  Image,
   StyleSheet,
-  Text, FlatList, RefreshControl
+  FlatList, RefreshControl,
+  TouchableOpacity
 } from "react-native";
-// @ts-ignore
-import Picture from '../assets/noImage.jpg';
-
 import {Recipe} from '../interface/RecipeInterface';
 import {getRecipes} from '../api/endpointRecipe';
 import RecipeCard from '../components/recipe/RecipeCard';
-const {width} = Dimensions.get('screen');
-const SPACING = 10;
-const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.8;
-const EMPTY_ITEM_SIZE = (width - ITEM_SIZE) / 2;
+import RecipeForm from '../components/recipe/RecipeForm';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import item from '@gorhom/animated-tabbar/lib/typescript/presets/bubble/item';
+
 const RecipesScreen: FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipe, setRecipe] = useState<Recipe>({})
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const [isRecipeFormVisible, setisRecipeFormVisible] = useState<boolean>(false);
   const onRefresh = () => {
     setRefreshing(true);
     setRefreshing(false);
@@ -33,28 +26,53 @@ const RecipesScreen: FC = () => {
     console.log(recipesList);
     setRecipes(recipesList);
   };
+
+  const openModal = (recipe: Recipe)=>{
+    setisRecipeFormVisible(true);
+    setRecipe(recipe)
+  }
+  const closeModal = ()=> {
+    loadRecipes();
+    setisRecipeFormVisible(false);
+  }
   useEffect(() => {
     loadRecipes();
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={recipes}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
-        renderItem={({item})=> (<RecipeCard recipe={item}/>)}
+        renderItem={({item})=> (<RecipeCard recipe={item} openModal={()=> openModal(recipe)}/>)}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
+      <TouchableOpacity
+        onPress={() => setisRecipeFormVisible(!isRecipeFormVisible)}
+        style={styles.add}>
+        <Icon name="plus-circle" size={30} />
+      </TouchableOpacity>
+      {isRecipeFormVisible && (
+        <RecipeForm
+          recipe={recipe}
+          onClose={closeModal}
+        />
+      )
+
+      }
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  }
+   height:'92%'
+  },
+  add: {
+    alignItems: 'center',
+  },
 });
 
 export default RecipesScreen;

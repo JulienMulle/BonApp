@@ -4,13 +4,15 @@ export interface Recipe {
   id?: number;
   title?: string;
   description?: string;
-  picture?: string;
+  picture?: File;
   items?: Item[];
   category?: Category[];
 }
 
 export interface RecipesCardProps {
   recipe: Recipe;
+  openModal: () => void;
+  onClose: () => void;
   //removeItem: () => void;
   //editItem: () => void;
   // addShoppingList: () => void;
