@@ -15,6 +15,7 @@ import Picture from '../assets/noImage.jpg';
 
 import {Recipe} from '../interface/RecipeInterface';
 import {getRecipes} from '../api/endpointRecipe';
+import RecipeCard from '../components/recipe/RecipeCard';
 const {width} = Dimensions.get('screen');
 const SPACING = 10;
 const ITEM_SIZE = Platform.OS === 'ios' ? width * 0.72 : width * 0.8;
@@ -36,19 +37,13 @@ const RecipesScreen: FC = () => {
     loadRecipes();
   }, []);
 
-  const renderRecipe = ({ item }: { item: Recipe }) => (
-    <TouchableOpacity style={styles.recipeCard}>
-      <Image source={{ uri: item.picture }} style={styles.recipeImage} />
-      <Text style={styles.recipeTitle}>{item.title}</Text>
-    </TouchableOpacity>
-  );
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <FlatList
         data={recipes}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
-        renderItem={renderRecipe}
+        renderItem={({item})=> (<RecipeCard recipe={item}/>)}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -59,25 +54,7 @@ const RecipesScreen: FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  recipeCard: {
-    flex: 1,
-    margin: 8,
-    padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    elevation: 4,
-  },
-  recipeImage: {
-    width: '100%',
-    height: 150,
-    resizeMode: 'cover',
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  recipeTitle: {
-    fontSize: 15,
-  },
+  }
 });
 
 export default RecipesScreen;
