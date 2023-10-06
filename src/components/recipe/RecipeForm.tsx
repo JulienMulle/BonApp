@@ -22,8 +22,8 @@ const RecipeForm: FC<RecipeFormProps> = ({isRecipeFormVisible, onClose}) => {
           formData.append('description', recipe.description);
           formData.append('picture', {
             uri: recipe.picture.uri,
-            type: 'image/jpeg', // Assurez-vous d'ajuster le type en fonction de votre fichier image
-            name: 'recipe_image.jpg', // Nom du fichier
+            type: 'image/jpeg',
+            name: 'recipe_image.jpg', 
           });
       
           await createRecipe(formData);
@@ -47,7 +47,7 @@ const RecipeForm: FC<RecipeFormProps> = ({isRecipeFormVisible, onClose}) => {
           },
         };
       
-        ImagePicker.showImagePicker(options, response => {
+        ImagePicker.launchImageLibrary(options, response => {
           if (response.didCancel) {
             console.log('Annulé par lutilisateur');
           } else if (response.error) {
