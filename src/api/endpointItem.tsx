@@ -25,7 +25,6 @@ export const createItem = (name: string) => {
 };
 
 export const editItem = (id: number | undefined, editedItem: string) => {
-  console.log(editedItem);
   fetch(`http://10.0.2.2:5000/item/${id}`, {
     method: 'PATCH',
     headers: {

@@ -4,14 +4,14 @@ export interface Recipe {
   id: number;
   title?: string;
   description?: string;
-  picture?: File;
-  items?: Item[];
+  picture?: string;
+  items: Item[];
   category?: Category[];
 }
 
 export interface RecipesCardProps {
   recipe: Recipe;
-  openModal: () => void;
+  openDeleteModal: () => void;
   //onClose: () => void;
   //removeItem: () => void;
   //editItem: () => void;
@@ -19,7 +19,34 @@ export interface RecipesCardProps {
 }
 
 export interface RecipeFormProps {
-  recipe: Recipe;
   onClose: () => void;
   isRecipeFormVisible: boolean;
+  onUpdateRecipes: () => void;
+}
+
+export interface RecipeDetailProps {
+  recipe: Recipe;
+  route: {
+    params: {
+      recipe: Recipe;
+    };
+  };
+}
+
+export interface RecipePreviewProps {
+  recipe: Recipe;
+  onClose: () => void;
+  isRecipePreviewVisible: boolean;
+}
+
+export interface AssociationWithItemProps {
+  recipe: Recipe;
+  isAssociationVisible: boolean;
+  onClose: () => void;
+}
+
+export interface DeleteModalProps {
+  recipe: Recipe;
+  onClose: () => void;
+  isDeleteModalVisible: boolean;
 }

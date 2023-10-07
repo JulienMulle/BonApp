@@ -6,93 +6,144 @@ import {
   Modal,
   TouchableOpacity,
   View,
-  Text
+  Image,
 } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { createRecipe } from '../../api/endpointRecipe';
-import { RecipeFormProps, Recipe } from '../../interface/RecipeInterface';
+import {createRecipe} from '../../api/endpointRecipe';
+import {RecipeFormProps, Recipe} from '../../interface/RecipeInterface';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-const RecipeForm: FC<RecipeFormProps> = ({isRecipeFormVisible, onClose}) => {
-    const [recipe, setRecipe]= useState<Recipe>({title:'', description:'', picture:null});
-    const NewRecipe = async (recipe: Recipe) => {
-        try {
-          const formData = new FormData();
-          formData.append('title', recipe.title);
-          formData.append('description', recipe.description);
-          formData.append('picture', {
-            uri: recipe.picture.uri,
-            type: 'image/jpeg',
-            name: 'recipe_image.jpg', 
-          });
-      
-          await createRecipe(formData);
-          setRecipe({
-            title: '',
-            description: '',
-            picture: null,
-          });
-          onClose();
-        } catch (error) {
-          console.error('erreur dans le formulaire', error);
+const RecipeForm: FC<RecipeFormProps> = ({
+  isRecipeFormVisible,
+  onClose,
+  onUpdateRecipes,
+}) => {
+  const [recipe, setRecipe] = useState<Recipe>({
+    category: [],
+    id: 0,
+    items: [],
+    title: '',
+    description: '',
+    picture: '',
+  });
+  const [file, setFile] = useState('');
+  const NewRecipe = async (recipe: Recipe) => {
+    try {
+      const formData = new FormData();
+      formData.append('title', recipe.title);
+      formData.append('description', recipe.description);
+      formData.append('picture', {
+        uri: file,
+        type: 'image/jpeg',
+        name: 'recipe_image.jpg',
+      });
+
+      await createRecipe(formData);
+      setRecipe({
+        category: [],
+        id: 0,
+        items: [],
+        title: '',
+        description: '',
+        picture: '',
+      });
+      onClose();
+      onUpdateRecipes();
+    } catch (error) {
+      console.error('erreur dans le formulaire', error);
+    }
+  };
+
+  const openGallery = async (mode: string) => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+    if (mode === 'gallery') {
+      launchImageLibrary(options, response => {
+        if (!response.didCancel && !response.errorMessage) {
+          const selectedImageUri = response.assets[0].uri;
+          setFile(selectedImageUri);
         }
-      };
+      });
+    } else {
+      // @ts-ignore
+      launchCamera(options, response => {
+        if (!response.didCancel && !response.errorMessage) {
+          const selectedImageUri = response.assets[0].uri;
+          setFile(selectedImageUri);
+        }
+      });
+    }
+  };
 
-      const openImagePicker = () => {
-        const options = {
-            mediaType: 'photo',
-        };
-      
-        ImagePicker.launchImageLibrary(options, response => {
-          if (response.didCancel) {
-            console.log('Annulé par lutilisateur');
-          } else if (response.error) {
-            console.log('Erreur :', response.error);
-          } else {
-            const { uri, type, fileName } = response;
-            const picture = {
-              uri,
-              type,
-              name: fileName,
-            };
-            setRecipe(prevRecipe => ({ ...prevRecipe, picture }));
-          }
-        });
-      };
-      
-      
-
-    return(
-        <Modal visible={isRecipeFormVisible}>
-            <View style={styles.modalView}>
-            <TouchableOpacity onPress={onClose}>
+  return (
+    <Modal visible={isRecipeFormVisible}>
+      <View style={styles.modalView}>
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Icon size={30} name="times-circle" />
         </TouchableOpacity>
-                <TextInput
-                onChangeText={text => setRecipe({ ...recipe, title: text })}
-                value={recipe.title}
-                placeholder='titre'/>
-                <TextInput
-                onChangeText={description => setRecipe({...recipe, description:description})}
-                value={recipe.description}
-                placeholder='description'/>
-                <TouchableOpacity onPress={openImagePicker}>
-                <Text>Sélectionner une image</Text>
-                </TouchableOpacity>
-                <Button title='ajouter' onPress={()=> NewRecipe(recipe)}></Button>
-            </View>
-        </Modal>
-    )
-}
+        {file && <Image source={{uri: file}} style={styles.capturedImage} />}
+        <TextInput
+          style={styles.input}
+          onChangeText={text => setRecipe({...recipe, title: text})}
+          value={recipe.title}
+          placeholder="titre"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={description =>
+            setRecipe({...recipe, description: description})
+          }
+          value={recipe.description}
+          placeholder="description"
+        />
+        <View style={styles.buttonContainer}>
+          <Button title="camera" onPress={openGallery} />
+          <Button title="open galery" onPress={() => openGallery('gallery')} />
+        </View>
+        <View style={styles.validate}>
+          <Button title="ajouter" onPress={() => NewRecipe(recipe)} />
+        </View>
+      </View>
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
-    modalView: {
-        margin: 20,
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'flex-start',
-        backgroundColor: 'white',
-      },
-})
+  modalView: {
+    flex: 1,
+    width: '92%',
+    height: '70%',
+    backgroundColor: 'green',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  closeButton: {
+    alignSelf: 'flex-start',
+  },
+  capturedImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  validate: {
+    alignItems: 'center',
+  },
+});
 
 export default RecipeForm;
