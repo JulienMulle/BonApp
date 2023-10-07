@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ItemTile from '../components/item/ItemTile';
-import {Item} from '../interface/interfaces';
+import {Item} from '../interface/ItemInterfaces';
 import {deleteItem, getItems} from '../api/endpointItem';
 import ItemForm from '../components/item/ItemForm';
 import EditedItemModal from '../components/item/EditedItemModal';

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Item} from '../interface/interfaces';
+import {Item} from '../interface/ItemInterfaces';
 
 export const getItems = async (): Promise<Item[]> => {
   try {
@@ -24,7 +24,7 @@ export const createItem = (name: string) => {
     .catch(error => console.error('Erreur lors de la demande :', error));
 };
 
-export const editItem = (id: number, editedItem: string) => {
+export const editItem = (id: number | undefined, editedItem: string) => {
   console.log(editedItem);
   fetch(`http://10.0.2.2:5000/item/${id}`, {
     method: 'PATCH',

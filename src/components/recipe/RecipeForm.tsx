@@ -40,11 +40,7 @@ const RecipeForm: FC<RecipeFormProps> = ({isRecipeFormVisible, onClose}) => {
 
       const openImagePicker = () => {
         const options = {
-          title: 'Sélectionner une image',
-          storageOptions: {
-            skipBackup: true,
-            path: 'images',
-          },
+            mediaType: 'photo',
         };
       
         ImagePicker.launchImageLibrary(options, response => {

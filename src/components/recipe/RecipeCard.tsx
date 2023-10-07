@@ -4,20 +4,19 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/RecipeInterface';
 
-const RecipeCard: FC<RecipesCardProps> = ({recipe, openModal}) => {
+const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
   return (
-    <TouchableOpacity style= {styles.container}>
+    <TouchableOpacity style={styles.container}>
       <View style={styles.recipeCard}>
-      <Image
-        resizeMode="contain"
-        source={recipe.picture ? {uri: recipe.picture} : noImage}
-        style={styles.recipeImage}
-      />
-      <Text>{recipe.title}</Text>
-      <Text>{recipe.description}</Text>
-    </View>
+        <Image
+          resizeMode="contain"
+          source={recipe.picture ? {uri: recipe.picture} : noImage}
+          style={styles.recipeImage}
+        />
+        <Text>{recipe.title}</Text>
+        <Text>{recipe.description}</Text>
+      </View>
     </TouchableOpacity>
-  
   );
 };
 

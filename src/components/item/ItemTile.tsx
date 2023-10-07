@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ItemTileProps} from '../../interface/interfaces';
+import {ItemTileProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const ItemTile: FC<ItemTileProps> = ({item, removeItem, openModal}) => {

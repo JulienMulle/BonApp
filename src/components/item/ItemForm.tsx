@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {createItem} from '../../api/endpointItem';
-import {ItemAddFormProps} from '../../interface/interfaces';
+import {ItemAddFormProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const ItemForm: FC<ItemAddFormProps> = ({isItemFormVisibile, onClose}) => {

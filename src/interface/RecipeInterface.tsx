@@ -1,7 +1,7 @@
-import {Category, Item} from './interfaces';
+import {Category, Item} from './ItemInterfaces';
 
 export interface Recipe {
-  id?: number;
+  id: number;
   title?: string;
   description?: string;
   picture?: File;
@@ -12,7 +12,7 @@ export interface Recipe {
 export interface RecipesCardProps {
   recipe: Recipe;
   openModal: () => void;
-  onClose: () => void;
+  //onClose: () => void;
   //removeItem: () => void;
   //editItem: () => void;
   // addShoppingList: () => void;

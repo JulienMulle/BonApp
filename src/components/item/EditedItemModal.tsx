@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {EditedItemModalProps} from '../../interface/interfaces';
+import {EditedItemModalProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {editItem} from '../../api/endpointItem';
 
