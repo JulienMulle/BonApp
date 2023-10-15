@@ -35,6 +35,20 @@ export const createRecipe = (newRecipe: FormData) => {
   });
 };
 
+export const editeRecipe = (id: number, editedRecipe: FormData) => {
+  fetch(`http://10.0.2.2:5000/recipe/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: editedRecipe,
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
+    }
+    return response.json();
+  });
+};
 export const deleteRecipe = (id: number) => {
   console.log(id);
   fetch(`http://10.0.2.2:5000/recipe/${id}`, {

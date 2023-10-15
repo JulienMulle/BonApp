@@ -9,19 +9,21 @@ export interface Recipe {
   category?: Category[];
 }
 
+export interface BasicRecipeProps {
+  recipe: Recipe;
+  onClose: () => void;
+}
+
 export interface RecipesCardProps {
   recipe: Recipe;
   openDeleteModal: () => void;
-  //onClose: () => void;
-  //removeItem: () => void;
-  //editItem: () => void;
-  // addShoppingList: () => void;
 }
 
 export interface RecipeFormProps {
   onClose: () => void;
   isRecipeFormVisible: boolean;
-  onUpdateRecipes: () => void;
+  onUpdateRecipes?: () => void;
+  recipeToEdit?: Recipe;
 }
 
 export interface RecipeDetailProps {
@@ -33,20 +35,14 @@ export interface RecipeDetailProps {
   };
 }
 
-export interface RecipePreviewProps {
-  recipe: Recipe;
-  onClose: () => void;
+export interface RecipePreviewProps extends BasicRecipeProps{
   isRecipePreviewVisible: boolean;
 }
 
-export interface AssociationWithItemProps {
-  recipe: Recipe;
+export interface AssociationWithItemProps extends BasicRecipeProps{
   isAssociationVisible: boolean;
-  onClose: () => void;
 }
 
-export interface DeleteModalProps {
-  recipe: Recipe;
-  onClose: () => void;
+export interface DeleteModalProps extends BasicRecipeProps{
   isDeleteModalVisible: boolean;
 }

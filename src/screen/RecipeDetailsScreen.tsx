@@ -21,9 +21,11 @@ import {Item} from '../interface/ItemInterfaces';
 // @ts-ignore
 import noImage from '../assets/noImage.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import RecipeForm from '../components/recipe/RecipeForm';
 const RecipeDetailsScreen: FC<RecipeDetailProps> = ({route}) => {
   const {recipe} = route.params;
   const navigation = useNavigation();
+  const [isEditRecipe, setIsEditRecipe] = useState<boolean>(false);
   const [isAddingItem, setIsAddingItem] = useState<boolean>(false);
   const [fetchRecipe, setFetchRecipe] = useState<Recipe>({
     category: recipe.category,
@@ -54,45 +56,55 @@ const RecipeDetailsScreen: FC<RecipeDetailProps> = ({route}) => {
     }));
   };
   const closeModal = () => {
+    setIsEditRecipe(false);
     setIsAddingItem(false);
     loadRecipe();
   };
 
   return (
     <SafeAreaView>
-      <ScrollView>
-        <View style={styles.modalView}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('RecipesScreen')}
-            style={styles.closeButton}>
-            <Icon size={30} name="times-circle" />
-          </TouchableOpacity>
-          <Image
-            source={{uri: recipe.picture || noImage}}
-            style={styles.recipeImage}
-          />
-          <Text>{fetchRecipe.title}</Text>
-          <Text>{fetchRecipe.description}</Text>
-          <Button
-            title="ajouter ingredient"
-            onPress={() => setIsAddingItem(!isAddingItem)}
-          />
-          {fetchRecipe.items.map(item => (
-            <ItemTile
-              key={item.id}
-              item={item}
-              removeItem={() => deleteAssociation(item.id)}
+      {!isEditRecipe && (
+        <ScrollView>
+          <View style={styles.modalView}>
+            <View style={styles.containerButton}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('RecipesScreen')}>
+                <Icon size={30} name="times-circle" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setIsEditRecipe(!isEditRecipe)}>
+                <Icon size={30} name="edit" />
+              </TouchableOpacity>
+            </View>
+            <Image
+              source={{uri: recipe.picture || noImage}}
+              style={styles.recipeImage}
             />
-          ))}
-          {isAddingItem && (
-            <AssociationWithItem
-              recipe={fetchRecipe}
-              isAssociationVisible={isAddingItem}
-              onClose={closeModal}
+            <Text>{fetchRecipe.title}</Text>
+            <Text>{fetchRecipe.description}</Text>
+            <Button
+              title="ajouter ingredient"
+              onPress={() => setIsAddingItem(!isAddingItem)}
             />
-          )}
-        </View>
-      </ScrollView>
+            {fetchRecipe.items.map(item => (
+              <ItemTile
+                key={item.id}
+                item={item}
+                removeItem={() => deleteAssociation(item.id)}
+              />
+            ))}
+            {isAddingItem && (
+              <AssociationWithItem
+                recipe={fetchRecipe}
+                isAssociationVisible={isAddingItem}
+                onClose={closeModal}
+              />
+            )}
+          </View>
+        </ScrollView>
+      )}
+      {isEditRecipe && (
+        <RecipeForm onClose={closeModal} isRecipeFormVisible={isEditRecipe} recipeToEdit={fetchRecipe}/>
+      )}
     </SafeAreaView>
   );
 };
@@ -111,8 +123,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
-  closeButton: {
-    alignSelf: 'flex-start',
+  containerButton: {
+    alignContent: 'space-between',
   },
 });
 export default RecipeDetailsScreen;

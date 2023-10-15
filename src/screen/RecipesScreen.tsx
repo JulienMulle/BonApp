@@ -58,7 +58,6 @@ const RecipesScreen: FC = () => {
     setIsDeleteModalVisible(true);
     setRecipe(recipe);
   };
-
   const closeModal = () => {
     loadRecipes();
     setIsRecipeFormVisible(false);

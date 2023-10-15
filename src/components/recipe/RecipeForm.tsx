@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -9,7 +9,7 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {createRecipe} from '../../api/endpointRecipe';
+import {createRecipe, editeRecipe} from '../../api/endpointRecipe';
 import {RecipeFormProps, Recipe} from '../../interface/RecipeInterface';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
@@ -17,6 +17,7 @@ const RecipeForm: FC<RecipeFormProps> = ({
   isRecipeFormVisible,
   onClose,
   onUpdateRecipes,
+  recipeToEdit,
 }) => {
   const [recipe, setRecipe] = useState<Recipe>({
     category: [],
@@ -28,6 +29,17 @@ const RecipeForm: FC<RecipeFormProps> = ({
   });
   const [file, setFile] = useState('');
   const NewRecipe = async (recipe: Recipe) => {
+    if(recipeToEdit){
+      const formData = new FormData();
+      formData.append('title', recipe.title);
+      formData.append('description', recipe.description);
+      formData.append('picture', {
+        uri: file,
+        type: 'image/jpeg',
+        name: 'recipe_image.jpg',
+      });
+      await editeRecipe();
+    }
     try {
       const formData = new FormData();
       formData.append('title', recipe.title);
@@ -76,10 +88,14 @@ const RecipeForm: FC<RecipeFormProps> = ({
       });
     }
   };
-
+  useEffect(() => {
+    if (recipeToEdit) {
+      setRecipe({...recipeToEdit, picture: file || recipeToEdit.picture});
+    }
+  }, [file, recipeToEdit]);
   return (
-    <Modal visible={isRecipeFormVisible}>
-      <View style={styles.modalView}>
+    <Modal visible={isRecipeFormVisible} transparent style={styles.container}>
+      <View style={styles.recipeCard}>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Icon size={30} name="times-circle" />
         </TouchableOpacity>
@@ -111,13 +127,18 @@ const RecipeForm: FC<RecipeFormProps> = ({
 };
 
 const styles = StyleSheet.create({
-  modalView: {
+  container: {
     flex: 1,
-    width: '92%',
-    height: '70%',
-    backgroundColor: 'green',
-    paddingHorizontal: 20,
-    paddingTop: 20,
+
+  },
+  recipeCard: {
+    margin: 8,
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    elevation: 4,
+    marginTop: 100,
+    height: 300,
   },
   closeButton: {
     alignSelf: 'flex-start',
