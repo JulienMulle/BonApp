@@ -102,7 +102,7 @@ const RecipeForm: FC<RecipeFormProps> = ({
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Icon size={30} name="times-circle" />
         </TouchableOpacity>
-          {file && <Image source={{uri: file}} style={styles.capturedImage}/>}
+        {file && <Image source={{uri: file}} style={styles.capturedImage} />}
         <TextInput
           style={styles.input}
           onChangeText={text => setRecipe({...recipe, title: text})}

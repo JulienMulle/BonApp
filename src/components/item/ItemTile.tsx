@@ -1,21 +1,29 @@
 import React, {FC} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ItemTileProps} from '../../interface/ItemInterfaces';
+import {Item, ItemTileProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useDispatch} from 'react-redux';
+import {openEditItemModal, setEditItem} from '../../redux/selector';
+import {deletedItem} from '../../redux/actions/ItemsActions';
 
-const ItemTile: FC<ItemTileProps> = ({item, removeItem, openModal}) => {
+const ItemTile: FC<ItemTileProps> = ({item}) => {
+  const dispatch = useDispatch();
+  const openEditModal = (item: Item) => {
+    dispatch(openEditItemModal());
+    dispatch(setEditItem(item));
+  };
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={openModal}>
+        <TouchableOpacity onPress={() => openEditModal(item)}>
           <Text style={styles.name}>{item.name} </Text>
         </TouchableOpacity>
         <View style={styles.btn}>
-          <TouchableOpacity onPress={removeItem}>
-            <Icon name="trash" size={30} color="#900" />
+          <TouchableOpacity onPress={() => dispatch(deletedItem(item.id))}>
+            <Icon name="trash" size={20} color="#900" />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Icon name="cart-arrow-down" size={30} color="#900" />
+            <Icon name="cart-arrow-down" size={20} color="#900" />
           </TouchableOpacity>
         </View>
       </View>
@@ -51,8 +59,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   btn: {
-    justifyContent: 'space-evenly',
     flexDirection: 'row',
+    justifyContent: 'space-evenly',
     paddingRight: 30,
   },
 });
