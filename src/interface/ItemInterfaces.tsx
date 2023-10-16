@@ -1,7 +1,6 @@
-
 export interface Item {
   id: number;
-  name?: string;
+  name: string;
   unit?: string;
   quantity?: number;
 }
@@ -10,21 +9,17 @@ export interface Category {
   name: string;
 }
 
-export interface ShoppingList {
-  items: Item[];
-}
-
-export interface ItemAddFormProps extends Item {
+export interface ItemAddFormProps {
   item: Item;
   onClose: () => void;
   isItemFormVisibile: boolean;
 }
-export interface ItemTileProps extends Item {
+export interface ItemTileProps {
   item: Item;
   removeItem: () => void;
-  openModal: () => void;
+  openModal?: () => void;
 }
-export interface EditedItemModalProps extends Item {
+export interface EditedItemModalProps {
   item: Item;
   isEditItemVisible: boolean;
   onClose: () => void;

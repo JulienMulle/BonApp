@@ -1,22 +1,34 @@
 import React, {FC} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/RecipeInterface';
+import {useNavigation} from '@react-navigation/native';
 
-const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
+const RecipeCard: FC<RecipesCardProps> = ({recipe, openDeleteModal}) => {
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.recipeCard}>
-        <Image
-          resizeMode="contain"
-          source={recipe.picture ? {uri: recipe.picture} : noImage}
-          style={styles.recipeImage}
-        />
-        <Text>{recipe.title}</Text>
-        <Text>{recipe.description}</Text>
+        <Pressable onLongPress={openDeleteModal}>
+          <Image
+            resizeMode="contain"
+            source={{uri: recipe.picture || noImage}}
+            style={styles.recipeImage}
+          />
+        </Pressable>
+        <View style={styles.recipeTitle}>
+          <Text>{recipe.title}</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Détail"
+            onPress={() => navigation.navigate('RecipeDetailsScreen', {recipe})}
+          />
+          <Button title="ajouter" />
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -40,7 +52,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   recipeTitle: {
+    alignItems: 'center',
     fontSize: 15,
+  },
+  buttonContainer: {
+    paddingTop: 15,
   },
 });
 export default RecipeCard;

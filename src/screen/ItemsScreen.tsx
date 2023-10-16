@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -14,14 +14,19 @@ import ItemForm from '../components/item/ItemForm';
 import EditedItemModal from '../components/item/EditedItemModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const ItemsList: React.FC = () => {
+const ItemsList: FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [searchItems, setSearchItems] = useState<Item[]>([]);
   const [search, setSearch] = useState('');
   const [isEditItemVisible, setIsEditItemVisible] = useState<boolean>(false);
   const [isItemFormVisibile, setisItemFormVisibile] = useState<boolean>(false);
-  const [editedItem, setEditedItem] = useState<Item>({});
+  const [editedItem, setEditedItem] = useState<Item>({
+    id: 0,
+    name: '',
+    quantity: 0,
+    unit: '',
+  });
   const onRefresh = () => {
     setRefreshing(true);
     loadItems();
@@ -44,7 +49,7 @@ const ItemsList: React.FC = () => {
     await deleteItem(id);
     setItems(newItemsList);
   };
-  const searchFilter = (name: string): void => {
+  const searchItem = (name: string): void => {
     if (name) {
       const newData: Item[] = searchItems.filter(item => {
         const itemData: string = item.name ? item.name : '';
@@ -57,6 +62,12 @@ const ItemsList: React.FC = () => {
       setSearch('');
     }
   };
+  const alphaNumericSort = (a: Item, b: Item) => {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
+    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  };
+  const sortedItems = [...items].sort(alphaNumericSort);
   const openModal = (item: Item) => {
     setIsEditItemVisible(true);
     setEditedItem(item);
@@ -64,11 +75,11 @@ const ItemsList: React.FC = () => {
   useEffect(() => {
     loadItems();
   }, []);
-  const handleItemFormClose = () => {
+  const itemFormClose = () => {
     loadItems();
     setisItemFormVisibile(false);
   };
-  const handleEditSuccess = () => {
+  const editSuccess = () => {
     loadItems();
     setIsEditItemVisible(false);
   };
@@ -77,15 +88,15 @@ const ItemsList: React.FC = () => {
       <TextInput
         value={search}
         placeholder={"j'ai besoin de..."}
-        onChangeText={name => searchFilter(name)}
+        onChangeText={name => searchItem(name)}
       />
       <FlatList
-        data={items}
+        data={sortedItems}
         keyExtractor={item => item?.id?.toString() ?? ''}
         renderItem={({item}) => (
           <ItemTile
             item={item}
-            removeItem={() => removeItem(item.id as number)}
+            removeItem={() => removeItem(item.id)}
             openModal={() => openModal(item)}
           />
         )}
@@ -102,13 +113,13 @@ const ItemsList: React.FC = () => {
         <EditedItemModal
           item={editedItem}
           isEditItemVisible={isEditItemVisible}
-          onClose={handleEditSuccess}
+          onClose={editSuccess}
         />
       )}
       {isItemFormVisibile && (
         <ItemForm
           item={editedItem}
-          onClose={handleItemFormClose}
+          onClose={itemFormClose}
           isItemFormVisibile={isItemFormVisibile}
         />
       )}
