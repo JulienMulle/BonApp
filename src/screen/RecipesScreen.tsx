@@ -64,8 +64,8 @@ const RecipesScreen: FC = () => {
     setIsDeleteModalVisible(false);
   };
   const updateScreen = async () => {
-    loadRecipes();
     setIsRecipeFormVisible(false);
+    loadRecipes();
   };
   const alphaNumericSort = (a: Recipe, b: Recipe) => {
     return a.title?.toLowerCase() < b.title?.toLowerCase()

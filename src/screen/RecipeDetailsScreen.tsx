@@ -103,7 +103,11 @@ const RecipeDetailsScreen: FC<RecipeDetailProps> = ({route}) => {
         </ScrollView>
       )}
       {isEditRecipe && (
-        <RecipeForm onClose={closeModal} isRecipeFormVisible={isEditRecipe} recipeToEdit={fetchRecipe}/>
+        <RecipeForm
+          onClose={closeModal}
+          isRecipeFormVisible={isEditRecipe}
+          recipeToEdit={fetchRecipe}
+        />
       )}
     </SafeAreaView>
   );
@@ -124,7 +128,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   containerButton: {
-    alignContent: 'space-between',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
 });
 export default RecipeDetailsScreen;
