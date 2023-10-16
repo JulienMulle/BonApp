@@ -19,7 +19,6 @@ const AssociationWithItem: FC<AssociationWithItemProps> = ({
   onClose,
 }) => {
   const [items, setItems] = useState<Item[]>();
-  console.log(recipe.id, recipe.title);
   const loadItems = async () => {
     try {
       const itemsList: Item[] = await getItems();
@@ -43,6 +42,11 @@ const AssociationWithItem: FC<AssociationWithItemProps> = ({
 
   return (
     <Modal visible={isAssociationVisible} animationType="slide">
+      <View style={styles.closeButton}>
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Icon name="times-circle" size={30} />
+        </TouchableOpacity>
+      </View>
       <View style={styles.itemContainer}>
         <FlatList
           data={items}
@@ -55,9 +59,6 @@ const AssociationWithItem: FC<AssociationWithItemProps> = ({
             </View>
           )}
         />
-        <TouchableOpacity onPress={onClose}>
-          <Icon name="plus-circle" size={30} />
-        </TouchableOpacity>
       </View>
     </Modal>
   );
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     width: '95%',
     paddingTop: 10,
     height: 50,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingLeft: 30,
     backgroundColor: 'white',
     borderRadius: 10,
@@ -91,10 +92,8 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
   },
-  btn: {
-    justifyContent: 'space-evenly',
-    flexDirection: 'row',
-    paddingRight: 30,
+  closeButton: {
+    alignSelf: 'flex-start',
   },
 });
 

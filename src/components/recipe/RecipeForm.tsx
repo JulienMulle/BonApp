@@ -28,29 +28,34 @@ const RecipeForm: FC<RecipeFormProps> = ({
     picture: '',
   });
   const [file, setFile] = useState('');
-  const NewRecipe = async (recipe: Recipe) => {
-    if(recipeToEdit){
-      const formData = new FormData();
-      formData.append('title', recipe.title);
-      formData.append('description', recipe.description);
-      formData.append('picture', {
-        uri: file,
-        type: 'image/jpeg',
-        name: 'recipe_image.jpg',
-      });
-      await editeRecipe();
+  useEffect(() => {
+    if (recipeToEdit) {
+      setRecipe({...recipeToEdit, picture: recipeToEdit.picture});
     }
+  }, [file, recipeToEdit]);
+  const NewRecipe = async (recipe: Recipe) => {
     try {
-      const formData = new FormData();
-      formData.append('title', recipe.title);
-      formData.append('description', recipe.description);
-      formData.append('picture', {
-        uri: file,
-        type: 'image/jpeg',
-        name: 'recipe_image.jpg',
-      });
-
-      await createRecipe(formData);
+      if (recipeToEdit) {
+        const formData = new FormData();
+        formData.append('title', recipe.title);
+        formData.append('description', recipe.description);
+        formData.append('picture', {
+          uri: file,
+          type: 'image/jpeg',
+          name: 'recipe_image.jpg',
+        });
+        await editeRecipe(recipeToEdit.id, formData);
+      } else {
+        const formData = new FormData();
+        formData.append('title', recipe.title);
+        formData.append('description', recipe.description);
+        formData.append('picture', {
+          uri: file,
+          type: 'image/jpeg',
+          name: 'recipe_image.jpg',
+        });
+        await createRecipe(formData);
+      }
       setRecipe({
         category: [],
         id: 0,
@@ -60,7 +65,9 @@ const RecipeForm: FC<RecipeFormProps> = ({
         picture: '',
       });
       onClose();
-      onUpdateRecipes();
+      if (onUpdateRecipes) {
+        onUpdateRecipes();
+      }
     } catch (error) {
       console.error('erreur dans le formulaire', error);
     }
@@ -88,18 +95,14 @@ const RecipeForm: FC<RecipeFormProps> = ({
       });
     }
   };
-  useEffect(() => {
-    if (recipeToEdit) {
-      setRecipe({...recipeToEdit, picture: file || recipeToEdit.picture});
-    }
-  }, [file, recipeToEdit]);
+
   return (
     <Modal visible={isRecipeFormVisible} transparent style={styles.container}>
       <View style={styles.recipeCard}>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <Icon size={30} name="times-circle" />
         </TouchableOpacity>
-        {file && <Image source={{uri: file}} style={styles.capturedImage} />}
+          {file && <Image source={{uri: file}} style={styles.capturedImage}/>}
         <TextInput
           style={styles.input}
           onChangeText={text => setRecipe({...recipe, title: text})}
@@ -129,7 +132,6 @@ const RecipeForm: FC<RecipeFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   },
   recipeCard: {
     margin: 8,
@@ -138,12 +140,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 4,
     marginTop: 100,
-    height: 300,
+    height: 500,
   },
   closeButton: {
     alignSelf: 'flex-start',
   },
   capturedImage: {
+    borderColor: 'black',
+    borderWidth: 1,
     width: '100%',
     height: 200,
     resizeMode: 'cover',
@@ -159,7 +163,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     marginBottom: 20,
   },
   validate: {

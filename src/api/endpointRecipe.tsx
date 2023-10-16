@@ -21,6 +21,7 @@ export const getRecipe = async (id: number): Promise<Recipe> => {
   }
 };
 export const createRecipe = (newRecipe: FormData) => {
+  console.log(newRecipe)
   fetch('http://10.0.2.2:5000/recipe/', {
     method: 'POST',
     headers: {
@@ -36,6 +37,7 @@ export const createRecipe = (newRecipe: FormData) => {
 };
 
 export const editeRecipe = (id: number, editedRecipe: FormData) => {
+  console.log(id, 'recette: ', editedRecipe);
   fetch(`http://10.0.2.2:5000/recipe/${id}`, {
     method: 'PATCH',
     headers: {
