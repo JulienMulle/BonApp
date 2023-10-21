@@ -1,8 +1,9 @@
 import {combineReducers} from '@reduxjs/toolkit';
-import itemsReducer from './ItemsSlice';
+import itemsReducer from './slices/ItemSlice';
+import recipesReducer from './slices/RecipeSlice';
 
 const rootReducer = combineReducers({
   items: itemsReducer,
-  //recipes: recipesReducer,
+  recipe: recipesReducer,
 });
 export default rootReducer;

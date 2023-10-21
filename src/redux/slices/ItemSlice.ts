@@ -1,23 +1,18 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createAction, createSlice} from '@reduxjs/toolkit';
 import {
   fetchItems,
   deletedItem,
   updatedItem,
   createdItem,
-} from './actions/ItemsActions';
-import {Item} from '../interface/ItemInterfaces';
+} from '../actions/ItemsActions';
+import {Item} from '../../interface/ItemInterfaces';
 
-const itemsSlice = createSlice({
+const itemSlice = createSlice({
   name: 'items',
   initialState: {
     items: [] as Item[],
     sortedItems: [] as Item[],
-    editedItem: {
-      id: 0,
-      name: '',
-      quantity: 0,
-      unit: '',
-    },
+    editedItem: {} as Item,
     search: '',
     newItem: '',
     refreshing: false,
@@ -53,13 +48,18 @@ const itemsSlice = createSlice({
     setNewItem: (state, action) => {
       state.newItem = action.payload;
     },
+    clearNewItem: state => {
+      state.newItem = '';
+    },
     setEdition: (state, action) => {
       state.editedItem.name = action.payload;
     },
     setEditItem: (state, action) => {
       state.editedItem = action.payload;
     },
-
+    clearEditedItem: state => {
+      state.editedItem = {} as Item;
+    },
   },
   extraReducers: builder => {
     builder
@@ -98,4 +98,4 @@ const itemsSlice = createSlice({
   },
 });
 
-export default itemsSlice.reducer;
+export default itemSlice.reducer;

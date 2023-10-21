@@ -17,8 +17,9 @@ import {
   openedEdtionItem,
   selectIsEditItemVisible,
   setEdition,
-} from '../../redux/selector';
+} from '../../redux/selectors/ItemSelector';
 import {fetchItems, updatedItem} from '../../redux/actions/ItemsActions';
+import {clearEditedRecipe} from '../../redux/selectors/RecipeSelector';
 
 const EditedItemModal: FC = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,10 @@ const EditedItemModal: FC = () => {
       dispatch(fetchItems());
     }, 5);
   };
+  const closeView = () => {
+    dispatch(closeEditItemModal());
+    dispatch(clearEditedRecipe());
+  };
   return (
     <Modal visible={isEditItemVisible} transparent animationType="slide">
       {!isEdited && (
@@ -41,7 +46,7 @@ const EditedItemModal: FC = () => {
           <TouchableOpacity onPress={() => dispatch(openedEdtionItem())}>
             <Text>{editedItem.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => dispatch(closeEditItemModal())}>
+          <TouchableOpacity onPress={() => closeView()}>
             <Icon name="times-circle" size={20} />
           </TouchableOpacity>
         </View>

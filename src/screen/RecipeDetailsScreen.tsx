@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef} from 'react';
 import {
   ScrollView,
   View,
@@ -9,106 +9,96 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import {Recipe, RecipeDetailProps} from '../interface/RecipeInterface';
 import ItemTile from '../components/item/ItemTile';
 import {useNavigation} from '@react-navigation/native';
 import AssociationWithItem from '../components/recipe/AssociationWithItem';
-import {
-  deleteItemAssociationWithRecipe,
-  getRecipe,
-} from '../api/endpointRecipe';
-import {Item} from '../interface/ItemInterfaces';
 // @ts-ignore
 import noImage from '../assets/noImage.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import RecipeForm from '../components/recipe/RecipeForm';
-const RecipeDetailsScreen: FC<RecipeDetailProps> = ({route}) => {
-  const {recipe} = route.params;
-  const navigation = useNavigation();
-  const [isEditRecipe, setIsEditRecipe] = useState<boolean>(false);
-  const [isAddingItem, setIsAddingItem] = useState<boolean>(false);
-  const [fetchRecipe, setFetchRecipe] = useState<Recipe>({
-    category: recipe.category,
-    description: recipe.description,
-    id: recipe.id,
-    items: recipe.items,
-    picture: recipe.picture,
-    title: recipe.title,
-  });
-  const loadRecipe = async () => {
-    const recipeId = recipe.id;
-    try {
-      const fetchingRecipe = await getRecipe(recipeId);
-      setFetchRecipe(fetchingRecipe);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+import {useDispatch, useSelector} from 'react-redux';
+import {rootState} from '../redux/store';
+import {
+  clearEditedRecipe,
+  openAssociationModal,
+  openedIsEdit,
+  openFormModal,
+  selectisAssociationModal,
+  selectIsFormVisible,
+  setRecipe,
+} from '../redux/selectors/RecipeSelector';
+import {
+  fetchRecipe,
+  removeAssociation,
+} from '../redux/actions/RecipesActions';
 
+const RecipeDetailsScreen: FC = () => {
+  const dispatch = useDispatch();
+  const recipeDetails = useSelector(
+    (state: rootState) => state.recipe.recipeDetails,
+  );
+  const navigation = useNavigation();
+  const isEdited = useSelector((state: rootState) =>
+    selectIsFormVisible(state),
+  );
+  const isAssociate = useSelector((state: rootState) =>
+    selectisAssociationModal(state),
+  );
   const deleteAssociation = async (id: number) => {
-    const NewAssociationList: Item[] = recipe.items.filter(item => {
-      return item.id !== id;
-    });
-    deleteItemAssociationWithRecipe(id, recipe.id);
-    setFetchRecipe(newAssociation => ({
-      ...newAssociation,
-      items: NewAssociationList,
-    }));
+    dispatch(removeAssociation({itemId: id, recipeId: recipeDetails.id}));
+    dispatch(fetchRecipe(recipeDetails.id));
   };
-  const closeModal = () => {
-    setIsEditRecipe(false);
-    setIsAddingItem(false);
-    loadRecipe();
+  const returnToRecipeScreen = () => {
+    navigation.navigate('RecipesScreen');
+    setTimeout(() => {
+      dispatch(clearEditedRecipe());
+    }, 10);
+  };
+  const editedRecipe = () => {
+    dispatch(openedIsEdit());
+    dispatch(setRecipe(recipeDetails));
+    dispatch(openFormModal());
   };
 
   return (
     <SafeAreaView>
-      {!isEditRecipe && (
+      {!isEdited && (
         <ScrollView>
           <View style={styles.modalView}>
             <View style={styles.containerButton}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('RecipesScreen')}>
-                <Icon size={30} name="times-circle" />
+              <TouchableOpacity onPress={() => returnToRecipeScreen()}>
+                <Icon size={20} name="times-circle" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => setIsEditRecipe(!isEditRecipe)}>
-                <Icon size={30} name="edit" />
+              <TouchableOpacity onPress={() => editedRecipe()}>
+                <Icon size={20} name="edit" />
               </TouchableOpacity>
             </View>
-            <Image
-              source={{uri: recipe.picture || noImage}}
-              style={styles.recipeImage}
-            />
-            <Text>{fetchRecipe.title}</Text>
-            <Text>{fetchRecipe.description}</Text>
+            {recipeDetails.picture ? (
+              <Image
+                source={{uri: recipeDetails.picture}}
+                style={styles.recipeImage}
+              />
+            ) : (
+              <Image source={noImage} style={styles.recipeImage} />
+            )}
+            <Text>{recipeDetails.title}</Text>
+            <Text>{recipeDetails.description}</Text>
             <Button
               title="ajouter ingredient"
-              onPress={() => setIsAddingItem(!isAddingItem)}
+              onPress={() => dispatch(openAssociationModal())}
             />
-            {fetchRecipe.items.map(item => (
+            {recipeDetails.items?.map(item => (
               <ItemTile
                 key={item.id}
                 item={item}
                 removeItem={() => deleteAssociation(item.id)}
               />
             ))}
-            {isAddingItem && (
-              <AssociationWithItem
-                recipe={fetchRecipe}
-                isAssociationVisible={isAddingItem}
-                onClose={closeModal}
-              />
-            )}
+            {isAssociate && <AssociationWithItem />}
           </View>
         </ScrollView>
       )}
-      {isEditRecipe && (
-        <RecipeForm
-          onClose={closeModal}
-          isRecipeFormVisible={isEditRecipe}
-          recipeToEdit={fetchRecipe}
-        />
-      )}
+      {isEdited && <RecipeForm />}
     </SafeAreaView>
   );
 };
