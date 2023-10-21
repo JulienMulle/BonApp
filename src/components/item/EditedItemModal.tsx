@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -7,49 +7,57 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {EditedItemModalProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {editItem} from '../../api/endpointItem';
+import {useDispatch, useSelector} from 'react-redux';
+import {rootState} from '../../redux/store';
+import {
+  closeEditionItem,
+  closeEditItemModal,
+  editionItem,
+  openedEdtionItem,
+  selectIsEditItemVisible,
+  setEdition,
+} from '../../redux/selector';
+import {fetchItems, updatedItem} from '../../redux/actions/ItemsActions';
 
-const EditedItemModal: FC<EditedItemModalProps> = ({
-  item,
-  isEditItemVisible,
-  onClose,
-}) => {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  // @ts-ignore
-  const [editedName, setEditedName] = useState<string>(item.name);
-  const editionItem = async (id: number, newName: string) => {
-    try {
-      editItem(id, newName);
-    } catch (error) {
-      console.log(error);
-    }
-    setIsEdit(!isEdit);
+const EditedItemModal: FC = () => {
+  const dispatch = useDispatch();
+  const isEdited = useSelector((state: rootState) => editionItem(state));
+  const isEditItemVisible = useSelector((state: rootState) =>
+    selectIsEditItemVisible(state),
+  );
+  const editedItem = useSelector((state: rootState) => state.items.editedItem);
+  const editionItems = async (id: number, newName: string) => {
+    dispatch(updatedItem({id, newName}));
+    dispatch(closeEditItemModal());
+    setTimeout(() => {
+      dispatch(fetchItems());
+    }, 5);
   };
   return (
     <Modal visible={isEditItemVisible} transparent animationType="slide">
-      {!isEdit && (
+      {!isEdited && (
         <View style={styles.modalView}>
-          <TouchableOpacity onPress={() => setIsEdit(!isEdit)}>
-            <Text>{editedName}</Text>
+          <TouchableOpacity onPress={() => dispatch(openedEdtionItem())}>
+            <Text>{editedItem.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onClose}>
-            <Icon name="times-circle" size={30} />
+          <TouchableOpacity onPress={() => dispatch(closeEditItemModal())}>
+            <Icon name="times-circle" size={20} />
           </TouchableOpacity>
         </View>
       )}
-      {isEdit && (
+      {isEdited && (
         <View style={styles.modalView}>
-          <TouchableOpacity onPress={() => setIsEdit(!isEdit)}>
-            <Icon name="times-circle" size={30} />
+          <TouchableOpacity onPress={() => dispatch(closeEditionItem())}>
+            <Icon name="times-circle" size={20} />
           </TouchableOpacity>
           <TextInput
-            value={editedName}
-            onChangeText={newName => setEditedName(newName)}
+            value={editedItem.name}
+            onChangeText={newName => dispatch(setEdition(newName))}
           />
-          <TouchableOpacity onPress={() => editionItem(item.id, editedName)}>
-            <Icon name="music" size={30} />
+          <TouchableOpacity
+            onPress={() => editionItems(editedItem.id, editedItem.name)}>
+            <Icon name="music" size={20} />
           </TouchableOpacity>
         </View>
       )}

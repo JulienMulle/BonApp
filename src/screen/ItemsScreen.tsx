@@ -8,117 +8,68 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ItemTile from '../components/item/ItemTile';
-import {Item} from '../interface/ItemInterfaces';
-import {deleteItem, getItems} from '../api/endpointItem';
 import ItemForm from '../components/item/ItemForm';
 import EditedItemModal from '../components/item/EditedItemModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useDispatch, useSelector} from 'react-redux';
+import {rootState} from '../redux/store';
+import {fetchItems} from '../redux/actions/ItemsActions';
+import {
+  filterItemsByName,
+  selectIsEditItemVisible,
+  selectIsItemFormVisible,
+  selectRefreshing,
+  selectSortedItems,
+  closeItemFormModal,
+  openItemFormModal,
+  setSearch,
+} from '../redux/selector';
 
 const ItemsList: FC = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [searchItems, setSearchItems] = useState<Item[]>([]);
-  const [search, setSearch] = useState('');
-  const [isEditItemVisible, setIsEditItemVisible] = useState<boolean>(false);
-  const [isItemFormVisibile, setisItemFormVisibile] = useState<boolean>(false);
-  const [editedItem, setEditedItem] = useState<Item>({
-    id: 0,
-    name: '',
-    quantity: 0,
-    unit: '',
-  });
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadItems();
-    setRefreshing(false);
-  };
-
-  const loadItems = async () => {
-    try {
-      const itemsList: Item[] = await getItems();
-      setItems(itemsList);
-      setSearchItems(itemsList);
-    } catch (error) {
-      console.error('Erreur dans le chargement des éléments :', error);
-    }
-  };
-  const removeItem = async (id: number) => {
-    const newItemsList: Item[] = items.filter(item => {
-      return item.id !== id;
-    });
-    await deleteItem(id);
-    setItems(newItemsList);
-  };
-  const searchItem = (name: string): void => {
-    if (name) {
-      const newData: Item[] = searchItems.filter(item => {
-        const itemData: string = item.name ? item.name : '';
-        return itemData.indexOf(name) > -1;
-      });
-      setItems(newData);
-      setSearch(name);
-    } else {
-      setItems(searchItems);
-      setSearch('');
-    }
-  };
-  const alphaNumericSort = (a: Item, b: Item) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
-    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-  };
-  const sortedItems = [...items].sort(alphaNumericSort);
-  const openModal = (item: Item) => {
-    setIsEditItemVisible(true);
-    setEditedItem(item);
-  };
+  const dispatch = useDispatch();
+  const refreshing = useSelector((state: rootState) => selectRefreshing(state));
+  const isEditItemVisible = useSelector((state: rootState) =>
+    selectIsEditItemVisible(state),
+  );
+  const isItemFormVisibile = useSelector((state: rootState) =>
+    selectIsItemFormVisible(state),
+  );
+  const filteredItem = useSelector((state: rootState) => state.items.search);
+  const sortedItems = useSelector(selectSortedItems);
   useEffect(() => {
-    loadItems();
-  }, []);
+    dispatch(fetchItems());
+  }, [dispatch]);
+
   const itemFormClose = () => {
-    loadItems();
-    setisItemFormVisibile(false);
-  };
-  const editSuccess = () => {
-    loadItems();
-    setIsEditItemVisible(false);
+    dispatch(closeItemFormModal());
+    dispatch(fetchItems());
   };
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
-        value={search}
+        value={filteredItem}
         placeholder={"j'ai besoin de..."}
-        onChangeText={name => searchItem(name)}
+        onChangeText={name => dispatch(setSearch(name))}
       />
       <FlatList
-        data={sortedItems}
+        data={filterItemsByName(sortedItems, filteredItem)}
         keyExtractor={item => item?.id?.toString() ?? ''}
-        renderItem={({item}) => (
-          <ItemTile
-            item={item}
-            removeItem={() => removeItem(item.id)}
-            openModal={() => openModal(item)}
-          />
-        )}
+        renderItem={({item}) => <ItemTile item={item} />}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => dispatch(fetchItems())}
+          />
         }
       />
       <TouchableOpacity
-        onPress={() => setisItemFormVisibile(!isEditItemVisible)}
+        onPress={() => dispatch(openItemFormModal())}
         style={styles.add}>
         <Icon name="plus-circle" size={30} />
       </TouchableOpacity>
-      {isEditItemVisible && (
-        <EditedItemModal
-          item={editedItem}
-          isEditItemVisible={isEditItemVisible}
-          onClose={editSuccess}
-        />
-      )}
+      {isEditItemVisible && <EditedItemModal />}
       {isItemFormVisibile && (
         <ItemForm
-          item={editedItem}
           onClose={itemFormClose}
           isItemFormVisibile={isItemFormVisibile}
         />

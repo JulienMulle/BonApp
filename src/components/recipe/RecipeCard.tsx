@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   buttonContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     paddingTop: 15,
   },
 });
