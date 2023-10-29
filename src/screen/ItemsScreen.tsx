@@ -13,17 +13,18 @@ import EditedItemModal from '../components/item/EditedItemModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../redux/store';
-import {fetchItems} from '../redux/actions/ItemsActions';
+import {deletedItem, fetchItems} from '../redux/actions/ItemsActions';
 import {
   filterItemsByName,
   selectIsEditItemVisible,
   selectIsItemFormVisible,
   selectRefreshing,
   selectSortedItems,
-  closeItemFormModal,
   openItemFormModal,
   setSearch,
-} from '../redux/selector';
+} from '../redux/selectors/ItemSelector';
+import {useFocusEffect} from '@react-navigation/native';
+import {fetchRecipes} from '../redux/actions/RecipesActions';
 
 const ItemsList: FC = () => {
   const dispatch = useDispatch();
@@ -39,11 +40,11 @@ const ItemsList: FC = () => {
   useEffect(() => {
     dispatch(fetchItems());
   }, [dispatch]);
-
-  const itemFormClose = () => {
-    dispatch(closeItemFormModal());
-    dispatch(fetchItems());
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchItems());
+    }, [dispatch]),
+  );
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -68,12 +69,7 @@ const ItemsList: FC = () => {
         <Icon name="plus-circle" size={30} />
       </TouchableOpacity>
       {isEditItemVisible && <EditedItemModal />}
-      {isItemFormVisibile && (
-        <ItemForm
-          onClose={itemFormClose}
-          isItemFormVisibile={isItemFormVisibile}
-        />
-      )}
+      {isItemFormVisibile && <ItemForm />}
     </SafeAreaView>
   );
 };

@@ -5,7 +5,6 @@ import {
   editItem,
   createItem,
 } from '../../api/endpointItem';
-import {Item} from '../../interface/ItemInterfaces';
 
 export const fetchItems = createAsyncThunk('items/load', async () => {
   const items = await getItems();
@@ -37,8 +36,8 @@ export const deletedItem = createAsyncThunk(
   'items/deleteItem',
   async (itemId: number) => {
     try {
-      await deleteItem(itemId);
-      return itemId;
+      const response = await deleteItem(itemId);
+      return response;
     } catch (error) {
       throw error;
     }

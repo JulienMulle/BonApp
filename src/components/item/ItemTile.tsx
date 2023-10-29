@@ -3,14 +3,21 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Item, ItemTileProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch} from 'react-redux';
-import {openEditItemModal, setEditItem} from '../../redux/selector';
-import {deletedItem} from '../../redux/actions/ItemsActions';
+import {
+  openEditItemModal,
+  setEditItem,
+} from '../../redux/selectors/ItemSelector';
+import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 
 const ItemTile: FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
   const openEditModal = (item: Item) => {
     dispatch(openEditItemModal());
     dispatch(setEditItem(item));
+  };
+  const deleteItem = (id: number) => {
+    dispatch(deletedItem(id));
+    dispatch(fetchItems());
   };
   return (
     <View style={styles.itemContainer}>
@@ -19,7 +26,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
           <Text style={styles.name}>{item.name} </Text>
         </TouchableOpacity>
         <View style={styles.btn}>
-          <TouchableOpacity onPress={() => dispatch(deletedItem(item.id))}>
+          <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} color="#900" />
           </TouchableOpacity>
           <TouchableOpacity>

@@ -1,5 +1,5 @@
-import {rootState} from './store';
-import {Item} from '../interface/ItemInterfaces';
+import {rootState} from '../store';
+import {Item} from '../../interface/ItemInterfaces';
 import {createAction, createSelector} from '@reduxjs/toolkit';
 
 export const selectItems = (state: rootState) => state.items.items;
@@ -33,7 +33,7 @@ export const selectIsItemFormVisible = (state: rootState) =>
   state.items.isItemFormVisible;
 export const openItemFormModal = createAction('items/openItemFormModal');
 export const closeItemFormModal = createAction('items/closeItemFormModal');
-export const setSearch = createAction<string>('items/setSearch');
-export const setNewItem = createAction<string>('items/setNewItem');
-export const setEdition = createAction<string>('items/setEdition');
-export const setEditItem = createAction<Item>('items/setEditItem');
+export const setSearch = createAction('items/setSearch');
+export const setNewItem = createAction('items/setNewItem');
+export const setEdition = createAction('items/setEdition');
+export const setEditItem = createAction('items/setEditItem');

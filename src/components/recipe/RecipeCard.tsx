@@ -4,13 +4,28 @@ import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/RecipeInterface';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {
+  openedDeleteModal,
+  setRecipe,
+} from '../../redux/selectors/RecipeSelector';
+import { fetchRecipe } from "../../redux/actions/RecipesActions";
 
-const RecipeCard: FC<RecipesCardProps> = ({recipe, openDeleteModal}) => {
+const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const goRecipeDetais = () => {
+    dispatch(fetchRecipe(recipe.id));
+    navigation.navigate('RecipeDetailsScreen');
+  };
+  const openDeleteRecipeModal = () => {
+    dispatch(openedDeleteModal());
+    dispatch(setRecipe(recipe));
+  };
   return (
     <View style={styles.container}>
       <View style={styles.recipeCard}>
-        <Pressable onLongPress={openDeleteModal}>
+        <Pressable onLongPress={() => openDeleteRecipeModal()}>
           <Image
             resizeMode="contain"
             source={{uri: recipe.picture || noImage}}
@@ -21,10 +36,7 @@ const RecipeCard: FC<RecipesCardProps> = ({recipe, openDeleteModal}) => {
           <Text>{recipe.title}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Button
-            title="Détail"
-            onPress={() => navigation.navigate('RecipeDetailsScreen', {recipe})}
-          />
+          <Button title="Détail" onPress={() => goRecipeDetais()} />
           <Button title="ajouter" />
         </View>
       </View>

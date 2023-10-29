@@ -19,6 +19,7 @@
     "@tamagui/config": "^1.73.0",
     "axios": "^1.5.0",
     "react": "18.2.0",
+    "react-hook-form": "^7.47.0",
     "react-native": "0.72.4",
     "react-native-gesture-handler": "^2.13.1",
     "react-native-image-picker": "^7.0.0",

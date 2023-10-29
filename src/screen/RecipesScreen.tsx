@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,118 +7,72 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {Recipe} from '../interface/RecipeInterface';
-import {getRecipes} from '../api/endpointRecipe';
+import {useFocusEffect} from '@react-navigation/native';
 import RecipeCard from '../components/recipe/RecipeCard';
 import RecipeForm from '../components/recipe/RecipeForm';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeleteModal from '../components/DeleteModal';
+import {useDispatch, useSelector} from 'react-redux';
+import {rootState} from '../redux/store';
+import {fetchRecipes} from '../redux/actions/RecipesActions';
+import {
+  openFormModal,
+  selectRefreshing,
+  setSearch,
+} from '../redux/selectors/RecipeSelector';
+import {
+  filteredRecipesByTitle,
+  selectIsdeleteModal,
+  selectIsFormVisible,
+  selectSortedRecipes,
+} from '../redux/selectors/RecipeSelector';
 
 const RecipesScreen: FC = () => {
-  const [searchRecipe, setSearchRecipe] = useState<Recipe[]>([]);
-  const [search, setSearch] = useState('');
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [isRecipeFormVisible, setIsRecipeFormVisible] =
-    useState<boolean>(false);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] =
-    useState<boolean>(false);
-  const [recipe, setRecipe] = useState<Recipe>({
-    category: [],
-    description: '',
-    id: 0,
-    items: [],
-    picture: undefined,
-    title: '',
-  });
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadRecipes();
-    setRefreshing(false);
-  };
-  const searchFilter = (title: string): void => {
-    if (title) {
-      const newRecipeList: Recipe[] = searchRecipe.filter(recipe => {
-        const recipeSearch: string = recipe.title ? recipe.title : '';
-        return recipeSearch.indexOf(title) > -1;
-      });
-      setRecipes(newRecipeList);
-      setSearch(title);
-    } else {
-      setRecipes(searchRecipe);
-      searchFilter('');
-    }
-  };
-  const loadRecipes = async () => {
-    const recipesList: Recipe[] = await getRecipes();
-    setRecipes(recipesList);
-    setSearchRecipe(recipesList);
-  };
-  const openDeleteRecipeModal = (recipe: Recipe) => {
-    setIsDeleteModalVisible(true);
-    setRecipe(recipe);
-  };
-  const closeModal = () => {
-    loadRecipes();
-    setIsRecipeFormVisible(false);
-    setIsDeleteModalVisible(false);
-  };
-  const updateScreen = async () => {
-    setIsRecipeFormVisible(false);
-    loadRecipes();
-  };
-  const alphaNumericSort = (a: Recipe, b: Recipe) => {
-    return a.title?.toLowerCase() < b.title?.toLowerCase()
-      ? -1
-      : a.title?.toLowerCase() > b.title?.toLowerCase()
-      ? 1
-      : 0;
-  };
-  const sortedRecipes = [...recipes].sort(alphaNumericSort);
-  useEffect(() => {
-    loadRecipes();
-  }, []);
+  const dispatch = useDispatch();
+  const refreshing = useSelector((state: rootState) => selectRefreshing(state));
+  const isFormVisible = useSelector((state: rootState) =>
+    selectIsFormVisible(state),
+  );
+  const isDeleteModalVisible = useSelector((state: rootState) =>
+    selectIsdeleteModal(state),
+  );
+  const filteredRecipe = useSelector((state: rootState) => state.recipe.search);
+  const sortedRecipes = useSelector(selectSortedRecipes);
 
+  useEffect(() => {
+    dispatch(fetchRecipes());
+  }, [dispatch]);
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(fetchRecipes());
+    }, [dispatch]),
+  );
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
-        value={search}
+        value={filteredRecipe}
         placeholder={'Recherche'}
-        onChangeText={title => searchFilter(title)}
+        onChangeText={title => dispatch(setSearch(title))}
       />
       <FlatList
-        data={sortedRecipes}
-        keyExtractor={item => item.id.toString()}
+        data={filteredRecipesByTitle(sortedRecipes, filteredRecipe)}
+        keyExtractor={item => (item ? item.id.toString() : 'undefined')}
         numColumns={2}
-        renderItem={({item}) => (
-          <RecipeCard
-            recipe={item}
-            openDeleteModal={() => openDeleteRecipeModal(item)}
-          />
-        )}
+        renderItem={({item}) => (item ? <RecipeCard recipe={item} /> : null)}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => dispatch(fetchRecipes())}
+          />
         }
       />
       <TouchableOpacity
-        onPress={() => setIsRecipeFormVisible(!isRecipeFormVisible)}
+        onPress={() => dispatch(openFormModal())}
         style={styles.add}>
         <Icon name="plus-circle" size={30} />
       </TouchableOpacity>
-      {isRecipeFormVisible && (
-        <RecipeForm
-          onClose={closeModal}
-          isRecipeFormVisible
-          onUpdateRecipes={updateScreen}
-        />
-      )}
-      {isDeleteModalVisible && (
-        <DeleteModal
-          recipe={recipe}
-          isDeleteModalVisible
-          onClose={closeModal}
-        />
-      )}
+      {isFormVisible && <RecipeForm />}
+      {isDeleteModalVisible && <DeleteModal />}
     </SafeAreaView>
   );
 };

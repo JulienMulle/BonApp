@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -7,16 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ItemAddFormProps} from '../../interface/ItemInterfaces';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
-import {createdItem} from '../../redux/actions/ItemsActions';
+import {createdItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {rootState} from '../../redux/store';
 import {
   closeItemFormModal,
   selectIsItemFormVisible,
   setNewItem,
-} from '../../redux/selector';
+} from '../../redux/selectors/ItemSelector';
 
 const ItemForm: FC = () => {
   const dispatch = useDispatch();
@@ -25,22 +24,26 @@ const ItemForm: FC = () => {
   );
   const name = useSelector((state: rootState) => state.items.newItem);
   const NewItem = (name: string) => {
-    dispatch(createdItem({newItem:name}));
+    dispatch(createdItem({newItem: name}));
     setTimeout(() => {
       dispatch(setNewItem(''));
     }, 5);
     dispatch(closeItemFormModal());
   };
-
+  const itemFormClose = () => {
+    dispatch(closeItemFormModal());
+    dispatch(fetchItems());
+  };
   return (
     <Modal visible={isItemFormVisible}>
       <View style={styles.modalView}>
         <TextInput
+          autoFocus={true}
           onChangeText={addItem => dispatch(setNewItem(addItem))}
           value={name}
           placeholder={'nouvel article'}
         />
-        <TouchableOpacity onPress={() => dispatch(closeItemFormModal())}>
+        <TouchableOpacity onPress={itemFormClose}>
           <Icon size={30} name="times-circle" />
         </TouchableOpacity>
         <Button title="Ajouter" onPress={() => NewItem(name)} />

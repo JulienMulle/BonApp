@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   FlatList,
@@ -8,48 +8,52 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Item} from '../../interface/ItemInterfaces';
-import {AssociationWithItemProps} from '../../interface/RecipeInterface';
-import {getItems} from '../../api/endpointItem';
 import {associateItemWithRecipe} from '../../api/endpointRecipe';
+import {useDispatch, useSelector} from 'react-redux';
+import {rootState} from '../../redux/store';
+import {
+  selectisAssociationModal,
+  closeAssociationModal,
+} from '../../redux/selectors/RecipeSelector';
+import {fetchItems} from '../../redux/actions/ItemsActions';
+import { associationItemToRecipe, fetchRecipe } from "../../redux/actions/RecipesActions";
 
-const AssociationWithItem: FC<AssociationWithItemProps> = ({
-  recipe,
-  isAssociationVisible,
-  onClose,
-}) => {
-  const [items, setItems] = useState<Item[]>();
-  const loadItems = async () => {
-    try {
-      const itemsList: Item[] = await getItems();
-      setItems(itemsList);
-    } catch (error) {
-      console.error('Erreur dans le chargement des éléments :', error);
-    }
-  };
+const AssociationWithItem: FC = () => {
+  const dispatch = useDispatch();
+  const recipeAssociate = useSelector(
+    (state: rootState) => state.recipe.recipeDetails,
+  );
+  const isAssociate = useSelector((state: rootState) =>
+    selectisAssociationModal(state),
+  );
+  const Items = useSelector((state: rootState) => state.items.items);
   const addItem = async (id: number) => {
-    const recipeId = recipe.id;
+    const recipeId = recipeAssociate.id;
     const itemId = id;
     try {
-      associateItemWithRecipe(itemId, recipeId);
+      dispatch(associationItemToRecipe({itemId: itemId, recipeId: recipeId}))
     } catch (error) {
       console.log(error);
     }
   };
+  const closeModal = () => {
+    dispatch(fetchRecipe(recipeAssociate.id));
+    dispatch(closeAssociationModal());
+  };
   useEffect(() => {
-    loadItems();
-  }, []);
-
+    dispatch(fetchItems());
+  }, [dispatch]);
   return (
-    <Modal visible={isAssociationVisible} animationType="slide">
+    <Modal visible={isAssociate} animationType="slide">
       <View style={styles.closeButton}>
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
           <Icon name="times-circle" size={30} />
         </TouchableOpacity>
       </View>
       <View style={styles.itemContainer}>
         <FlatList
-          data={items}
+          data={Items}
+          numColumns={2}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
             <View style={styles.container}>
@@ -65,18 +69,20 @@ const AssociationWithItem: FC<AssociationWithItemProps> = ({
 };
 const styles = StyleSheet.create({
   itemContainer: {
+    flex: 1,
     flexDirection: 'row',
     width: '100%',
-    alignItems: 'center',
+    justifyContent: 'space-around',
     paddingBottom: 10,
   },
   container: {
-    flexDirection: 'row',
-    width: '95%',
+    flex: 1,
+    margin: 6,
+    width: '45%',
     paddingTop: 10,
-    height: 50,
+    height: 60,
     justifyContent: 'center',
-    paddingLeft: 30,
+    alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 10,
     // Shadow for iOS
@@ -88,9 +94,6 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     // Shadow for Android
     elevation: 5,
-  },
-  name: {
-    fontSize: 16,
   },
   closeButton: {
     alignSelf: 'flex-start',
