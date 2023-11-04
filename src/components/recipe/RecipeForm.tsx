@@ -95,7 +95,6 @@ const RecipeForm: FC = () => {
         }
       });
     }
-
   };
   return (
     <Modal visible={isFormVisible} transparent style={styles.container}>

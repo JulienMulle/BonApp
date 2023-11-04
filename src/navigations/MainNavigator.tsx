@@ -1,13 +1,12 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import RecipesScreen from '../screen/RecipesScreen';
 import ItemsScreen from '../screen/ItemsScreen';
-import ShoppingList from '../screen/ShoppingList';
 import PlanningScreen from '../screen/PlanningScreen';
 import {StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RecipesStack from './RecipeStack';
+import ShoppingStack from './ShoppingStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -61,7 +60,7 @@ export default class MainNavigator extends React.Component {
           })}>
           <Tab.Screen name="liste des recettes" component={RecipesStack} />
           <Tab.Screen name="liste des ingrédients" component={ItemsScreen} />
-          <Tab.Screen name="liste de course" component={ShoppingList} />
+          <Tab.Screen name="liste de course" component={ShoppingStack} />
           <Tab.Screen name="Agenda" component={PlanningScreen} />
         </Tab.Navigator>
       </NavigationContainer>

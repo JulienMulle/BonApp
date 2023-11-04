@@ -1,6 +1,6 @@
 import {rootState} from '../store';
 import {createAction, createSelector} from '@reduxjs/toolkit';
-import {Recipe} from '../../interface/RecipeInterface';
+import {Recipe} from '../../interface/Interface';
 
 export const selectRecipes = (state: rootState) => state.recipe.recipes;
 export const filteredRecipesByTitle = (recipes: Recipe[], title: string) => {

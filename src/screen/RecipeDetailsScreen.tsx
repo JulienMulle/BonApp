@@ -27,10 +27,7 @@ import {
   selectIsFormVisible,
   setRecipe,
 } from '../redux/selectors/RecipeSelector';
-import {
-  fetchRecipe,
-  removeAssociation,
-} from '../redux/actions/RecipesActions';
+import {fetchRecipe, removeAssociation} from '../redux/actions/RecipesActions';
 
 const RecipeDetailsScreen: FC = () => {
   const dispatch = useDispatch();

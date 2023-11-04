@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {Recipe} from '../../interface/RecipeInterface';
+import {Recipe} from '../../interface/Interface';
 import {
   associationItemToRecipe,
   createdRecipe,

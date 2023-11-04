@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import noImage from '../../assets/noImage.jpg';
-import {RecipesCardProps} from '../../interface/RecipeInterface';
+import {RecipesCardProps} from '../../interface/Interface';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {

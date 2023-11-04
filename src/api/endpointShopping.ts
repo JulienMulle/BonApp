@@ -1,33 +1,36 @@
 import axios from 'axios';
-import {Recipe} from '../interface/Interface';
+import {Shopping} from '../interface/Interface';
 
-export const getRecipes = async (): Promise<Recipe[]> => {
+export const getAllShopping = async (): Promise<Shopping[]> => {
   try {
-    const response = await axios.get<Recipe[]>('http://10.0.2.2:5000/recipes/');
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getRecipe = async (id: number): Promise<Recipe> => {
-  try {
-    const response = await axios.get<Recipe>(
-      `http://10.0.2.2:5000/recipe/${id}`,
+    const response = await axios.get<Shopping[]>(
+      'http://10.0.2.2:5000/shopping/',
     );
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-export const createRecipe = async (newRecipe: FormData) => {
+
+export const getShopping = async (id: number): Promise<Shopping> => {
   try {
-    const response = await fetch('http://10.0.2.2:5000/recipe/', {
+    const response = await axios.get(`http://10.0.2.2:5000/shopping/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createdShopping = async (
+  newShopping: Shopping,
+): Promise<Shopping> => {
+  try {
+    const response = await fetch('http://10.0.2.2:5000/shopping/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       },
-      body: newRecipe,
+      body: JSON.stringify({title: newShopping.title, date: newShopping.date}),
     });
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
@@ -40,14 +43,17 @@ export const createRecipe = async (newRecipe: FormData) => {
   }
 };
 
-export const editeRecipe = async (id: number, editedRecipe: FormData) => {
+export const editedShopping = async (
+  id: number,
+  shopping: FormData,
+): Promise<Shopping> => {
   try {
-    const response = await fetch(`http://10.0.2.2:5000/recipe/${id}`, {
+    const response = await fetch(`http://10.0.2.2:5000/shopping/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      body: editedRecipe,
+      body: shopping,
     });
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
@@ -59,23 +65,23 @@ export const editeRecipe = async (id: number, editedRecipe: FormData) => {
     throw error;
   }
 };
-export const deleteRecipe = async (id: number) => {
+
+export const deleteShopping = async (id: number): Promise<Shopping> => {
   try {
-    const response = await axios.delete(`http://10.0.2.2:5000/recipe/${id}`);
+    const response = await axios.delete(`http://10.0.2.2:5000/shopping/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de la suppression de l'élément:", error);
     throw error;
   }
 };
 
-export const associateItemWithRecipe = async (
+export const associateItem = async (
+  shoppingId: number,
   itemId: number,
-  recipeId: number,
-) => {
+): Promise<Shopping> => {
   try {
     const response = await fetch(
-      `http://10.0.2.2:5000/item/${itemId}/associateRecipe/${recipeId}`,
+      `http://10.0.2.2:5000/shopping/${shoppingId}/associateItem/${itemId}`,
       {
         method: 'POST',
         headers: {
@@ -94,13 +100,13 @@ export const associateItemWithRecipe = async (
   }
 };
 
-export const deleteItemAssociationWithRecipe = async (
+export const deleteAssociation = async (
+  shoppingId: number,
   itemId: number,
-  recipeId: number,
-) => {
+): Promise<Shopping> => {
   try {
     const response = await fetch(
-      `http://10.0.2.2:5000/item/${itemId}/deleteAssociationRecipe/${recipeId}`,
+      `http://10.0.2.2:5000/shopping/${shoppingId}/associateItem/${itemId}`,
       {
         method: 'DELETE',
         headers: {
@@ -111,7 +117,6 @@ export const deleteItemAssociationWithRecipe = async (
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
-
     const data = await response.json();
     return data;
   } catch (error) {
