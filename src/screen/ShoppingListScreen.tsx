@@ -9,16 +9,21 @@ import {
 } from '../redux/selectors/ShoppingSelector';
 import ShoppingTile from '../components/shopping/shoppingTile';
 import {fetchAllShopping} from '../redux/actions/ShoppingActions';
+import { useNavigation } from "@react-navigation/native";
 
 const ShoppingListScreen: FC = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const refreshing = useSelector((state: rootState) => selectRefreshing(state));
   const sortedItems = useSelector(selectSortedAllShopping);
   const filteredShopping = useSelector(
     (state: rootState) => state.shopping.search,
   );
+  const goToShoppingDetails = () =>{
+    navigation.navigate('ShoppingDetailsScreen')
+  }
   useEffect(() => {
-    dispatch(fetchAllShopping());
+    dispatch(fetchAllShopping(''));
   }, [dispatch]);
   return (
     <SafeAreaView>
@@ -27,6 +32,7 @@ const ShoppingListScreen: FC = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => <ShoppingTile item={item} />}
       />
+      <Button title='liste des courses' onPress={()=>goToShoppingDetails()}/>
     </SafeAreaView>
   );
 };

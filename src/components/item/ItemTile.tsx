@@ -10,7 +10,11 @@ import {
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {associateItem, createdShopping} from '../../api/endpointShopping';
 import {selectShoppingIsActive} from '../../redux/selectors/ShoppingSelector';
-import { associationItem, createShopping, fetchAllShopping } from "../../redux/actions/ShoppingActions";
+import {
+  associationItem,
+  createShopping,
+  fetchAllShopping,
+} from '../../redux/actions/ShoppingActions';
 
 const ItemTile: FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
