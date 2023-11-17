@@ -41,11 +41,11 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
           date: Date.now(),
           isActive: true,
         };
-        console.log(newShoppingList);
         const newShopping = await createdShopping(newShoppingList);
         const shoppingId = newShopping.id;
         await associateItem(shoppingId, itemId);
       }
+      dispatch(fetchAllShopping())
     } catch (error) {
       console.error(
         "Erreur lors de la création de la liste de courses et de l'ajout de l'item :",

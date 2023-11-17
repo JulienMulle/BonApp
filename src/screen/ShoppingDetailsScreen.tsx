@@ -28,9 +28,12 @@ const ShoppingDetailsScreen: FC = () => {
   };
   const checkedShopping = () => {
     const checked = {
+      title: shoppingIsActive.title,
+      date: shoppingIsActive.date,
       isActive: false,
     };
     editedShopping(shoppingIsActive.id, checked);
+    dispatch(fetchAllShopping())
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
