@@ -12,8 +12,10 @@ import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
 import {
   deletedAssociation,
   fetchAllShopping,
+  updateShopping,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
+import { editedShopping } from "../api/endpointShopping";
 const ShoppingDetailsScreen: FC = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -23,6 +25,12 @@ const ShoppingDetailsScreen: FC = () => {
   };
   const goToShoppingLists = () => {
     navigation.navigate('ShoppingListScreen');
+  };
+  const checkedShopping = () => {
+    const checked = {
+      isActive: false,
+    };
+    editedShopping(shoppingIsActive.id, checked);
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
@@ -40,12 +48,12 @@ const ShoppingDetailsScreen: FC = () => {
           renderItem={({item}) => (
             <View style={styles.container}>
               <Text>{item.name}</Text>
-
             </View>
           )}
         />
-        <Button title="liste des courses" onPress={() => goToShoppingLists()} />
+        <Button title="liste terminer" onPress={() => checkedShopping()} />
       </View>
+      <Button title="liste des courses" onPress={() => goToShoppingLists()} />
     </SafeAreaView>
   );
 };

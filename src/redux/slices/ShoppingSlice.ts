@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {Shopping} from '../../interface/Interface';
-import {deletedAssociation, fetchAllShopping} from '../actions/ShoppingActions';
+import { createShopping, deletedAssociation, fetchAllShopping } from "../actions/ShoppingActions";
 
 const shoppingSlice = createSlice({
   name: 'shopping',
@@ -25,6 +25,9 @@ const shoppingSlice = createSlice({
     });
     builder.addCase(fetchAllShopping.rejected, state => {
       state.refreshing = false;
+    });
+    builder.addCase(createShopping.fulfilled, (state, action)=>{
+      state.shopping.push(action.payload);
     });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
       const {shoppingId, item} = action.payload;

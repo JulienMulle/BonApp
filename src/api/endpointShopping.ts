@@ -24,13 +24,18 @@ export const getShopping = async (id: number): Promise<Shopping> => {
 export const createdShopping = async (
   newShopping: Shopping,
 ): Promise<Shopping> => {
+  console.log(newShopping);
   try {
     const response = await fetch('http://10.0.2.2:5000/shopping/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({title: newShopping.title, date: newShopping.date}),
+      body: JSON.stringify({
+        title: newShopping.title,
+        date: newShopping.date,
+        isActive: newShopping.isActive,
+      }),
     });
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
@@ -38,22 +43,26 @@ export const createdShopping = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Erreur lors de la requête :', error);
+    console.error(`Erreur lors de la requête ${newShopping} :`, error);
     throw error;
   }
 };
 
 export const editedShopping = async (
   id: number,
-  shopping: FormData,
+  shopping: Shopping,
 ): Promise<Shopping> => {
   try {
     const response = await fetch(`http://10.0.2.2:5000/shopping/${id}`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
       },
-      body: shopping,
+      body: JSON.stringify({
+        title: shopping.title,
+        date: shopping.date,
+        isActive: shopping.isActive,
+      }),
     });
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
@@ -95,7 +104,7 @@ export const associateItem = async (
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Erreur lors de la requête :', error);
+    console.error(`Erreur lors de la requête ajout de ${itemId} :`, error);
     throw error;
   }
 };

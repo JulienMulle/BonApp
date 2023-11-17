@@ -31,6 +31,6 @@ export interface Shopping {
   id: number;
   title: string;
   date: Date;
-  items: Item[];
   isActive: boolean;
+  items: Item[];
 }

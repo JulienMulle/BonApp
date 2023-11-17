@@ -1,5 +1,5 @@
 import {rootState} from '../store';
-import {Item} from '../../interface/ItemInterfaces';
+import {Item} from '../../interface/Interface';
 import {createAction, createSelector} from '@reduxjs/toolkit';
 
 export const selectItems = (state: rootState) => state.items.items;

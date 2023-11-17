@@ -16,7 +16,10 @@ import {
   closeAssociationModal,
 } from '../../redux/selectors/RecipeSelector';
 import {fetchItems} from '../../redux/actions/ItemsActions';
-import { associationItemToRecipe, fetchRecipe } from "../../redux/actions/RecipesActions";
+import {
+  associationItemToRecipe,
+  fetchRecipe,
+} from '../../redux/actions/RecipesActions';
 
 const AssociationWithItem: FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +34,7 @@ const AssociationWithItem: FC = () => {
     const recipeId = recipeAssociate.id;
     const itemId = id;
     try {
-      dispatch(associationItemToRecipe({itemId: itemId, recipeId: recipeId}))
+      dispatch(associationItemToRecipe({itemId: itemId, recipeId: recipeId}));
     } catch (error) {
       console.log(error);
     }

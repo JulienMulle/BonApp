@@ -37,6 +37,7 @@ export const fetchShopping = createAsyncThunk(
 export const createShopping = createAsyncThunk(
   'shopping/create shopping',
   async ({newShopping}: {newShopping: Shopping}): Promise<Shopping> => {
+    console.log(newShopping);
     try {
       const response = await createdShopping(newShopping);
       return response;

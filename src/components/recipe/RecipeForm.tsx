@@ -24,7 +24,7 @@ import {
   updatedRecipe,
   fetchRecipe,
 } from '../../redux/actions/RecipesActions';
-import {Recipe} from '../../interface/RecipeInterface';
+import {Recipe} from '../../interface/Interface';
 const RecipeForm: FC = () => {
   const recipeToEdit = useSelector(
     (state: rootState) => state.recipe.editedRecipe,
@@ -43,7 +43,7 @@ const RecipeForm: FC = () => {
   }, [dispatch, file, recipeToEdit]);
   const closeModal = () => {
     if (isEdited) {
-      dispatch(fetchRecipe(newRecipe.id));
+      dispatch(fetchRecipe(recipeToEdit.id));
     }
     dispatch(closeIsEdit());
     dispatch(closeFormModal());

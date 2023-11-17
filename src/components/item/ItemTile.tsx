@@ -9,7 +9,10 @@ import {
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {associateItem, createdShopping} from '../../api/endpointShopping';
-import {selectShoppingIsActive} from '../../redux/selectors/ShoppingSelector';
+import {
+  selectShoppingIsActive,
+  selectSortedAllShopping,
+} from '../../redux/selectors/ShoppingSelector';
 import {
   associationItem,
   createShopping,
@@ -26,10 +29,11 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
     dispatch(deletedItem(id));
     dispatch(fetchItems());
   };
-  const shoppingIsActive = useSelector(selectShoppingIsActive);
+  const shoppingList = useSelector(selectSortedAllShopping);
+  const shoppingIsActive = shoppingList.find(shop => shop.isActive === true);
   const addingItemToShopping = async (itemId: number) => {
     try {
-      if (shoppingIsActive) {
+      if (shoppingIsActive?.isActive) {
         await associateItem(shoppingIsActive.id, itemId);
       } else {
         const newShoppingList = {
@@ -37,9 +41,10 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
           date: Date.now(),
           isActive: true,
         };
-        const newShopping = await dispatch(createShopping(newShoppingList));
+        console.log(newShoppingList);
+        const newShopping = await createdShopping(newShoppingList);
         const shoppingId = newShopping.id;
-        dispatch(associationItem(shoppingId, itemId));
+        await associateItem(shoppingId, itemId);
       }
     } catch (error) {
       console.error(
