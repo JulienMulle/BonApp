@@ -3,11 +3,11 @@ import {Button, Modal, StyleSheet, Text, View} from 'react-native';
 import {
   clearEditedRecipe,
   closedDeleteModal,
-  selectIsdeleteModal
-} from "../redux/selectors/RecipeSelector";
+  selectIsdeleteModal,
+} from '../redux/selectors/RecipeSelector';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../redux/store';
-import { deletedRecipe, fetchRecipes } from "../redux/actions/RecipesActions";
+import {deletedRecipe, fetchRecipes} from '../redux/actions/RecipesActions';
 
 const DeleteModal: FC = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const DeleteModal: FC = () => {
   const removeRecipe = async (id: number) => {
     dispatch(deletedRecipe(id));
     dispatch(clearEditedRecipe());
-    dispatch(fetchRecipes())
+    dispatch(fetchRecipes());
     dispatch(closedDeleteModal());
   };
   return (

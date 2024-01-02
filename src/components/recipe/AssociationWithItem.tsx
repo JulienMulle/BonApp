@@ -12,7 +12,7 @@ import {associateItemWithRecipe} from '../../api/endpointRecipe';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../redux/store';
 import {
-  selectisAssociationModal,
+  selectIsAssociationModal,
   closeAssociationModal,
 } from '../../redux/selectors/RecipeSelector';
 import {fetchItems} from '../../redux/actions/ItemsActions';
@@ -27,7 +27,7 @@ const AssociationWithItem: FC = () => {
     (state: rootState) => state.recipe.recipeDetails,
   );
   const isAssociate = useSelector((state: rootState) =>
-    selectisAssociationModal(state),
+    selectIsAssociationModal(state),
   );
   const Items = useSelector((state: rootState) => state.items.items);
   const addItem = async (id: number) => {

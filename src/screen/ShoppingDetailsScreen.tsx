@@ -1,4 +1,5 @@
 import React, {FC, useEffect} from 'react';
+import CheckBox from '@react-native-community/checkbox';
 import {
   Button,
   FlatList,
@@ -15,7 +16,7 @@ import {
   updateShopping,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
-import { editedShopping } from "../api/endpointShopping";
+import {editedShopping} from '../api/endpointShopping';
 const ShoppingDetailsScreen: FC = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const ShoppingDetailsScreen: FC = () => {
       isActive: false,
     };
     editedShopping(shoppingIsActive.id, checked);
-    dispatch(fetchAllShopping())
+    dispatch(fetchAllShopping());
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
@@ -50,6 +51,7 @@ const ShoppingDetailsScreen: FC = () => {
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
             <View style={styles.container}>
+              <CheckBox />
               <Text>{item.name}</Text>
             </View>
           )}

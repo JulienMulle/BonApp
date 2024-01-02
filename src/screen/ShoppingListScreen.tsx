@@ -1,5 +1,5 @@
-import React, {Component, FC, useEffect} from 'react';
-import {View, Text, Button, FlatList, SafeAreaView} from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {Button, FlatList, SafeAreaView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../redux/store';
 import {
@@ -9,7 +9,7 @@ import {
 } from '../redux/selectors/ShoppingSelector';
 import ShoppingTile from '../components/shopping/shoppingTile';
 import {fetchAllShopping} from '../redux/actions/ShoppingActions';
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
 
 const ShoppingListScreen: FC = () => {
   const navigation = useNavigation();
@@ -19,9 +19,10 @@ const ShoppingListScreen: FC = () => {
   const filteredShopping = useSelector(
     (state: rootState) => state.shopping.search,
   );
-  const goToShoppingDetails = () =>{
-    navigation.navigate('ShoppingDetailsScreen')
-  }
+  const goToShoppingDetails = () => {
+    console.log('Navigating to ShoppingDetailsScreen');
+    navigation.navigate('ShoppingDetailsScreen');
+  };
   useEffect(() => {
     dispatch(fetchAllShopping(''));
   }, [dispatch]);
@@ -32,7 +33,7 @@ const ShoppingListScreen: FC = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => <ShoppingTile item={item} />}
       />
-      <Button title='liste des courses' onPress={()=>goToShoppingDetails()}/>
+      <Button title="liste des courses" onPress={() => goToShoppingDetails()} />
     </SafeAreaView>
   );
 };
