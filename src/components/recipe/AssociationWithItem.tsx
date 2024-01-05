@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {associateItemWithRecipe} from '../../api/endpointRecipe';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../redux/store';
 import {
@@ -36,7 +35,6 @@ const AssociationWithItem: FC = () => {
     try {
       dispatch(associationItemToRecipe({itemId: itemId, recipeId: recipeId}));
     } catch (error) {
-      console.log(error);
     }
   };
   const closeModal = () => {

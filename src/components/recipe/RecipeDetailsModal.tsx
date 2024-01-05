@@ -26,12 +26,12 @@ import {
   selectIsAssociationModal,
   selectIsFormVisible,
   selectViewDetails,
-  setRecipe,
-} from '../../redux/selectors/RecipeSelector';
+  setRecipe
+} from "../../redux/selectors/RecipeSelector";
 import {
-  fetchRecipe,
-  removeAssociation,
-} from '../../redux/actions/RecipesActions';
+  fetchRecipe, fetchRecipes,
+  removeAssociation
+} from "../../redux/actions/RecipesActions";
 
 const RecipeDetailsModal: FC = () => {
   const dispatch = useDispatch();
@@ -57,14 +57,24 @@ const RecipeDetailsModal: FC = () => {
     dispatch(openFormModal());
   };
 
+  const closeDetails = ()=>{
+    dispatch(closeModalDetails());
+    dispatch(fetchRecipes())
+  }
+  useEffect(() => {
+
+    recipeDetails
+  }, );
+
+
   return (
     <SafeAreaView>
       {!isEdited && (
-        <Modal visible={viewDetails} animationType="slide">
+        <Modal visible={viewDetails}>
           <ScrollView>
             <View style={styles.modalView}>
               <View style={styles.containerButton}>
-                <TouchableOpacity onPress={() => dispatch(closeModalDetails())}>
+                <TouchableOpacity onPress={closeDetails}>
                   <Icon size={20} name="times-circle" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => editedRecipe()}>

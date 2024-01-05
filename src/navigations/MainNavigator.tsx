@@ -6,6 +6,7 @@ import {StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ShoppingStack from './ShoppingStack';
 import RecipesScreen from '../screen/RecipesScreen';
+import RecipesStack from "./RecipeStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ export default class MainNavigator extends React.Component {
             ...styles.shadow,
           },
         })}>
-        <Tab.Screen name="liste des recettes" component={RecipesScreen} />
+        <Tab.Screen name="liste des recettes" component={RecipesStack} />
         <Tab.Screen name="liste des ingrédients" component={ItemsScreen} />
         <Tab.Screen name="liste de course" component={ShoppingStack} />
         <Tab.Screen name="Agenda" component={PlanningScreen} />

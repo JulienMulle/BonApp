@@ -45,11 +45,7 @@ const RecipesScreen: FC = () => {
   useEffect(() => {
     dispatch(fetchRecipes());
   }, [dispatch]);
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch(fetchRecipes());
-    }, [dispatch]),
-  );
+
   return (
     <SafeAreaView style={styles.container}>
       <TextInput

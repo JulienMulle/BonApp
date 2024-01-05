@@ -24,7 +24,6 @@ export const getShopping = async (id: number): Promise<Shopping> => {
 export const createdShopping = async (
   newShopping: Shopping,
 ): Promise<Shopping> => {
-  console.log(newShopping);
   try {
     const response = await fetch('http://10.0.2.2:5000/shopping/', {
       method: 'POST',
