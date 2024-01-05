@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Item} from '../interface/ItemInterfaces';
+import {Item} from '../interface/Interface';
 
 export const getItems = async (): Promise<Item[]> => {
   try {

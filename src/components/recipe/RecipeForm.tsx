@@ -24,7 +24,7 @@ import {
   updatedRecipe,
   fetchRecipe,
 } from '../../redux/actions/RecipesActions';
-import {Recipe} from '../../interface/RecipeInterface';
+import {Recipe} from '../../interface/Interface';
 const RecipeForm: FC = () => {
   const recipeToEdit = useSelector(
     (state: rootState) => state.recipe.editedRecipe,
@@ -41,13 +41,7 @@ const RecipeForm: FC = () => {
       dispatch(setNewRecipe({...recipeToEdit, picture: recipeToEdit.picture}));
     }
   }, [dispatch, file, recipeToEdit]);
-  const closeModal = () => {
-    if (isEdited) {
-      dispatch(fetchRecipe(newRecipe.id));
-    }
-    dispatch(closeIsEdit());
-    dispatch(closeFormModal());
-  };
+
   const createRecipe = (newRecipe: Recipe) => {
     if (isEdited) {
       const formData = new FormData();
@@ -59,6 +53,7 @@ const RecipeForm: FC = () => {
         name: 'recipe_image.jpg',
       });
       dispatch(updatedRecipe({id: newRecipe.id, recipeUpdated: formData}));
+      closeModal();
     } else {
       const formData = new FormData();
       formData.append('title', newRecipe.title);
@@ -69,8 +64,16 @@ const RecipeForm: FC = () => {
         name: 'recipe_image.jpg',
       });
       dispatch(createdRecipe({newRecipe: formData}));
+      closeModal();
     }
-    closeModal();
+  };
+  const closeModal = () => {
+    setTimeout(() => {
+      dispatch(fetchRecipe(recipeToEdit.id));
+    },1)
+
+    dispatch(closeIsEdit());
+    dispatch(closeFormModal());
   };
   const selectFile = async (mode: string) => {
     dispatch(setNewRecipe(newRecipe));
@@ -95,7 +98,6 @@ const RecipeForm: FC = () => {
         }
       });
     }
-
   };
   return (
     <Modal visible={isFormVisible} transparent style={styles.container}>

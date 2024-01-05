@@ -1,13 +1,23 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Item, ItemTileProps} from '../../interface/ItemInterfaces';
+import {Item, ItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   openEditItemModal,
   setEditItem,
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
+import {associateItem, createdShopping} from '../../api/endpointShopping';
+import {
+  selectShoppingIsActive,
+  selectSortedAllShopping,
+} from '../../redux/selectors/ShoppingSelector';
+import {
+  associationItem,
+  createShopping,
+  fetchAllShopping,
+} from '../../redux/actions/ShoppingActions';
 
 const ItemTile: FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
@@ -19,6 +29,34 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
     dispatch(deletedItem(id));
     dispatch(fetchItems());
   };
+  const shoppingList = useSelector(selectSortedAllShopping);
+  const shoppingIsActive = shoppingList.find(shop => shop.isActive === true);
+  const addingItemToShopping = async (itemId: number) => {
+    try {
+      if (shoppingIsActive?.isActive) {
+        await associateItem(shoppingIsActive.id, itemId);
+      } else {
+        const newShoppingList = {
+          title: 'Liste de course du ',
+          date: Date.now(),
+          isActive: true,
+        };
+        const newShopping = await createdShopping(newShoppingList);
+        const shoppingId = newShopping.id;
+        await associateItem(shoppingId, itemId);
+      }
+      dispatch(fetchAllShopping())
+    } catch (error) {
+      console.error(
+        "Erreur lors de la création de la liste de courses et de l'ajout de l'item :",
+        error,
+      );
+    }
+  };
+  useEffect(() => {
+    dispatch(fetchAllShopping());
+  }, [dispatch]);
+
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
@@ -29,7 +67,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} color="#900" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => addingItemToShopping(item.id)}>
             <Icon name="cart-arrow-down" size={20} color="#900" />
           </TouchableOpacity>
         </View>

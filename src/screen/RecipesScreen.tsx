@@ -17,15 +17,16 @@ import {rootState} from '../redux/store';
 import {fetchRecipes} from '../redux/actions/RecipesActions';
 import {
   openFormModal,
-  selectRefreshing,
-  setSearch,
-} from '../redux/selectors/RecipeSelector';
+  selectRefreshing, selectViewDetails,
+  setSearch
+} from "../redux/selectors/RecipeSelector";
 import {
   filteredRecipesByTitle,
   selectIsdeleteModal,
   selectIsFormVisible,
   selectSortedRecipes,
 } from '../redux/selectors/RecipeSelector';
+import RecipeDetailsModal from "../components/recipe/RecipeDetailsModal";
 
 const RecipesScreen: FC = () => {
   const dispatch = useDispatch();
@@ -36,17 +37,15 @@ const RecipesScreen: FC = () => {
   const isDeleteModalVisible = useSelector((state: rootState) =>
     selectIsdeleteModal(state),
   );
+  const viewDetails = useSelector((state:rootState)=> selectViewDetails(state)
+  );
   const filteredRecipe = useSelector((state: rootState) => state.recipe.search);
   const sortedRecipes = useSelector(selectSortedRecipes);
 
   useEffect(() => {
     dispatch(fetchRecipes());
   }, [dispatch]);
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch(fetchRecipes());
-    }, [dispatch]),
-  );
+
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -73,6 +72,7 @@ const RecipesScreen: FC = () => {
       </TouchableOpacity>
       {isFormVisible && <RecipeForm />}
       {isDeleteModalVisible && <DeleteModal />}
+      {viewDetails && <RecipeDetailsModal />}
     </SafeAreaView>
   );
 };

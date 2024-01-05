@@ -5,7 +5,7 @@ import {
   updatedItem,
   createdItem,
 } from '../actions/ItemsActions';
-import {Item} from '../../interface/ItemInterfaces';
+import {Item} from '../../interface/Interface';
 
 const itemSlice = createSlice({
   name: 'items',

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -13,7 +13,7 @@ import EditedItemModal from '../components/item/EditedItemModal';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../redux/store';
-import {deletedItem, fetchItems} from '../redux/actions/ItemsActions';
+import {fetchItems} from '../redux/actions/ItemsActions';
 import {
   filterItemsByName,
   selectIsEditItemVisible,
@@ -24,7 +24,6 @@ import {
   setSearch,
 } from '../redux/selectors/ItemSelector';
 import {useFocusEffect} from '@react-navigation/native';
-import {fetchRecipes} from '../redux/actions/RecipesActions';
 
 const ItemsList: FC = () => {
   const dispatch = useDispatch();

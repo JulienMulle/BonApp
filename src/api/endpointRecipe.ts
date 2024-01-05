@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Recipe} from '../interface/RecipeInterface';
+import {Recipe} from '../interface/Interface';
 
 export const getRecipes = async (): Promise<Recipe[]> => {
   try {
@@ -15,6 +15,7 @@ export const getRecipe = async (id: number): Promise<Recipe> => {
     const response = await axios.get<Recipe>(
       `http://10.0.2.2:5000/recipe/${id}`,
     );
+    console.log(response.data)
     return response.data;
   } catch (error) {
     throw error;

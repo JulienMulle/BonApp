@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {Recipe} from '../../interface/RecipeInterface';
+import {Recipe} from '../../interface/Interface';
 import {
   associationItemToRecipe,
   createdRecipe,
@@ -23,6 +23,7 @@ const recipeSlice = createSlice({
     isFormVisible: false,
     isDeleteModalVisible: false,
     isAssociationModalVisible: false,
+    isDetailVisible: false,
     search: '',
   },
   reducers: {
@@ -49,6 +50,12 @@ const recipeSlice = createSlice({
     },
     closeFormModal: state => {
       state.isFormVisible = false;
+    },
+    openModalDetails: state => {
+      state.isDetailVisible = true;
+    },
+    closeModalDetails: state => {
+      state.isDetailVisible = false;
     },
     searchRecipe: (state, action) => {
       state.search = action.payload;

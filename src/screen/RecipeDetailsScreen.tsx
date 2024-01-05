@@ -8,57 +8,72 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
-import ItemTile from '../components/item/ItemTile';
-import {useNavigation} from '@react-navigation/native';
-import AssociationWithItem from '../components/recipe/AssociationWithItem';
-// @ts-ignore
-import noImage from '../assets/noImage.jpg';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import RecipeForm from '../components/recipe/RecipeForm';
+
 import {useDispatch, useSelector} from 'react-redux';
-import {rootState} from '../redux/store';
+
 import {
-  clearEditedRecipe,
+  closeModalDetails,
   openAssociationModal,
   openedIsEdit,
   openFormModal,
-  selectisAssociationModal,
+  selectIsAssociationModal,
   selectIsFormVisible,
+  selectViewDetails,
   setRecipe,
 } from '../redux/selectors/RecipeSelector';
 import {
   fetchRecipe,
+  fetchRecipes,
   removeAssociation,
 } from '../redux/actions/RecipesActions';
+import {useNavigation} from '@react-navigation/native';
+import {clearEditedRecipe} from '../redux/selectors/RecipeSelector';
+import {rootState} from '../redux/store';
+import ItemTile from '../components/item/ItemTile';
+import AssociationWithItem from '../components/recipe/AssociationWithItem';
+import RecipeForm from '../components/recipe/RecipeForm';
 
-const RecipeDetailsScreen: FC = () => {
+const RecipeDetailsModal: FC = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const recipeDetails = useSelector(
     (state: rootState) => state.recipe.recipeDetails,
   );
-  const navigation = useNavigation();
   const isEdited = useSelector((state: rootState) =>
     selectIsFormVisible(state),
   );
   const isAssociate = useSelector((state: rootState) =>
-    selectisAssociationModal(state),
+    selectIsAssociationModal(state),
   );
-  const deleteAssociation = async (id: number) => {
-    dispatch(removeAssociation({itemId: id, recipeId: recipeDetails.id}));
-    dispatch(fetchRecipe(recipeDetails.id));
-  };
+  const viewDetails = useSelector((state: rootState) =>
+    selectViewDetails(state),
+  );
   const returnToRecipeScreen = () => {
     navigation.navigate('RecipesScreen');
     setTimeout(() => {
       dispatch(clearEditedRecipe());
     }, 10);
   };
+  const deleteAssociation = async (id: number) => {
+    dispatch(removeAssociation({itemId: id, recipeId: recipeDetails.id}));
+    dispatch(fetchRecipe(recipeDetails.id));
+  };
   const editedRecipe = () => {
     dispatch(openedIsEdit());
     dispatch(setRecipe(recipeDetails));
     dispatch(openFormModal());
   };
+
+  const closeDetails = () => {
+    dispatch(closeModalDetails());
+    dispatch(fetchRecipes());
+  };
+  useEffect(() => {
+    recipeDetails;
+  });
 
   return (
     <SafeAreaView>
@@ -79,7 +94,10 @@ const RecipeDetailsScreen: FC = () => {
                 style={styles.recipeImage}
               />
             ) : (
-              <Image source={noImage} style={styles.recipeImage} />
+              <Image
+                source={require('../assets/noImage.jpg')}
+                style={styles.recipeImage}
+              />
             )}
             <Text>{recipeDetails.title}</Text>
             <Text>{recipeDetails.description}</Text>
@@ -123,4 +141,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-export default RecipeDetailsScreen;
+export default RecipeDetailsModal;

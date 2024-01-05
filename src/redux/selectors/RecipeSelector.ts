@@ -1,6 +1,6 @@
 import {rootState} from '../store';
 import {createAction, createSelector} from '@reduxjs/toolkit';
-import {Recipe} from '../../interface/RecipeInterface';
+import {Recipe} from '../../interface/Interface';
 
 export const selectRecipes = (state: rootState) => state.recipe.recipes;
 export const filteredRecipesByTitle = (recipes: Recipe[], title: string) => {
@@ -23,13 +23,17 @@ export const selectSortedRecipes = createSelector([selectRecipes], recipes =>
 export const selectRefreshing = (state: rootState) => state.recipe.refreshing;
 export const selectIsdeleteModal = (state: rootState) =>
   state.recipe.isDeleteModalVisible;
-export const openedDeleteModal = createAction('recipe/openedDeleteModal');
-export const closedDeleteModal = createAction('recipe/closeDeleteModal');
-export const selectisAssociationModal = (state: rootState) =>
+
+export const selectIsAssociationModal = (state: rootState) =>
   state.recipe.isAssociationModalVisible;
 export const selectIsFormVisible = (state: rootState) =>
   state.recipe.isFormVisible;
+export const selectViewDetails = (state: rootState) =>
+  state.recipe.isDetailVisible;
+
 export const selectIsEdit = (state: rootState) => state.recipe.isEdit;
+export const openedDeleteModal = createAction('recipe/openModalDetails');
+export const closedDeleteModal = createAction('recipe/closeModalDetails');
 export const openedIsEdit = createAction('recipe/openedIsEdit');
 export const closeIsEdit = createAction('recipe/closedIsEdit');
 export const openAssociationModal = createAction('recipe/openAssociationModal');
@@ -38,6 +42,8 @@ export const closeAssociationModal = createAction(
 );
 export const openFormModal = createAction('recipe/openFormModal');
 export const closeFormModal = createAction('recipe/closeFormModal');
+export const openModalDetails = createAction('recipe/openModalDetails');
+export const closeModalDetails = createAction('recipe/closeModalDetails');
 export const setSearch = createAction<string>('recipe/setSearch');
 export const setRecipe = createAction<Recipe>('recipe/setRecipe');
 export const clearEditedRecipe = createAction('recipe/clearEditedRecipe');
