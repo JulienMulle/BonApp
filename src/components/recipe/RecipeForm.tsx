@@ -53,7 +53,6 @@ const RecipeForm: FC = () => {
         name: 'recipe_image.jpg',
       });
       dispatch(updatedRecipe({id: newRecipe.id, recipeUpdated: formData}));
-      closeModal();
     } else {
       const formData = new FormData();
       formData.append('title', newRecipe.title);
@@ -64,8 +63,8 @@ const RecipeForm: FC = () => {
         name: 'recipe_image.jpg',
       });
       dispatch(createdRecipe({newRecipe: formData}));
-      closeModal();
     }
+    closeModal();
   };
   const closeModal = () => {
     setTimeout(() => {

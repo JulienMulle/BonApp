@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -8,14 +8,12 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
-  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
-  closeModalDetails,
   openAssociationModal,
   openedIsEdit,
   openFormModal,
@@ -52,10 +50,9 @@ const RecipeDetailsModal: FC = () => {
     selectViewDetails(state),
   );
   const returnToRecipeScreen = () => {
-    navigation.navigate('RecipesScreen');
-    setTimeout(() => {
-      dispatch(clearEditedRecipe());
-    }, 10);
+    navigation.goBack();
+    dispatch(fetchRecipes());
+    dispatch(clearEditedRecipe());
   };
   const deleteAssociation = async (id: number) => {
     dispatch(removeAssociation({itemId: id, recipeId: recipeDetails.id}));
@@ -67,10 +64,6 @@ const RecipeDetailsModal: FC = () => {
     dispatch(openFormModal());
   };
 
-  const closeDetails = () => {
-    dispatch(closeModalDetails());
-    dispatch(fetchRecipes());
-  };
   useEffect(() => {
     recipeDetails;
   });

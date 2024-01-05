@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
 import RecipeCard from '../components/recipe/RecipeCard';
 import RecipeForm from '../components/recipe/RecipeForm';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -72,7 +71,6 @@ const RecipesScreen: FC = () => {
       </TouchableOpacity>
       {isFormVisible && <RecipeForm />}
       {isDeleteModalVisible && <DeleteModal />}
-      {viewDetails && <RecipeDetailsModal />}
     </SafeAreaView>
   );
 };
