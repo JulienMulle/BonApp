@@ -25,7 +25,6 @@ import {
   selectIsFormVisible,
   selectSortedRecipes,
 } from '../redux/selectors/RecipeSelector';
-import RecipeDetailsModal from "../components/recipe/RecipeDetailsModal";
 
 const RecipesScreen: FC = () => {
   const dispatch = useDispatch();
@@ -35,8 +34,6 @@ const RecipesScreen: FC = () => {
   );
   const isDeleteModalVisible = useSelector((state: rootState) =>
     selectIsdeleteModal(state),
-  );
-  const viewDetails = useSelector((state:rootState)=> selectViewDetails(state)
   );
   const filteredRecipe = useSelector((state: rootState) => state.recipe.search);
   const sortedRecipes = useSelector(selectSortedRecipes);

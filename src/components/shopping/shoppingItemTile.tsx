@@ -1,13 +1,21 @@
 import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Shopping} from '../../interface/Interface';
+import {useDispatch} from 'react-redux';
+import { ShoppingItemTileProps } from "../../interface/Interface";
 
-const ShoppingTile: FC<{item: Shopping}> = ({item}) => {
+const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
+  const test = item.name;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(test)
+  }, []);
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
-        <Text> {item.title}</Text>
-        <Text> {item.date}</Text>
+        <TouchableOpacity>
+          <Text style={styles.name}>{item.name}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -46,4 +54,5 @@ const styles = StyleSheet.create({
     paddingRight: 30,
   },
 });
-export default ShoppingTile;
+
+export default ShoppingItemTile;

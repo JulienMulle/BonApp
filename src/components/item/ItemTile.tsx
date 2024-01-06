@@ -9,15 +9,8 @@ import {
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {associateItem, createdShopping} from '../../api/endpointShopping';
-import {
-  selectShoppingIsActive,
-  selectSortedAllShopping,
-} from '../../redux/selectors/ShoppingSelector';
-import {
-  associationItem,
-  createShopping,
-  fetchAllShopping,
-} from '../../redux/actions/ShoppingActions';
+import {selectSortedAllShopping} from '../../redux/selectors/ShoppingSelector';
+import {fetchAllShopping} from '../../redux/actions/ShoppingActions';
 
 const ItemTile: FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
@@ -45,7 +38,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
         const shoppingId = newShopping.id;
         await associateItem(shoppingId, itemId);
       }
-      dispatch(fetchAllShopping())
+      dispatch(fetchAllShopping());
     } catch (error) {
       console.error(
         "Erreur lors de la création de la liste de courses et de l'ajout de l'item :",

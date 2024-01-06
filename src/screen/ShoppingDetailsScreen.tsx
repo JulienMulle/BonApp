@@ -1,5 +1,4 @@
 import React, {FC, useEffect} from 'react';
-import CheckBox from '@react-native-community/checkbox';
 import {
   Button,
   FlatList,
@@ -13,10 +12,10 @@ import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
 import {
   deletedAssociation,
   fetchAllShopping,
-  updateShopping,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
+import ShoppingItemTile from '../components/shopping/shoppingItemTile';
 const ShoppingDetailsScreen: FC = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -47,14 +46,8 @@ const ShoppingDetailsScreen: FC = () => {
         <Text>{shoppingIsActive?.date}</Text>
         <FlatList
           data={shoppingIsActive?.items}
-          numColumns={2}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <View style={styles.container}>
-              <CheckBox />
-              <Text>{item.name}</Text>
-            </View>
-          )}
+          keyExtractor={item => item?.id?.toString() ?? ''}
+          renderItem={({item}) => <ShoppingItemTile item={item} />}
         />
         <Button title="liste terminer" onPress={() => checkedShopping()} />
       </View>

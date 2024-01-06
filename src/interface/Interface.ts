@@ -27,6 +27,10 @@ export interface RecipesCardProps {
   recipe: Recipe;
 }
 
+export interface ShoppingItemTileProps {
+  item: Item
+}
+
 export interface Shopping {
   id: number;
   title: string;
