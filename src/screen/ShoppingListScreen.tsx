@@ -20,7 +20,6 @@ const ShoppingListScreen: FC = () => {
     (state: rootState) => state.shopping.search,
   );
   const goToShoppingDetails = () => {
-    console.log('Navigating to ShoppingDetailsScreen');
     navigation.navigate('ShoppingDetailsScreen');
   };
   useEffect(() => {

@@ -7,6 +7,7 @@ import {
   deleteShopping,
   associateItem,
   deleteAssociation,
+  addedQuantity,
 } from '../../api/endpointShopping';
 import {Shopping} from '../../interface/Interface';
 
@@ -77,7 +78,7 @@ export const deletedShopping = createAsyncThunk(
 );
 
 export const associationItem = createAsyncThunk(
-  'shopping / associate Item',
+  'shopping/ associate Item',
   async ({
     shoppingId,
     itemId,
@@ -88,6 +89,26 @@ export const associationItem = createAsyncThunk(
     try {
       const association = await associateItem(shoppingId, itemId);
       return association;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const updateQuantity = createAsyncThunk(
+  'shopping/ quantity item',
+  async ({
+    shoppingId,
+    itemId,
+    quantity,
+  }: {
+    shoppingId: number;
+    itemId: number;
+    quantity: number;
+  }): Promise<Shopping> => {
+    try {
+      const quantityItem = await addedQuantity(shoppingId, itemId, quantity);
+      return quantityItem;
     } catch (error) {
       throw error;
     }

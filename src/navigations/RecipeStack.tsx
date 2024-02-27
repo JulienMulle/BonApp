@@ -7,7 +7,7 @@ export default function RecipesStack() {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="RecipesScreen" component={RecipesScreen} />
+      <Stack.Screen name="Recette" component={RecipesScreen} />
       <Stack.Screen
         name="RecipeDetailsScreen"
         component={RecipeDetailsScreen}

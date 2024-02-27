@@ -23,9 +23,9 @@ export const createdItem = createAsyncThunk(
 );
 export const updatedItem = createAsyncThunk(
   'items/updateItem',
-  async ({id, newName}: {id: number; newName: string}) => {
+  async ({id, newName, quantity}: {id: number; newName: string, quantity: string}) => {
     try {
-      const response = editItem(id, newName);
+      const response = editItem(id, newName, quantity);
       return response;
     } catch (error) {
       throw error;

@@ -10,16 +10,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
 import {useDispatch, useSelector} from 'react-redux';
-
 import {
   openAssociationModal,
   openedIsEdit,
   openFormModal,
   selectIsAssociationModal,
   selectIsFormVisible,
-  selectViewDetails,
   setRecipe,
 } from '../redux/selectors/RecipeSelector';
 import {
@@ -45,9 +42,6 @@ const RecipeDetailsModal: FC = () => {
   );
   const isAssociate = useSelector((state: rootState) =>
     selectIsAssociationModal(state),
-  );
-  const viewDetails = useSelector((state: rootState) =>
-    selectViewDetails(state),
   );
   const returnToRecipeScreen = () => {
     navigation.goBack();

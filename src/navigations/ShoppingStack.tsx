@@ -4,14 +4,14 @@ import ShoppingListScreen from '../screen/ShoppingListScreen';
 import ShoppingDetailsScreen from '../screen/ShoppingDetailsScreen';
 
 export default function ShoppingStack() {
-  const Stack = createStackNavigator();
+  const StackShopping = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
+    <StackShopping.Navigator screenOptions={{headerShown: false}}>
+      <StackShopping.Screen
         name="ShoppingDetailsScreen"
         component={ShoppingDetailsScreen}
       />
-      <Stack.Screen name="ShoppingListScreen" component={ShoppingListScreen} />
-    </Stack.Navigator>
+      <StackShopping.Screen name="ShoppingListScreen" component={ShoppingListScreen} />
+    </StackShopping.Navigator>
   );
 }

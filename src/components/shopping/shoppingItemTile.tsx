@@ -1,15 +1,13 @@
 import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import { ShoppingItemTileProps } from "../../interface/Interface";
+import {ShoppingItemTileProps} from '../../interface/Interface';
 
 const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
   const test = item.name;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(test)
-  }, []);
+  useEffect(() => {}, []);
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>

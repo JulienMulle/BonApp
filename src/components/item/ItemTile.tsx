@@ -8,7 +8,7 @@ import {
   setEditItem,
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
-import {associateItem, createdShopping} from '../../api/endpointShopping';
+import { addedQuantity, associateItem, createdShopping } from '../../api/endpointShopping';
 import {selectSortedAllShopping} from '../../redux/selectors/ShoppingSelector';
 import {fetchAllShopping} from '../../redux/actions/ShoppingActions';
 
@@ -28,6 +28,9 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
     try {
       if (shoppingIsActive?.isActive) {
         await associateItem(shoppingIsActive.id, itemId);
+        setTimeout(()=>{
+          addedQuantity(shoppingIsActive.id, itemId, 1);
+        },5)
       } else {
         const newShoppingList = {
           title: 'Liste de course du ',

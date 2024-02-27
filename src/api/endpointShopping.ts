@@ -108,6 +108,39 @@ export const associateItem = async (
   }
 };
 
+export const addedQuantity = async (
+  shoppingId: number,
+  itemId: number,
+  quantity: number,
+): Promise<Shopping> => {
+  try {
+    const response = await fetch(
+      `http://10.0.2.2:5000/shopping/${shoppingId}/Item/${itemId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          itemId: itemId,
+          shoppingId: shoppingId,
+          quantity: quantity,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to add quantity to item.');
+    }
+
+    const updatedShopping: Shopping = await response.json();
+    return updatedShopping;
+  } catch (error) {
+    console.error('Error adding quantity to item:', error);
+    throw error;
+  }
+};
+
 export const deleteAssociation = async (
   shoppingId: number,
   itemId: number,
