@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
 import {
   deletedAssociation,
-  fetchAllShopping,
+  fetchAllShopping, fetchShopping,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
@@ -37,7 +37,7 @@ const ShoppingDetailsScreen: FC = () => {
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
-  }, [dispatch]);
+  }, [dispatch,shoppingIsActive ]);
 
   return (
     <SafeAreaView>

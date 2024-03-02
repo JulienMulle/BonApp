@@ -2,13 +2,15 @@ import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ShoppingItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  deletedAssociation,
+  deletedAssociation, fetchShopping,
   updateQuantity,
 } from '../../redux/actions/ShoppingActions';
+import { selectShoppingIsActive } from "../../redux/selectors/ShoppingSelector";
 
 const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
+  const shoppingIsActive = useSelector(selectShoppingIsActive);
   const dispatch = useDispatch();
   const quantity = (shoppingId: number, itemId: number, delta: number) => {
     const updatedQuantity: number = item.ShoppingItem.quantity + delta;
@@ -17,7 +19,8 @@ const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
   const deleteItem = (shoppingId: number, itemId: number) => {
     dispatch(deletedAssociation({shoppingId,itemId}));
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+  }, []);
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>

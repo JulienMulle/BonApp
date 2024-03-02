@@ -47,14 +47,10 @@ const shoppingSlice = createSlice({
       state.refreshing = false;
     });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
-      const {shoppping_id, item_id} = action.payload;
-      const shoppingToUpdate = state.shopping.findIndex(
-        shop => shop.id === shoppping_id,
-      );
-      if (shoppingToUpdate !== -1) {
-        state.shopping[shoppingToUpdate].items = state.shopping[
-          shoppingToUpdate
-        ].items.filter(item => item.id !== item_id);
+      const { shopping_id, item_id } = action.payload;
+      const shoppingToUpdate = state.shopping.find(shop => shop.id === shopping_id);
+      if (shoppingToUpdate) {
+        shoppingToUpdate.items = shoppingToUpdate.items.filter(item => item.id !== item_id);
       }
     });
     builder.addCase(updateQuantity.fulfilled, (state, action) => {
@@ -68,11 +64,11 @@ const shoppingSlice = createSlice({
         return false;
       });
       if (shoppingToUpdate) {
-        const itemToUpdate = shoppingToUpdate.items.find(
+        const itemTodelete = shoppingToUpdate.items.find(
           item => item.id === item_id,
         );
-        if (itemToUpdate) {
-          itemToUpdate.ShoppingItem.quantity = quantity;
+        if (itemTodelete) {
+          itemTodelete.ShoppingItem.quantity = quantity;
         }
       }
     });
