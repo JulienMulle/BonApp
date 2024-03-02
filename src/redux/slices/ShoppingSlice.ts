@@ -1,14 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {Shopping} from '../../interface/Interface';
+import {Shopping, ShoppingItem} from '../../interface/Interface';
 import {
   createShopping,
   deletedAssociation,
   fetchAllShopping,
+  fetchShopping,
+  updateQuantity,
 } from '../actions/ShoppingActions';
 
 const shoppingSlice = createSlice({
   name: 'shopping',
   initialState: {
+    shoppingList: {} as Shopping,
     shopping: [] as Shopping[],
     sortedAllShopping: [] as Shopping[],
     newShopping: {} as Shopping,
@@ -33,8 +36,17 @@ const shoppingSlice = createSlice({
     builder.addCase(createShopping.fulfilled, (state, action) => {
       state.shopping.push(action.payload);
     });
+    builder.addCase(fetchShopping.fulfilled, (state, action) => {
+      state.shoppingList = action.payload;
+      state.refreshing = false;
+    });
+    builder.addCase(fetchShopping.pending, state => {
+      state.refreshing = true;
+    });
+    builder.addCase(fetchShopping.rejected, state => {
+      state.refreshing = false;
+    });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {shoppping_id, item_id} = action.payload;
       const shoppingToUpdate = state.shopping.findIndex(
         shop => shop.id === shoppping_id,
@@ -43,6 +55,25 @@ const shoppingSlice = createSlice({
         state.shopping[shoppingToUpdate].items = state.shopping[
           shoppingToUpdate
         ].items.filter(item => item.id !== item_id);
+      }
+    });
+    builder.addCase(updateQuantity.fulfilled, (state, action) => {
+      const {shopping_id, item_id, quantity } = action.payload;
+      const shoppingToUpdate = state.shopping.find(shop => {
+        if (shop.items && shop.items.length > 0) {
+          return shop.items.some(
+            item => item.ShoppingItem?.shopping_id === shopping_id,
+          );
+        }
+        return false;
+      });
+      if (shoppingToUpdate) {
+        const itemToUpdate = shoppingToUpdate.items.find(
+          item => item.id === item_id,
+        );
+        if (itemToUpdate) {
+          itemToUpdate.ShoppingItem.quantity = quantity;
+        }
       }
     });
   },

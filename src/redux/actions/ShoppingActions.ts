@@ -100,14 +100,19 @@ export const updateQuantity = createAsyncThunk(
   async ({
     shoppingId,
     itemId,
-    quantity,
+    updatedQuantity,
   }: {
     shoppingId: number;
     itemId: number;
-    quantity: number;
+    updatedQuantity: number;
   }): Promise<Shopping> => {
     try {
-      const quantityItem = await addedQuantity(shoppingId, itemId, quantity);
+      console.log(shoppingId, itemId, updatedQuantity);
+      const quantityItem = await addedQuantity(
+        shoppingId,
+        itemId,
+        updatedQuantity,
+      );
       return quantityItem;
     } catch (error) {
       throw error;

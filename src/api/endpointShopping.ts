@@ -128,15 +128,13 @@ export const addedQuantity = async (
         }),
       },
     );
-
     if (!response.ok) {
       throw new Error('Failed to add quantity to item.');
     }
-
     const updatedShopping: Shopping = await response.json();
     return updatedShopping;
   } catch (error) {
-    console.error('Error adding quantity to item:', error);
+    console.error('Error adding quantity to item:', shoppingId, itemId, quantity);
     throw error;
   }
 };

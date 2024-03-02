@@ -8,7 +8,11 @@ import {
   setEditItem,
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
-import { addedQuantity, associateItem, createdShopping } from '../../api/endpointShopping';
+import {
+  addedQuantity,
+  associateItem,
+  createdShopping,
+} from '../../api/endpointShopping';
 import {selectSortedAllShopping} from '../../redux/selectors/ShoppingSelector';
 import {fetchAllShopping} from '../../redux/actions/ShoppingActions';
 

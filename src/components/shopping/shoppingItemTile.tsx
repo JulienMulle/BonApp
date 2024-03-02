@@ -2,27 +2,20 @@ import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ShoppingItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {addedQuantity, deleteAssociation} from '../../api/endpointShopping';
+import {useDispatch} from 'react-redux';
+import {
+  deletedAssociation,
+  updateQuantity,
+} from '../../redux/actions/ShoppingActions';
 
 const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
-  const updateQuantity = async (
-    shoppingId: number,
-    itemId: number,
-    delta: number,
-  ) => {
-    try {
-      const updatedQuantity = item.ShoppingItem.quantity + delta;
-      await addedQuantity(shoppingId, itemId, updatedQuantity);
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de la quantité :', error);
-    }
+  const dispatch = useDispatch();
+  const quantity = (shoppingId: number, itemId: number, delta: number) => {
+    const updatedQuantity: number = item.ShoppingItem.quantity + delta;
+    dispatch(updateQuantity({shoppingId, itemId, updatedQuantity}));
   };
-  const deleteItem = async (shoppingId: number, itemId: number) => {
-    try {
-      await deleteAssociation(shoppingId, itemId);
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de la quantité :', error);
-    }
+  const deleteItem = (shoppingId: number, itemId: number) => {
+    dispatch(deletedAssociation({shoppingId,itemId}));
   };
   useEffect(() => {}, []);
   return (
@@ -46,7 +39,7 @@ const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
               size={20}
               color="#900"
               onPress={() =>
-                updateQuantity(
+                quantity(
                   item.ShoppingItem.shopping_id,
                   item.ShoppingItem.item_id,
                   -1,
@@ -61,7 +54,7 @@ const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
               size={20}
               color="#900"
               onPress={() =>
-                updateQuantity(
+                quantity(
                   item.ShoppingItem.shopping_id,
                   item.ShoppingItem.item_id,
                   1,
