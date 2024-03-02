@@ -34,12 +34,15 @@ const shoppingSlice = createSlice({
       state.shopping.push(action.payload);
     });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
-      const {shoppingId, item} = action.payload;
-      const shoppingToUpdate = state.shopping.find(
-        shop => shop.id === shoppingId,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {shoppping_id, item_id} = action.payload;
+      const shoppingToUpdate = state.shopping.findIndex(
+        shop => shop.id === shoppping_id,
       );
-      if (shoppingToUpdate) {
-        shoppingToUpdate.items.splice(item);
+      if (shoppingToUpdate !== -1) {
+        state.shopping[shoppingToUpdate].items = state.shopping[
+          shoppingToUpdate
+        ].items.filter(item => item.id !== item_id);
       }
     });
   },

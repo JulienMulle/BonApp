@@ -117,7 +117,7 @@ export const addedQuantity = async (
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/Item/${itemId}`,
       {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },

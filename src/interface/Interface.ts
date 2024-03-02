@@ -1,6 +1,13 @@
 export interface Item {
   id: number;
   name: string;
+  ShoppingItem?: ShoppingItem
+  ItemRecipe?: ShoppingItem
+}
+
+export interface ShoppingItem {
+  shopping_id: number;
+  item_id: number;
   unit?: string;
   quantity?: number;
 }

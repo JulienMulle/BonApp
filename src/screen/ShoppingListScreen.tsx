@@ -32,7 +32,10 @@ const ShoppingListScreen: FC = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => <ShoppingTile item={item} />}
       />
-      <Button title="liste des courses" onPress={() => goToShoppingDetails()} />
+      <Button
+        title="retour à la liste actuel"
+        onPress={() => goToShoppingDetails()}
+      />
     </SafeAreaView>
   );
 };

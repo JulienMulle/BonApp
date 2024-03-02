@@ -28,9 +28,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
     try {
       if (shoppingIsActive?.isActive) {
         await associateItem(shoppingIsActive.id, itemId);
-        setTimeout(()=>{
-          addedQuantity(shoppingIsActive.id, itemId, 1);
-        },5)
+        await addedQuantity(shoppingIsActive.id, itemId, 1);
       } else {
         const newShoppingList = {
           title: 'Liste de course du ',
@@ -40,6 +38,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
         const newShopping = await createdShopping(newShoppingList);
         const shoppingId = newShopping.id;
         await associateItem(shoppingId, itemId);
+        await addedQuantity(shoppingId, itemId, 1);
       }
       dispatch(fetchAllShopping());
     } catch (error) {
