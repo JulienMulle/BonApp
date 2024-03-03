@@ -19,23 +19,23 @@ import {
   associationItemToRecipe,
   fetchRecipe,
 } from '../../redux/actions/RecipesActions';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 const AssociationWithItem: FC = () => {
-  const dispatch = useDispatch();
-  const recipeAssociate = useSelector(
+  const dispatch = useAppDispatch();
+  const recipeAssociate = useAppSelector(
     (state: rootState) => state.recipe.recipeDetails,
   );
-  const isAssociate = useSelector((state: rootState) =>
+  const isAssociate = useAppSelector((state: rootState) =>
     selectIsAssociationModal(state),
   );
-  const Items = useSelector((state: rootState) => state.items.items);
+  const Items = useAppSelector((state: rootState) => state.items.items);
   const addItem = async (id: number) => {
     const recipeId = recipeAssociate.id;
     const itemId = id;
     try {
       dispatch(associationItemToRecipe({itemId: itemId, recipeId: recipeId}));
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   const closeModal = () => {
     dispatch(fetchRecipe(recipeAssociate.id));

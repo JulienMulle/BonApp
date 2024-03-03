@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../redux/store';
 import {
   closeFormModal,
@@ -25,17 +24,20 @@ import {
   fetchRecipe,
 } from '../../redux/actions/RecipesActions';
 import {Recipe} from '../../interface/Interface';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 const RecipeForm: FC = () => {
-  const recipeToEdit = useSelector(
+  const recipeToEdit = useAppSelector(
     (state: rootState) => state.recipe.editedRecipe,
   );
   const [file, setFile] = useState(recipeToEdit.picture);
-  const dispatch = useDispatch();
-  const isEdited = useSelector((state: rootState) => selectIsEdit(state));
-  const isFormVisible = useSelector((state: rootState) =>
+  const dispatch = useAppDispatch();
+  const isEdited = useAppSelector((state: rootState) => selectIsEdit(state));
+  const isFormVisible = useAppSelector((state: rootState) =>
     selectIsFormVisible(state),
   );
-  const newRecipe = useSelector((state: rootState) => state.recipe.newRecipe);
+  const newRecipe = useAppSelector(
+    (state: rootState) => state.recipe.newRecipe,
+  );
   useEffect(() => {
     if (recipeToEdit) {
       dispatch(setNewRecipe({...recipeToEdit, picture: recipeToEdit.picture}));
@@ -69,7 +71,7 @@ const RecipeForm: FC = () => {
   const closeModal = () => {
     setTimeout(() => {
       dispatch(fetchRecipe(recipeToEdit.id));
-    },1)
+    }, 1);
 
     dispatch(closeIsEdit());
     dispatch(closeFormModal());

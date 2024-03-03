@@ -2,28 +2,33 @@ import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ShoppingItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
 import {
-  deletedAssociation, fetchShopping,
+  deletedAssociation,
   updateQuantity,
 } from '../../redux/actions/ShoppingActions';
-import { selectShoppingIsActive } from "../../redux/selectors/ShoppingSelector";
+import {Check} from '@tamagui/lucide-icons';
+import {Checkbox} from 'tamagui';
+import { useAppDispatch } from '../../redux/hooks';
 
 const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
-  const shoppingIsActive = useSelector(selectShoppingIsActive);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const quantity = (shoppingId: number, itemId: number, delta: number) => {
     const updatedQuantity: number = item.ShoppingItem.quantity + delta;
     dispatch(updateQuantity({shoppingId, itemId, updatedQuantity}));
   };
   const deleteItem = (shoppingId: number, itemId: number) => {
-    dispatch(deletedAssociation({shoppingId,itemId}));
+    dispatch(deletedAssociation({shoppingId, itemId}));
   };
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
+        <Checkbox size="$4">
+          <Checkbox.Indicator>
+            <Check />
+          </Checkbox.Indicator>
+        </Checkbox>
+
         <Icon
           name="trash"
           size={20}

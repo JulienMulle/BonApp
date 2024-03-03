@@ -3,28 +3,22 @@ import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/Interface';
-
-import {useDispatch} from 'react-redux';
 import {
-  openedDeleteModal,
-  openModalDetails,
+  openDeleteModal,
 } from '../../redux/selectors/RecipeSelector';
 import {fetchRecipe} from '../../redux/actions/RecipesActions';
 import {useNavigation} from '@react-navigation/native';
+import { useAppDispatch } from "../../redux/hooks";
 
 const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const goRecipeDetails = () => {
     dispatch(fetchRecipe(recipe.id));
     navigation.navigate('RecipeDetailsScreen');
   };
   const openDeleteRecipeModal = () => {
-    dispatch(openedDeleteModal());
-    dispatch(fetchRecipe(recipe.id));
-  };
-  const openViewDetailsModal = () => {
-    dispatch(openModalDetails());
+    dispatch(openDeleteModal());
     dispatch(fetchRecipe(recipe.id));
   };
   return (

@@ -11,15 +11,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
 import {
   deletedAssociation,
-  fetchAllShopping, fetchShopping,
+  fetchAllShopping,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
 import ShoppingItemTile from '../components/shopping/shoppingItemTile';
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 const ShoppingDetailsScreen: FC = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const shoppingIsActive = useSelector(selectShoppingIsActive);
+  const dispatch = useAppDispatch();
+  const shoppingIsActive = useAppSelector(selectShoppingIsActive);
   const deleteAssociation = (id: number) => {
     dispatch(deletedAssociation({shoppingId: shoppingIsActive.id, itemId: id}));
   };
@@ -37,13 +38,12 @@ const ShoppingDetailsScreen: FC = () => {
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
-  }, [dispatch,shoppingIsActive ]);
+  }, [dispatch]);
 
   return (
     <SafeAreaView>
       <View>
         <Text>{shoppingIsActive?.title}</Text>
-        <Text>{shoppingIsActive?.date}</Text>
         <FlatList
           data={shoppingIsActive?.items}
           keyExtractor={item => item?.id?.toString() ?? ''}
