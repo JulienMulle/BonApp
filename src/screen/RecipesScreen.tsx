@@ -11,12 +11,11 @@ import RecipeCard from '../components/recipe/RecipeCard';
 import RecipeForm from '../components/recipe/RecipeForm';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeleteModal from '../components/DeleteModal';
-import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../redux/store';
 import {fetchRecipes} from '../redux/actions/RecipesActions';
 import {
   openFormModal,
-  selectRefreshing, selectViewDetails,
+  selectRefreshing,
   setSearch
 } from "../redux/selectors/RecipeSelector";
 import {
@@ -25,18 +24,19 @@ import {
   selectIsFormVisible,
   selectSortedRecipes,
 } from '../redux/selectors/RecipeSelector';
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const RecipesScreen: FC = () => {
-  const dispatch = useDispatch();
-  const refreshing = useSelector((state: rootState) => selectRefreshing(state));
-  const isFormVisible = useSelector((state: rootState) =>
+  const dispatch = useAppDispatch();
+  const refreshing = useAppSelector((state: rootState) => selectRefreshing(state));
+  const isFormVisible = useAppSelector((state: rootState) =>
     selectIsFormVisible(state),
   );
-  const isDeleteModalVisible = useSelector((state: rootState) =>
+  const isDeleteModalVisible = useAppSelector((state: rootState) =>
     selectIsdeleteModal(state),
   );
-  const filteredRecipe = useSelector((state: rootState) => state.recipe.search);
-  const sortedRecipes = useSelector(selectSortedRecipes);
+  const filteredRecipe = useAppSelector((state: rootState) => state.recipe.search);
+  const sortedRecipes = useAppSelector(selectSortedRecipes);
 
   useEffect(() => {
     dispatch(fetchRecipes());
@@ -67,7 +67,7 @@ const RecipesScreen: FC = () => {
         <Icon name="plus-circle" size={30} />
       </TouchableOpacity>
       {isFormVisible && <RecipeForm />}
-      {isDeleteModalVisible && <DeleteModal />}
+      {isDeleteModalVisible && <DeleteModal recipe={sortedRecipes.id} />}
     </SafeAreaView>
   );
 };

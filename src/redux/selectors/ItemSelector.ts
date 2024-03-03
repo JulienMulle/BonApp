@@ -35,5 +35,5 @@ export const openItemFormModal = createAction('items/openItemFormModal');
 export const closeItemFormModal = createAction('items/closeItemFormModal');
 export const setSearch = createAction('items/setSearch');
 export const setNewItem = createAction('items/setNewItem');
-export const setEdition = createAction('items/setEdition');
+export const setEdition = createAction<string>('items/setEdition');
 export const setEditItem = createAction('items/setEditItem');

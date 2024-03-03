@@ -21,6 +21,10 @@ export interface ItemTileProps {
   openModal?: () => void;
 }
 
+export interface RecipeDeleteProps {
+  recipe: Recipe
+}
+
 export interface Recipe {
   id: number;
   title: string;

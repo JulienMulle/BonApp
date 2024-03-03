@@ -37,7 +37,7 @@ export const closeAssociationModal = createAction(
 );
 export const openFormModal = createAction('recipe/openFormModal');
 export const closeFormModal = createAction('recipe/closeFormModal');
-export const openDeleteModal = createAction('recipe/openDeleteModal');
+export const openDeleteModal = createAction('recipe/openedDeleteModal');
 export const closedDeleteModal = createAction('recipe/closeDeleteModal');
 export const setSearch = createAction<string>('recipe/setSearch');
 export const setRecipe = createAction<Recipe>('recipe/setRecipe');

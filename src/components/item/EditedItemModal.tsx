@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
 import {rootState} from '../../redux/store';
 import {
   closeEditionItem,
@@ -20,14 +19,15 @@ import {
 } from '../../redux/selectors/ItemSelector';
 import {fetchItems, updatedItem} from '../../redux/actions/ItemsActions';
 import {clearEditedRecipe} from '../../redux/selectors/RecipeSelector';
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const EditedItemModal: FC = () => {
-  const dispatch = useDispatch();
-  const isEdited = useSelector((state: rootState) => editionItem(state));
-  const isEditItemVisible = useSelector((state: rootState) =>
+  const dispatch = useAppDispatch();
+  const isEdited = useAppSelector((state: rootState) => editionItem(state));
+  const isEditItemVisible = useAppSelector((state: rootState) =>
     selectIsEditItemVisible(state),
   );
-  const editedItem = useSelector((state: rootState) => state.items.editedItem);
+  const editedItem = useAppSelector((state: rootState) => state.items.editedItem);
   const editionItems = async (id: number, newName: string) => {
     dispatch(updatedItem({id, newName}));
     dispatch(closeEditItemModal());
