@@ -159,7 +159,7 @@ export const addedQuantity = async (
 export const deleteAssociation = async (
   shoppingId: number,
   itemId: number,
-): Promise<Shopping> => {
+): Promise<{ itemId: number; shoppingId: number }> => {
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/associateItem/${itemId}`,
@@ -173,7 +173,7 @@ export const deleteAssociation = async (
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
-    const data = await response.json();
+    const data = {shoppingId, itemId};
     return data;
   } catch (error) {
     console.error('Erreur lors de la requête :', error);

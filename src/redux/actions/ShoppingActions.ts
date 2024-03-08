@@ -41,7 +41,6 @@ export const fetchShoppingIsActive = createAsyncThunk(
   async (): Promise<Shopping> => {
     try {
       const shopIsActive = await getShoppingIsActive();
-      console.log(shopIsActive,'action')
       return shopIsActive;
     } catch (error) {
       throw error;
@@ -121,7 +120,6 @@ export const updateQuantity = createAsyncThunk(
     updatedQuantity: number;
   }): Promise<Shopping> => {
     try {
-      console.log(shoppingId, itemId, updatedQuantity);
       const quantityItem = await addedQuantity(
         shoppingId,
         itemId,
@@ -135,7 +133,7 @@ export const updateQuantity = createAsyncThunk(
 );
 
 export const deletedAssociation = createAsyncThunk(
-  'shopping/ delete association',
+  'shopping/ delete_association',
   async ({
     shoppingId,
     itemId,

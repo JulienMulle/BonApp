@@ -58,34 +58,16 @@ const shoppingSlice = createSlice({
       .addCase(fetchShoppingIsActive.rejected, state => {
         state.refreshing = false;
       })
-      .addCase(deletedAssociation.pending, state => {
-        state.refreshing = true;
-      })
       .addCase(deletedAssociation.fulfilled, (state, action) => {
-        const {shopping_id, item_id} = action.payload;
-        const shoppingToUpdate = state.shopping.find(
-          shop => shop.id === shopping_id,
+        const {shoppingId, itemId} = action.payload;
+        const shoppingToUpdate = state.shoppingList;
+        shoppingToUpdate.items = shoppingToUpdate.items.filter(
+          item => item.id !== itemId,
         );
-        if (shoppingToUpdate) {
-          shoppingToUpdate.items = shoppingToUpdate.items.filter(
-            item => item.id !== item_id,
-          );
-        }
-        state.refreshing = false;
-      })
-      .addCase(deletedAssociation.rejected, state => {
-        state.refreshing = false;
       })
       .addCase(updateQuantity.fulfilled, (state, action) => {
         const {shopping_id, item_id, quantity} = action.payload;
-        const shoppingToUpdate = state.shopping.find(shop => {
-          if (shop.items && shop.items.length > 0) {
-            return shop.items.some(
-              item => item.ShoppingItem?.shopping_id === shopping_id,
-            );
-          }
-          return false;
-        });
+        const shoppingToUpdate = state.shoppingList;
         if (shoppingToUpdate) {
           const itemTodelete = shoppingToUpdate.items.find(
             item => item.id === item_id,

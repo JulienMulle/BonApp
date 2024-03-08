@@ -3,19 +3,15 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ShoppingItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
-  deletedAssociation, fetchShoppingIsActive,
+  deletedAssociation,
   updateQuantity,
 } from '../../redux/actions/ShoppingActions';
 import {Check} from '@tamagui/lucide-icons';
 import {Checkbox} from 'tamagui';
-import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {RootState} from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
   const dispatch = useAppDispatch();
-  const shoppingItem = useAppSelector(
-    (state: RootState) => state.shopping.shoppingList.items,
-  );
   const quantity = (shoppingId: number, itemId: number, delta: number) => {
     const updatedQuantity: number = item.ShoppingItem.quantity + delta;
     dispatch(updateQuantity({shoppingId, itemId, updatedQuantity}));
@@ -32,7 +28,6 @@ const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
             <Check />
           </Checkbox.Indicator>
         </Checkbox>
-
         <Icon
           name="trash"
           size={20}

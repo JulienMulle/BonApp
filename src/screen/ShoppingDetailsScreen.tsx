@@ -5,21 +5,25 @@ import {
   RefreshControl,
   SafeAreaView,
   StyleSheet,
-  Text,
+  Text, TouchableOpacity,
   View,
 } from 'react-native';
 import {
   selectRefreshing,
 } from '../redux/selectors/ShoppingSelector';
 import {
+  deletedAssociation,
   fetchShopping,
-  fetchShoppingIsActive,
+  fetchShoppingIsActive, updateQuantity,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
-import ShoppingItemTile from '../components/shopping/shoppingItemTile';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {RootState} from '../redux/store';
+import { Checkbox } from "tamagui";
+import { Check } from "@tamagui/lucide-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import ShoppingItemTile from "../components/shopping/shoppingItemTile";
 
 
 const ShoppingDetailsScreen: FC = () => {
@@ -28,8 +32,16 @@ const ShoppingDetailsScreen: FC = () => {
   const shoppingIsActive = useAppSelector(
     (state: RootState) => state.shopping.shoppingList,
   );
-  console.log(shoppingIsActive, 'dans le composant');
+
   const navigation = useNavigation();
+  const quantity = (shoppingId: number, itemId: number, delta: number) => {
+    const shoppingItem = shoppingIsActive.items.find(item => item.ShoppingItem.item_id === itemId);
+    const updatedQuantity = (shoppingItem.ShoppingItem.quantity ?? 0) + delta;
+    dispatch(updateQuantity({shoppingId, itemId, updatedQuantity}));
+  };
+  const deleteItem = (shoppingId: number, itemId: number) => {
+    dispatch(deletedAssociation({shoppingId, itemId}));
+  };
 
   const goToShoppingLists = () => {
     navigation.navigate('ShoppingListScreen');
@@ -45,7 +57,6 @@ const ShoppingDetailsScreen: FC = () => {
   };
   useEffect(() => {
     dispatch(fetchShoppingIsActive());
-    console.log(shoppingIsActive, 'ecran');
   }, [dispatch]);
 
   return (
@@ -55,7 +66,7 @@ const ShoppingDetailsScreen: FC = () => {
         <FlatList
           data={shoppingIsActive?.items}
           keyExtractor={item => item?.id?.toString() ?? ''}
-          renderItem={({item}) => <ShoppingItemTile item={item} />}
+          renderItem={({item}) => <ShoppingItemTile item={item}/> }
           refreshControl={
             <RefreshControl
               refreshing={refresh}
@@ -78,13 +89,12 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   container: {
-    flex: 1,
-    margin: 6,
-    width: '45%',
+    flexDirection: 'row',
+    width: '95%',
     paddingTop: 10,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 50,
+    justifyContent: 'space-between',
+    paddingLeft: 30,
     backgroundColor: 'white',
     borderRadius: 10,
     // Shadow for iOS
@@ -97,8 +107,18 @@ const styles = StyleSheet.create({
     // Shadow for Android
     elevation: 5,
   },
-  closeButton: {
-    alignSelf: 'flex-start',
+  updateQuantity: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'space-between',
+  },
+  name: {
+    fontSize: 16,
+  },
+  btn: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    paddingRight: 30,
   },
 });
 
