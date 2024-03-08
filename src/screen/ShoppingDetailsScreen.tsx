@@ -5,26 +5,22 @@ import {
   RefreshControl,
   SafeAreaView,
   StyleSheet,
-  Text, TouchableOpacity,
+  Text,
   View,
 } from 'react-native';
-import {
-  selectRefreshing,
-} from '../redux/selectors/ShoppingSelector';
+import {selectRefreshing} from '../redux/selectors/ShoppingSelector';
 import {
   deletedAssociation,
   fetchShopping,
-  fetchShoppingIsActive, updateQuantity,
+  fetchShoppingIsActive,
+  updateQuantity,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {RootState} from '../redux/store';
-import { Checkbox } from "tamagui";
-import { Check } from "@tamagui/lucide-icons";
-import Icon from "react-native-vector-icons/FontAwesome";
-import ShoppingItemTile from "../components/shopping/shoppingItemTile";
 
+import ShoppingItemTile from '../components/shopping/shoppingItemTile';
 
 const ShoppingDetailsScreen: FC = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +31,9 @@ const ShoppingDetailsScreen: FC = () => {
 
   const navigation = useNavigation();
   const quantity = (shoppingId: number, itemId: number, delta: number) => {
-    const shoppingItem = shoppingIsActive.items.find(item => item.ShoppingItem.item_id === itemId);
+    const shoppingItem = shoppingIsActive.items.find(
+      item => item.ShoppingItem.item_id === itemId,
+    );
     const updatedQuantity = (shoppingItem.ShoppingItem.quantity ?? 0) + delta;
     dispatch(updateQuantity({shoppingId, itemId, updatedQuantity}));
   };
@@ -66,7 +64,7 @@ const ShoppingDetailsScreen: FC = () => {
         <FlatList
           data={shoppingIsActive?.items}
           keyExtractor={item => item?.id?.toString() ?? ''}
-          renderItem={({item}) => <ShoppingItemTile item={item}/> }
+          renderItem={({item}) => <ShoppingItemTile item={item} />}
           refreshControl={
             <RefreshControl
               refreshing={refresh}

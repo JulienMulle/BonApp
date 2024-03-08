@@ -3,12 +3,10 @@ import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/Interface';
-import {
-  openDeleteModal,
-} from '../../redux/selectors/RecipeSelector';
+import {openDeleteModal} from '../../redux/selectors/RecipeSelector';
 import {fetchRecipe} from '../../redux/actions/RecipesActions';
 import {useNavigation} from '@react-navigation/native';
-import { useAppDispatch } from "../../redux/hooks";
+import {useAppDispatch} from '../../redux/hooks';
 
 const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
   const dispatch = useAppDispatch();
