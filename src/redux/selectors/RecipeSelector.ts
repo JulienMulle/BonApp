@@ -1,8 +1,8 @@
-import {rootState} from '../store';
+import {RootState} from '../store';
 import {createAction, createSelector} from '@reduxjs/toolkit';
 import {Recipe} from '../../interface/Interface';
 
-export const selectRecipes = (state: rootState) => state.recipe.recipes;
+export const selectRecipes = (state: RootState) => state.recipe.recipes;
 export const filteredRecipesByTitle = (recipes: Recipe[], title: string) => {
   if (title.trim() !== '') {
     return recipes.filter(recipe =>
@@ -20,15 +20,15 @@ const alphaNumericSort = (a: Recipe, b: Recipe) => {
 export const selectSortedRecipes = createSelector([selectRecipes], recipes =>
   [...recipes].sort(alphaNumericSort),
 );
-export const selectRefreshing = (state: rootState) => state.recipe.refreshing;
-export const selectIsdeleteModal = (state: rootState) =>
+export const selectRefreshing = (state: RootState) => state.recipe.refreshing;
+export const selectIsdeleteModal = (state: RootState) =>
   state.recipe.isDeleteModalVisible;
 
-export const selectIsAssociationModal = (state: rootState) =>
+export const selectIsAssociationModal = (state: RootState) =>
   state.recipe.isAssociationModalVisible;
-export const selectIsFormVisible = (state: rootState) =>
+export const selectIsFormVisible = (state: RootState) =>
   state.recipe.isFormVisible;
-export const selectIsEdit = (state: rootState) => state.recipe.isEdit;
+export const selectIsEdit = (state: RootState) => state.recipe.isEdit;
 export const openedIsEdit = createAction('recipe/openedIsEdit');
 export const closeIsEdit = createAction('recipe/closedIsEdit');
 export const openAssociationModal = createAction('recipe/openAssociationModal');

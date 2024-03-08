@@ -2,28 +2,35 @@ import React, {FC, useEffect} from 'react';
 import {
   Button,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
 import {
-  deletedAssociation,
-  fetchAllShopping,
+  selectRefreshing,
+} from '../redux/selectors/ShoppingSelector';
+import {
+  fetchShopping,
+  fetchShoppingIsActive,
 } from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
 import ShoppingItemTile from '../components/shopping/shoppingItemTile';
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {RootState} from '../redux/store';
+
+
 const ShoppingDetailsScreen: FC = () => {
-  const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const shoppingIsActive = useAppSelector(selectShoppingIsActive);
-  const deleteAssociation = (id: number) => {
-    dispatch(deletedAssociation({shoppingId: shoppingIsActive.id, itemId: id}));
-  };
+  const refresh = useAppSelector((state: RootState) => selectRefreshing(state));
+  const shoppingIsActive = useAppSelector(
+    (state: RootState) => state.shopping.shoppingList,
+  );
+  console.log(shoppingIsActive, 'dans le composant');
+  const navigation = useNavigation();
+
   const goToShoppingLists = () => {
     navigation.navigate('ShoppingListScreen');
   };
@@ -34,10 +41,11 @@ const ShoppingDetailsScreen: FC = () => {
       isActive: false,
     };
     editedShopping(shoppingIsActive.id, checked);
-    dispatch(fetchAllShopping());
+    dispatch(fetchShopping(shoppingIsActive.id));
   };
   useEffect(() => {
-    dispatch(fetchAllShopping());
+    dispatch(fetchShoppingIsActive());
+    console.log(shoppingIsActive, 'ecran');
   }, [dispatch]);
 
   return (
@@ -48,6 +56,12 @@ const ShoppingDetailsScreen: FC = () => {
           data={shoppingIsActive?.items}
           keyExtractor={item => item?.id?.toString() ?? ''}
           renderItem={({item}) => <ShoppingItemTile item={item} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={() => dispatch(fetchShopping(shoppingIsActive.id))}
+            />
+          }
         />
         <Button title="liste terminer" onPress={() => checkedShopping()} />
       </View>

@@ -36,6 +36,7 @@ export const deletedItem = createAsyncThunk(
   'items/deleteItem',
   async (itemId: number) => {
     try {
+        console.log(itemId)
       const response = await deleteItem(itemId);
       return response;
     } catch (error) {

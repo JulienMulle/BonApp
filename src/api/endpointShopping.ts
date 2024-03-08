@@ -21,6 +21,18 @@ export const getShopping = async (id: number): Promise<Shopping> => {
   }
 };
 
+export const getShoppingIsActive = async (): Promise<Shopping> => {
+  try {
+    const response = await axios.get<Shopping>(
+      'http://10.0.2.2:5000/shoppingIsActive',
+    );
+    console.log(response.data, 'endpoint');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createdShopping = async (
   newShopping: Shopping,
 ): Promise<Shopping> => {
@@ -48,8 +60,8 @@ export const createdShopping = async (
 };
 
 export const editedShopping = async (
-  id: number,
-  shopping: Shopping,
+    id: number,
+    shopping: { date: Date; title: string; isActive: boolean },
 ): Promise<Shopping> => {
   try {
     const response = await fetch(`http://10.0.2.2:5000/shopping/${id}`, {
@@ -134,7 +146,12 @@ export const addedQuantity = async (
     const updatedShopping: Shopping = await response.json();
     return updatedShopping;
   } catch (error) {
-    console.error('Error adding quantity to item:', shoppingId, itemId, quantity);
+    console.error(
+      'Error adding quantity to item:',
+      shoppingId,
+      itemId,
+      quantity,
+    );
     throw error;
   }
 };

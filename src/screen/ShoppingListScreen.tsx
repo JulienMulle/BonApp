@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {Button, FlatList, SafeAreaView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {rootState} from '../redux/store';
+import {RootState} from '../redux/store';
 import {
   filteredShoppingByTitle,
   selectRefreshing,
@@ -14,10 +14,10 @@ import {useNavigation} from '@react-navigation/native';
 const ShoppingListScreen: FC = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const refreshing = useSelector((state: rootState) => selectRefreshing(state));
+  const refreshing = useSelector((state: RootState) => selectRefreshing(state));
   const sortedItems = useSelector(selectSortedAllShopping);
   const filteredShopping = useSelector(
-    (state: rootState) => state.shopping.search,
+    (state: RootState) => state.shopping.search,
   );
   const goToShoppingDetails = () => {
     navigation.navigate('ShoppingDetailsScreen');

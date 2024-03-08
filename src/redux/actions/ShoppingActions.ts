@@ -8,6 +8,7 @@ import {
   associateItem,
   deleteAssociation,
   addedQuantity,
+  getShoppingIsActive,
 } from '../../api/endpointShopping';
 import {Shopping} from '../../interface/Interface';
 
@@ -29,6 +30,19 @@ export const fetchShopping = createAsyncThunk(
     try {
       const shopping = await getShopping(shoppingId);
       return shopping;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const fetchShoppingIsActive = createAsyncThunk(
+  'shopping/ isActive',
+  async (): Promise<Shopping> => {
+    try {
+      const shopIsActive = await getShoppingIsActive();
+      console.log(shopIsActive,'action')
+      return shopIsActive;
     } catch (error) {
       throw error;
     }

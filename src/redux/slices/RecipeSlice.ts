@@ -85,8 +85,15 @@ const recipeSlice = createSlice({
         state.refreshing = false;
         state.recipeDetails = action.payload;
       })
+      .addCase(createdRecipe.pending, state => {
+        state.refreshing = true;
+      })
       .addCase(createdRecipe.fulfilled, (state, action) => {
         state.recipes.push(action.payload);
+        state.refreshing = false;
+      })
+      .addCase(createdRecipe.rejected, state => {
+        state.refreshing = false;
       })
       .addCase(updatedRecipe.fulfilled, (state, action) => {
         const {id, updatedRecipe} = action.payload;
@@ -103,12 +110,13 @@ const recipeSlice = createSlice({
       })
       .addCase(deletedRecipe.fulfilled, (state, action) => {
         const recpeToDelete = action.payload;
-        const recipeIndex = state.recipes.findIndex(
+        const recipeIndex = state.recipes.find(
           recipe => recipe.id === recpeToDelete,
         );
-        if (recipeIndex !== -1) {
-          state.recipes.splice(recipeIndex, 1);
+        if (recipeIndex) {
+          state.recipes.filter(recipeIndex);
         }
+        state.refreshing = false;
       })
       .addCase(deletedRecipe.rejected, state => {
         state.refreshing = false;
@@ -128,7 +136,7 @@ const recipeSlice = createSlice({
           recipe => recipe.id === recipeId,
         );
         if (recipeToEdit) {
-          recipeToEdit.items.splice(item);
+          recipeToEdit.items.filter(item);
         }
       });
   },

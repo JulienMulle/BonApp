@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {rootState} from '../../redux/store';
+import {RootState} from '../../redux/store';
 import {
   selectIsAssociationModal,
   closeAssociationModal,
@@ -24,12 +24,12 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 const AssociationWithItem: FC = () => {
   const dispatch = useAppDispatch();
   const recipeAssociate = useAppSelector(
-    (state: rootState) => state.recipe.recipeDetails,
+    (state: RootState) => state.recipe.recipeDetails,
   );
-  const isAssociate = useAppSelector((state: rootState) =>
+  const isAssociate = useAppSelector((state: RootState) =>
     selectIsAssociationModal(state),
   );
-  const Items = useAppSelector((state: rootState) => state.items.items);
+  const Items = useAppSelector((state: RootState) => state.items.items);
   const addItem = async (id: number) => {
     const recipeId = recipeAssociate.id;
     const itemId = id;

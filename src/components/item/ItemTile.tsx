@@ -2,7 +2,6 @@ import React, {FC, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Item, ItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   openEditItemModal,
   setEditItem,
@@ -13,11 +12,13 @@ import {
   associateItem,
   createdShopping,
 } from '../../api/endpointShopping';
-import {selectSortedAllShopping} from '../../redux/selectors/ShoppingSelector';
-import {fetchAllShopping} from '../../redux/actions/ShoppingActions';
+import {fetchShoppingIsActive} from '../../redux/actions/ShoppingActions';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {RootState} from '@reduxjs/toolkit/query';
 
 const ItemTile: FC<ItemTileProps> = ({item}) => {
-  const dispatch = useDispatch();
+
+  const dispatch = useAppDispatch();
   const openEditModal = (item: Item) => {
     dispatch(openEditItemModal());
     dispatch(setEditItem(item));
@@ -26,8 +27,9 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
     dispatch(deletedItem(id));
     dispatch(fetchItems());
   };
-  const shoppingList = useSelector(selectSortedAllShopping);
-  const shoppingIsActive = shoppingList.find(shop => shop.isActive === true);
+  const shoppingIsActive = useAppSelector(
+    (state: RootState) => state.shopping.shoppingList,
+  );
   const addingItemToShopping = async (itemId: number) => {
     try {
       if (shoppingIsActive?.isActive) {
@@ -44,7 +46,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
         await associateItem(shoppingId, itemId);
         await addedQuantity(shoppingId, itemId, 1);
       }
-      dispatch(fetchAllShopping());
+      dispatch(fetchShoppingIsActive());
     } catch (error) {
       console.error(
         "Erreur lors de la création de la liste de courses et de l'ajout de l'item :",
@@ -52,9 +54,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
       );
     }
   };
-  useEffect(() => {
-    dispatch(fetchAllShopping());
-  }, [dispatch]);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.itemContainer}>
