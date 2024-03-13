@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   openAssociationModal,
   openedIsEdit,
@@ -30,17 +29,18 @@ import {RootState} from '../redux/store';
 import ItemTile from '../components/item/ItemTile';
 import AssociationWithItem from '../components/recipe/AssociationWithItem';
 import RecipeForm from '../components/recipe/RecipeForm';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
 
 const RecipeDetailsModal: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const recipeDetails = useSelector(
+  const recipeDetails = useAppSelector(
     (state: RootState) => state.recipe.recipeDetails,
   );
-  const isEdited = useSelector((state: RootState) =>
+  const isEdited = useAppSelector((state: RootState) =>
     selectIsFormVisible(state),
   );
-  const isAssociate = useSelector((state: RootState) =>
+  const isAssociate = useAppSelector((state: RootState) =>
     selectIsAssociationModal(state),
   );
   const returnToRecipeScreen = () => {
@@ -50,7 +50,6 @@ const RecipeDetailsModal: FC = () => {
   };
   const deleteAssociation = async (id: number) => {
     dispatch(removeAssociation({itemId: id, recipeId: recipeDetails.id}));
-    dispatch(fetchRecipe(recipeDetails.id));
   };
   const editedRecipe = () => {
     dispatch(openedIsEdit());

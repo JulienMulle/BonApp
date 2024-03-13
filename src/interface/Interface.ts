@@ -1,8 +1,8 @@
 export interface Item {
   id: number;
   name: string;
-  ShoppingItem?: ShoppingItem
-  ItemRecipe?: ShoppingItem
+  ShoppingItem?: ShoppingItem;
+  ItemRecipe?: ShoppingItem;
 }
 
 export interface ShoppingItem {
@@ -22,7 +22,7 @@ export interface ItemTileProps {
 }
 
 export interface RecipeDeleteProps {
-  recipe: Recipe
+  recipe: Recipe;
 }
 
 export interface Recipe {
@@ -39,7 +39,7 @@ export interface RecipesCardProps {
 }
 
 export interface ShoppingItemTileProps {
-  item: Item
+  item: Item;
 }
 
 export interface Shopping {
@@ -48,4 +48,14 @@ export interface Shopping {
   date: Date;
   isActive: boolean;
   items: Item[];
+}
+
+enum PlanningWeek {
+  Monday = 'lundi',
+  Tuesday = 'Mardi',
+  Wednesday = 'Mercredi',
+  Thursday = 'Jeudi',
+  Friday = 'Vendredi',
+  Saturday = 'Samedi',
+  Sunday = 'Dimanche',
 }

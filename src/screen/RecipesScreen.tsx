@@ -41,7 +41,6 @@ const RecipesScreen: FC = () => {
     (state: RootState) => state.recipe.search,
   );
   const sortedRecipes = useAppSelector(selectSortedRecipes);
-
   useEffect(() => {
     dispatch(fetchRecipes());
   }, [dispatch]);

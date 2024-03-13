@@ -85,18 +85,14 @@ const recipeSlice = createSlice({
         state.refreshing = false;
         state.recipeDetails = action.payload;
       })
-      .addCase(createdRecipe.pending, state => {
-        state.refreshing = true;
-      })
       .addCase(createdRecipe.fulfilled, (state, action) => {
         state.recipes.push(action.payload);
         state.refreshing = false;
       })
-      .addCase(createdRecipe.rejected, state => {
-        state.refreshing = false;
-      })
+
       .addCase(updatedRecipe.fulfilled, (state, action) => {
         const {id, updatedRecipe} = action.payload;
+        console.log(id, updatedRecipe, 'slice recipe');
         const recipeIndex = state.recipes.findIndex(recipe => recipe.id === id);
         if (recipeIndex !== -1) {
           state.recipes[recipeIndex] = {
@@ -104,9 +100,6 @@ const recipeSlice = createSlice({
             ...updatedRecipe,
           };
         }
-      })
-      .addCase(deletedRecipe.pending, state => {
-        state.refreshing = true;
       })
       .addCase(deletedRecipe.fulfilled, (state, action) => {
         const recpeToDelete = action.payload;
@@ -116,10 +109,6 @@ const recipeSlice = createSlice({
         if (recipeIndex) {
           state.recipes.filter(recipeIndex);
         }
-        state.refreshing = false;
-      })
-      .addCase(deletedRecipe.rejected, state => {
-        state.refreshing = false;
       })
       .addCase(associationItemToRecipe.fulfilled, (state, action) => {
         const {recipeId, item} = action.payload;

@@ -43,8 +43,11 @@ export const updatedRecipe = createAsyncThunk(
   'recipe/updatedRecipe',
   async ({id, recipeUpdated}: {id: number; recipeUpdated: FormData}) => {
     try {
+        console.log('hello')
       const response = editeRecipe(id, recipeUpdated);
-      return response;
+      const jsonResponse = JSON.parse(response);
+      console.log(jsonResponse, 'action recipe');
+      return jsonResponse;
     } catch (error) {
       throw error;
     }
@@ -54,7 +57,6 @@ export const deletedRecipe = createAsyncThunk(
   'recipe/deletedRecipe',
   async (recipeId: number) => {
     try {
-        console.log(recipeId)
       const response = await deleteRecipe(recipeId);
       return response;
     } catch (error) {
