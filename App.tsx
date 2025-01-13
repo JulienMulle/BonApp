@@ -12,14 +12,12 @@ function App() {
   return (
     <ImageBackground
       source={require('./src/assets/background.jpg')}
-      style={styles.background}>
-      <TamaguiProvider config={tamaguiConfig}>
+      style={styles.background}>²
         <Provider store={store}>
           <NavigationContainer>
             <MainNavigator />
           </NavigationContainer>
         </Provider>
-      </TamaguiProvider>
     </ImageBackground>
   );
 }
