@@ -38,11 +38,7 @@ const RecipeForm: FC = () => {
   const newRecipe = useAppSelector(
     (state: rootState) => state.recipe.newRecipe,
   );
-  useEffect(() => {
-    if (recipeToEdit) {
-      dispatch(setNewRecipe({...recipeToEdit, picture: recipeToEdit.picture}));
-    }
-  }, [dispatch, file, recipeToEdit]);
+  useEffect(() => { if (recipeToEdit && !file) { dispatch(setNewRecipe({ ...recipeToEdit, picture: recipeToEdit.picture })); } }, [dispatch, recipeToEdit, file]);
 
   const createRecipe = (newRecipe: Recipe) => {
     if (isEdited) {
@@ -69,10 +65,7 @@ const RecipeForm: FC = () => {
     closeModal();
   };
   const closeModal = () => {
-    setTimeout(() => {
-      dispatch(fetchRecipe(recipeToEdit.id));
-    }, 1);
-
+    dispatch(fetchRecipe(recipeToEdit.id));
     dispatch(closeIsEdit());
     dispatch(closeFormModal());
   };
@@ -87,6 +80,7 @@ const RecipeForm: FC = () => {
         if (!response.didCancel && !response.errorMessage) {
           const selectedImageUri = response.assets[0].uri;
           setFile(selectedImageUri);
+          dispatch(setNewRecipe({ ...newRecipe, picture: selectedImageUri }));
         }
       });
     } else {
@@ -94,8 +88,8 @@ const RecipeForm: FC = () => {
       launchCamera(options, response => {
         if (!response.didCancel && !response.errorMessage) {
           const selectedImageUri = response.assets[0].uri;
-          dispatch(setNewRecipe(newRecipe));
           setFile(selectedImageUri);
+          dispatch(setNewRecipe({ ...newRecipe, picture: selectedImageUri }));
         }
       });
     }

@@ -8,8 +8,8 @@ const ShoppingTile: FC<{item: Shopping}> = ({item}) => {
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
-        <Text> {item.title}</Text>
-        <Text> {formatDateFr}</Text>
+        <Text>{item.title}</Text>
+        <Text>{formatDateFr}</Text>
       </View>
     </View>
   );

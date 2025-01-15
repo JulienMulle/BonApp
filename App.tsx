@@ -12,7 +12,7 @@ function App() {
   return (
     <ImageBackground
       source={require('./src/assets/background.jpg')}
-      style={styles.background}>²
+      style={styles.background}>
         <Provider store={store}>
           <NavigationContainer>
             <MainNavigator />

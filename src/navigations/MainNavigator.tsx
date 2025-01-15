@@ -15,6 +15,7 @@ export default class MainNavigator extends React.Component {
     return (
       <Tab.Navigator
         screenOptions={({route}) => ({
+          id: route.name,
           tabBarIcon: ({focused, color, size}) => {
             let iconName = 'default-icon';
             switch (route.name) {
@@ -61,6 +62,7 @@ export default class MainNavigator extends React.Component {
         <Tab.Screen name="liste de course" component={ShoppingStack} />
         <Tab.Screen name="Agenda" component={PlanningScreen} />
       </Tab.Navigator>
+
     );
   }
 }
