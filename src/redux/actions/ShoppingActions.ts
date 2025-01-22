@@ -1,4 +1,4 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {
   getAllShopping,
   getShopping,
@@ -48,7 +48,7 @@ export const createShopping = createAsyncThunk(
 );
 
 export const updateShopping = createAsyncThunk(
-  'shopping/ patch shopping',
+  'shopping/patch shopping',
   async ({
     id,
     shoppingUdpated,
@@ -66,7 +66,7 @@ export const updateShopping = createAsyncThunk(
 );
 
 export const deletedShopping = createAsyncThunk(
-  'shopping/ delete shopping',
+  'shopping/delete shopping',
   async (shoppingId: number): Promise<Shopping> => {
     try {
       const response = await deleteShopping(shoppingId);
@@ -78,7 +78,7 @@ export const deletedShopping = createAsyncThunk(
 );
 
 export const associationItem = createAsyncThunk(
-  'shopping/ associate Item',
+  'shopping/associate Item',
   async ({
     shoppingId,
     itemId,
@@ -96,7 +96,7 @@ export const associationItem = createAsyncThunk(
 );
 
 export const updateQuantity = createAsyncThunk(
-  'shopping/ quantity item',
+  'shopping/quantityitem',
   async ({
     shoppingId,
     itemId,
@@ -107,7 +107,6 @@ export const updateQuantity = createAsyncThunk(
     updatedQuantity: number;
   }): Promise<Shopping> => {
     try {
-      console.log(shoppingId, itemId, updatedQuantity);
       const quantityItem = await addedQuantity(
         shoppingId,
         itemId,
@@ -121,7 +120,7 @@ export const updateQuantity = createAsyncThunk(
 );
 
 export const deletedAssociation = createAsyncThunk(
-  'shopping/ delete association',
+  'shopping/delete association',
   async ({
     shoppingId,
     itemId,

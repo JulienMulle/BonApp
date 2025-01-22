@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   Button,
   FlatList,
@@ -7,23 +7,17 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
-import {
-  deletedAssociation,
-  fetchAllShopping,
-} from '../redux/actions/ShoppingActions';
+import {fetchAllShopping} from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
 import {editedShopping} from '../api/endpointShopping';
 import ShoppingItemTile from '../components/shopping/shoppingItemTile';
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-const ShoppingDetailsScreen: FC = () => {
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+
+const ShoppingDetailsScreen: React.FC = () => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const shoppingIsActive = useAppSelector(selectShoppingIsActive);
-  const deleteAssociation = (id: number) => {
-    dispatch(deletedAssociation({shoppingId: shoppingIsActive.id, itemId: id}));
-  };
   const goToShoppingLists = () => {
     navigation.navigate('ShoppingListScreen');
   };
@@ -34,7 +28,7 @@ const ShoppingDetailsScreen: FC = () => {
       isActive: false,
     };
     editedShopping(shoppingIsActive.id, checked);
-    dispatch(fetchAllShopping());
+    goToShoppingLists();
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
@@ -43,15 +37,22 @@ const ShoppingDetailsScreen: FC = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>{shoppingIsActive?.title}</Text>
-        <FlatList
-          data={shoppingIsActive?.items}
-          keyExtractor={item => item?.id?.toString() ?? ''}
-          renderItem={({item}) => <ShoppingItemTile item={item} />}
-        />
-        <Button title="liste terminer" onPress={() => checkedShopping()} />
+        <View>
+          <Text>{shoppingIsActive?.title}</Text>
+          <FlatList
+            data={shoppingIsActive?.items}
+            keyExtractor={item => item?.id?.toString() ?? ''}
+            renderItem={({item}) => <ShoppingItemTile item={item} />}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button title="liste terminer" onPress={() => checkedShopping()} />
+          <Button
+            title="liste des courses"
+            onPress={() => goToShoppingLists()}
+          />
+        </View>
       </View>
-      <Button title="liste des courses" onPress={() => goToShoppingLists()} />
     </SafeAreaView>
   );
 };
@@ -83,8 +84,10 @@ const styles = StyleSheet.create({
     // Shadow for Android
     elevation: 5,
   },
-  closeButton: {
-    alignSelf: 'flex-start',
+  buttonContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingTop: 15,
   },
 });
 

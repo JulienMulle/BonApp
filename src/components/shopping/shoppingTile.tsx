@@ -1,10 +1,11 @@
-import React, {FC} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {Shopping} from '../../interface/Interface';
 
-const ShoppingTile: FC<{item: Shopping}> = ({item}) => {
+const ShoppingTile: React.FC<{item: Shopping}> = ({item}) => {
   const dateToString = new Date(item.date);
   const formatDateFr = dateToString.toLocaleDateString('fr-FR');
+
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>

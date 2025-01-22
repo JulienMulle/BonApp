@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {Shopping, ShoppingItem} from '../../interface/Interface';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {Item, Shopping} from '../../interface/Interface';
 import {
   createShopping,
   deletedAssociation,
@@ -19,9 +19,31 @@ const shoppingSlice = createSlice({
     editedShopping: {} as Shopping,
     refreshing: false,
     isFormVisible: false,
+    isQuantityModalVisible: false,
+    itemToQuantity: {} as Item,
     search: '',
   },
-  reducers: {},
+  reducers: {
+    openModalToAdd: state => {
+      state.isQuantityModalVisible = true;
+    },
+    closeModallToAdd: state => {
+      state.isQuantityModalVisible = false;
+    },
+    setItemToQuantity: (state, action) => {
+      state.itemToQuantity = action.payload;
+    },
+    updateItemQuantity: (
+      state,
+      action: PayloadAction<{itemId: number; quantity: number}>,
+    ) => {
+      const {itemId, quantity} = action.payload;
+      const item = state.shoppingList.items.find(item => item.id === itemId);
+      if (item) {
+        item.ShoppingItem.quantity = quantity;
+      }
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchAllShopping.fulfilled, (state, action) => {
       state.shopping = action.payload;
@@ -47,14 +69,18 @@ const shoppingSlice = createSlice({
       state.refreshing = false;
     });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
-      const { shopping_id, item_id } = action.payload;
-      const shoppingToUpdate = state.shopping.find(shop => shop.id === shopping_id);
+      const {shopping_id, item_id} = action.payload;
+      const shoppingToUpdate = state.shopping.find(
+        shop => shop.id === shopping_id,
+      );
       if (shoppingToUpdate) {
-        shoppingToUpdate.items = shoppingToUpdate.items.filter(item => item.id !== item_id);
+        shoppingToUpdate.items = shoppingToUpdate.items.filter(
+          item => item.id !== item_id,
+        );
       }
     });
     builder.addCase(updateQuantity.fulfilled, (state, action) => {
-      const {shopping_id, item_id, quantity } = action.payload;
+      const {shopping_id, item_id, quantity} = action.payload;
       const shoppingToUpdate = state.shopping.find(shop => {
         if (shop.items && shop.items.length > 0) {
           return shop.items.some(

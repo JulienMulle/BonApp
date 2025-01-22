@@ -1,76 +1,46 @@
-import React, {FC, useEffect} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ShoppingItemTileProps} from '../../interface/Interface';
+import {Item, ShoppingItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {
-  deletedAssociation,
-  updateQuantity,
-} from '../../redux/actions/ShoppingActions';
-import {Check} from '@tamagui/lucide-icons';
-import {Checkbox} from 'tamagui';
-import { useAppDispatch } from '../../redux/hooks';
+import {deletedAssociation} from '../../redux/actions/ShoppingActions';
+import {useAppDispatch} from '../../redux/hooks';
+import {setItemToQuantity} from '../../redux/selectors/ShoppingSelector';
+import AddToShopping from './AddToShopping';
+import Popover from 'react-native-popover-view';
 
-const ShoppingItemTile: FC<ShoppingItemTileProps> = ({item}) => {
+const ShoppingItemTile: React.FC<ShoppingItemTileProps> = ({item}) => {
   const dispatch = useAppDispatch();
-  const quantity = (shoppingId: number, itemId: number, delta: number) => {
-    const updatedQuantity: number = item.ShoppingItem.quantity + delta;
-    dispatch(updateQuantity({shoppingId, itemId, updatedQuantity}));
-  };
+  const [showPopover, setShowPopover] = useState(false);
   const deleteItem = (shoppingId: number, itemId: number) => {
     dispatch(deletedAssociation({shoppingId, itemId}));
   };
-  useEffect(() => {}, []);
+  const quantityModal = (item: Item) => {
+    dispatch(setItemToQuantity(item));
+    setShowPopover(true);
+  };
+
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
-        <Checkbox size="$4">
-          <Checkbox.Indicator>
-            <Check />
-          </Checkbox.Indicator>
-        </Checkbox>
-
-        <Icon
-          name="trash"
-          size={20}
-          color="#900"
+        <TouchableOpacity
           onPress={() =>
             deleteItem(item.ShoppingItem.shopping_id, item.ShoppingItem.item_id)
-          }
-        />
-        <TouchableOpacity>
-          <Text style={styles.name}>{item.name}</Text>
+          }>
+          <Icon name="trash" size={20} color="#900" />
         </TouchableOpacity>
-        <View style={styles.updateQuantity}>
-          <TouchableOpacity>
-            <Icon
-              name="minus"
-              size={20}
-              color="#900"
-              onPress={() =>
-                quantity(
-                  item.ShoppingItem.shopping_id,
-                  item.ShoppingItem.item_id,
-                  -1,
-                )
-              }
-            />
-          </TouchableOpacity>
-          <Text style={styles.name}>{item.ShoppingItem.quantity}</Text>
-          <TouchableOpacity>
-            <Icon
-              name="plus"
-              size={20}
-              color="#900"
-              onPress={() =>
-                quantity(
-                  item.ShoppingItem.shopping_id,
-                  item.ShoppingItem.item_id,
-                  1,
-                )
-              }
-            />
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.name}>{item.name}</Text>
+        <Popover
+          isVisible={showPopover}
+          onRequestClose={() => setShowPopover(false)}
+          from={
+            <TouchableOpacity onPress={() => quantityModal(item)}>
+              <Text style={styles.name}>{item.ShoppingItem.quantity}</Text>
+            </TouchableOpacity>
+          }>
+          <View style={styles.popoverContent}>
+            <AddToShopping item={item} />
+          </View>
+        </Popover>
       </View>
     </View>
   );
@@ -81,13 +51,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 10,
   },
+  popoverContent: {
+    width: 130,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
   container: {
     flexDirection: 'row',
     width: '95%',
     paddingTop: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
     height: 50,
     justifyContent: 'space-between',
-    paddingLeft: 30,
     backgroundColor: 'white',
     borderRadius: 10,
     // Shadow for iOS
@@ -106,6 +82,7 @@ const styles = StyleSheet.create({
     alignContent: 'space-between',
   },
   name: {
+    fontWeight: 'bold',
     fontSize: 16,
   },
   btn: {

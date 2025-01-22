@@ -49,7 +49,7 @@ export const createdShopping = async (
 
 export const editedShopping = async (
   id: number,
-  shopping: Shopping,
+  shopping: {title: string; date: Date; isActive: boolean},
 ): Promise<Shopping> => {
   try {
     const response = await fetch(`http://10.0.2.2:5000/shopping/${id}`, {
@@ -113,6 +113,7 @@ export const addedQuantity = async (
   itemId: number,
   quantity: number,
 ): Promise<Shopping> => {
+  console.log('action', shoppingId, itemId, quantity);
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/Item/${itemId}`,
@@ -124,7 +125,7 @@ export const addedQuantity = async (
         body: JSON.stringify({
           itemId: itemId,
           shoppingId: shoppingId,
-          quantity: quantity,
+          quantity: Number(quantity),
         }),
       },
     );
@@ -134,7 +135,12 @@ export const addedQuantity = async (
     const updatedShopping: Shopping = await response.json();
     return updatedShopping;
   } catch (error) {
-    console.error('Error adding quantity to item:', shoppingId, itemId, quantity);
+    console.error(
+      'Error adding quantity to item:',
+      shoppingId,
+      itemId,
+      quantity,
+    );
     throw error;
   }
 };

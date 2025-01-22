@@ -1,11 +1,11 @@
 export interface Item {
   id: number;
   name: string;
-  ShoppingItem?: ShoppingItem
-  ItemRecipe?: ShoppingItem
+  ShoppingItem?: ItemShop;
+  ItemRecipe?: ItemShop;
 }
 
-export interface ShoppingItem {
+export interface ItemShop {
   shopping_id: number;
   item_id: number;
   unit?: string;
@@ -15,6 +15,7 @@ export interface ShoppingItem {
 export interface Category {
   name: string;
 }
+
 export interface ItemTileProps {
   item: Item;
   removeItem?: () => void;
@@ -22,7 +23,7 @@ export interface ItemTileProps {
 }
 
 export interface RecipeDeleteProps {
-  recipe: Recipe
+  recipe: Recipe;
 }
 
 export interface Recipe {
@@ -39,7 +40,9 @@ export interface RecipesCardProps {
 }
 
 export interface ShoppingItemTileProps {
-  item: Item
+  item?: Item;
+  shopList?: Shopping;
+  openModal?: () => void;
 }
 
 export interface Shopping {

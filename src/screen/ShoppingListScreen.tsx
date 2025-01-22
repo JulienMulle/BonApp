@@ -1,30 +1,24 @@
-import React, {FC, useEffect} from 'react';
+import React from 'react';
 import {Button, FlatList, SafeAreaView} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {rootState} from '../redux/store';
+import {useSelector} from 'react-redux';
+import {RootState} from '../redux/store';
 import {
   filteredShoppingByTitle,
-  selectRefreshing,
   selectSortedAllShopping,
 } from '../redux/selectors/ShoppingSelector';
 import ShoppingTile from '../components/shopping/shoppingTile';
-import {fetchAllShopping} from '../redux/actions/ShoppingActions';
+
 import {useNavigation} from '@react-navigation/native';
 
-const ShoppingListScreen: FC = () => {
+const ShoppingListScreen: React.FC = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const refreshing = useSelector((state: rootState) => selectRefreshing(state));
   const sortedItems = useSelector(selectSortedAllShopping);
   const filteredShopping = useSelector(
-    (state: rootState) => state.shopping.search,
+    (state: RootState) => state.shopping.search,
   );
   const goToShoppingDetails = () => {
     navigation.navigate('ShoppingDetailsScreen');
   };
-  useEffect(() => {
-    dispatch(fetchAllShopping(''));
-  }, [dispatch]);
   return (
     <SafeAreaView>
       <FlatList

@@ -1,8 +1,8 @@
-import {rootState} from '../store';
-import {createSelector} from '@reduxjs/toolkit';
+import {RootState} from '../store';
+import {createAction, createSelector} from '@reduxjs/toolkit';
 import {Shopping} from '../../interface/Interface';
 
-export const selectAllShopping = (state: rootState) => state.shopping.shopping;
+export const selectAllShopping = (state: RootState) => state.shopping.shopping;
 export const filteredShoppingByTitle = (
   shopping: Shopping[],
   title: string,
@@ -25,7 +25,12 @@ export const selectSortedAllShopping = createSelector(
   shopps => [...shopps].sort(alphaNumericSort),
 );
 
-export const selectShoppingIsActive = (state: rootState) => {
+export const selectShoppingIsActive = (state: RootState) => {
   return state.shopping.shopping.find(shop => shop.isActive === true);
 };
-export const selectRefreshing = (state: rootState) => state.shopping.refreshing;
+export const selectRefreshing = (state: RootState) => state.shopping.refreshing;
+export const selectIsQuantityVisible = (state: RootState) =>
+  state.shopping.isQuantityModalVisible;
+export const openQuantityModal = createAction('shopping/openModalToAdd');
+export const closeQuantityModal = createAction('shopping/closeModallToAdd');
+export const setItemToQuantity = createAction('shopping/setItemToQuantity');
