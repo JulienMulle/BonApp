@@ -10,7 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {createdItem, fetchItems} from '../../redux/actions/ItemsActions';
-import {rootState} from '../../redux/store';
+import {RootState} from '../../redux/store';
 import {
   closeItemFormModal,
   selectIsItemFormVisible,
@@ -19,10 +19,10 @@ import {
 
 const ItemForm: FC = () => {
   const dispatch = useDispatch();
-  const isItemFormVisible = useSelector((state: rootState) =>
+  const isItemFormVisible = useSelector((state: RootState) =>
     selectIsItemFormVisible(state),
   );
-  const name = useSelector((state: rootState) => state.items.newItem);
+  const name = useSelector((state: RootState) => state.items.newItem);
   const NewItem = (name: string) => {
     dispatch(createdItem({newItem: name}));
     setTimeout(() => {

@@ -5,16 +5,16 @@ import {
   closedDeleteModal,
   selectIsdeleteModal,
 } from '../redux/selectors/RecipeSelector';
-import {rootState} from '../redux/store';
+import {RootState} from '../redux/store';
 import {deletedRecipe, fetchRecipes} from '../redux/actions/RecipesActions';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 
 const DeleteModal: FC = () => {
   const dispatch = useAppDispatch();
-  const isDeleteModalVisible = useAppSelector((state: rootState) =>
+  const isDeleteModalVisible = useAppSelector((state: RootState) =>
     selectIsdeleteModal(state),
   );
-  const recipeToDelete = useAppSelector((state: rootState)=> state.recipe.recipeDetails);
+  const recipeToDelete = useAppSelector((state: RootState)=> state.recipe.recipeDetails);
 
   const removeRecipe = async (id: number) => {
     dispatch(deletedRecipe(id));

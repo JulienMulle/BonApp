@@ -1,8 +1,8 @@
-import React, {FC, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Item, ItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {
   openEditItemModal,
   setEditItem,
@@ -13,11 +13,19 @@ import {
   associateItem,
   createdShopping,
 } from '../../api/endpointShopping';
-import {selectSortedAllShopping} from '../../redux/selectors/ShoppingSelector';
+import {
+  selectShoppingIsActive,
+  setItemToQuantity,
+} from '../../redux/selectors/ShoppingSelector';
 import {fetchAllShopping} from '../../redux/actions/ShoppingActions';
+import {useAppSelector} from '../../redux/hooks';
+import Popover from 'react-native-popover-view';
+import AddToShopping from '../shopping/AddToShopping';
+import {RootState} from '../../redux/store';
 
-const ItemTile: FC<ItemTileProps> = ({item}) => {
+const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
+  const [showPopover, setShowPopover] = useState(false);
   const openEditModal = (item: Item) => {
     dispatch(openEditItemModal());
     dispatch(setEditItem(item));
@@ -26,8 +34,7 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
     dispatch(deletedItem(id));
     dispatch(fetchItems());
   };
-  const shoppingList = useSelector(selectSortedAllShopping);
-  const shoppingIsActive = shoppingList.find(shop => shop.isActive === true);
+  const shoppingIsActive = useAppSelector(selectShoppingIsActive);
   const addingItemToShopping = async (itemId: number) => {
     try {
       if (shoppingIsActive?.isActive) {
@@ -52,6 +59,15 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
       );
     }
   };
+  const itemSelected = useAppSelector(
+    (state: RootState) => state.shopping.itemToQuantity,
+  );
+  const quantityModal = (item: Item) => {
+    console.log(item);
+    dispatch(setItemToQuantity(item));
+    addingItemToShopping(item.id);
+    setShowPopover(true);
+  };
   useEffect(() => {
     dispatch(fetchAllShopping());
   }, [dispatch]);
@@ -59,16 +75,25 @@ const ItemTile: FC<ItemTileProps> = ({item}) => {
   return (
     <View style={styles.itemContainer}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => openEditModal(item)}>
+        <TouchableOpacity onLongPress={() => openEditModal(item)}>
           <Text style={styles.name}>{item.name} </Text>
         </TouchableOpacity>
-        <View style={styles.btn}>
+        <View style={styles.btnContainer}>
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
-            <Icon name="trash" size={20} color="#900" />
+            <Icon name="trash" size={20} style={styles.btn} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => addingItemToShopping(item.id)}>
-            <Icon name="cart-arrow-down" size={20} color="#900" />
-          </TouchableOpacity>
+          <Popover
+            isVisible={showPopover}
+            onRequestClose={() => setShowPopover(false)}
+            from={
+              <TouchableOpacity onPress={() => quantityModal(item)}>
+                <Icon name="cart-arrow-down" size={20} style={styles.btn} />
+              </TouchableOpacity>
+            }>
+            <View style={styles.popoverContent}>
+              <Text>{'hello'}</Text>
+            </View>
+          </Popover>
         </View>
       </View>
     </View>
@@ -80,10 +105,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 10,
   },
+  popoverContent: {
+    width: 130,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
   container: {
     flexDirection: 'row',
     width: '95%',
-    paddingTop: 10,
+    paddingTop: 12,
     height: 50,
     justifyContent: 'space-between',
     paddingLeft: 30,
@@ -102,10 +132,14 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
   },
-  btn: {
+  btnContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     paddingRight: 30,
+  },
+  btn: {
+    paddingLeft: 20,
+    color: '#900',
   },
 });
 

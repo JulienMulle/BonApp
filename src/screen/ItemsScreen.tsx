@@ -10,9 +10,9 @@ import {
 import ItemTile from '../components/item/ItemTile';
 import ItemForm from '../components/item/ItemForm';
 import EditedItemModal from '../components/item/EditedItemModal';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import {useDispatch, useSelector} from 'react-redux';
-import {rootState} from '../redux/store';
+import {RootState} from '../redux/store';
 import {fetchItems} from '../redux/actions/ItemsActions';
 import {
   filterItemsByName,
@@ -23,27 +23,31 @@ import {
   openItemFormModal,
   setSearch,
 } from '../redux/selectors/ItemSelector';
-import {useFocusEffect} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {useAppSelector} from '../redux/hooks';
+import {selectIsQuantityVisible} from '../redux/selectors/ShoppingSelector';
+import AddToShopping from '../components/shopping/AddToShopping';
+import {fetchAllShopping} from '../redux/actions/ShoppingActions';
 
 const ItemsList: FC = () => {
   const dispatch = useDispatch();
-  const refreshing = useSelector((state: rootState) => selectRefreshing(state));
-  const isEditItemVisible = useSelector((state: rootState) =>
+  const refreshing = useSelector((state: RootState) => selectRefreshing(state));
+  const isEditItemVisible = useSelector((state: RootState) =>
     selectIsEditItemVisible(state),
   );
-  const isItemFormVisibile = useSelector((state: rootState) =>
+  const isItemFormVisibile = useSelector((state: RootState) =>
     selectIsItemFormVisible(state),
   );
-  const filteredItem = useSelector((state: rootState) => state.items.search);
+  const isQuantityModalVisible = useAppSelector((state: RootState) =>
+    selectIsQuantityVisible(state),
+  );
+  const filteredItem = useSelector((state: RootState) => state.items.search);
   const sortedItems = useSelector(selectSortedItems);
   useEffect(() => {
     dispatch(fetchItems());
-  }, [dispatch]);
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch(fetchItems());
-    }, [dispatch]),
-  );
+    dispatch(fetchAllShopping());
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -69,6 +73,7 @@ const ItemsList: FC = () => {
       </TouchableOpacity>
       {isEditItemVisible && <EditedItemModal />}
       {isItemFormVisibile && <ItemForm />}
+      {isQuantityModalVisible && <AddToShopping />}
     </SafeAreaView>
   );
 };
