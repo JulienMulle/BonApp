@@ -1,5 +1,13 @@
 import React from 'react';
-import {Button, FlatList, SafeAreaView} from 'react-native';
+import {
+  Text,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import {
@@ -7,8 +15,9 @@ import {
   selectSortedAllShopping,
 } from '../redux/selectors/ShoppingSelector';
 import ShoppingTile from '../components/shopping/shoppingTile';
-
 import {useNavigation} from '@react-navigation/native';
+import ActionButton from '../components/ActionButton';
+import styles from '../style';
 
 const ShoppingListScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -21,16 +30,42 @@ const ShoppingListScreen: React.FC = () => {
   };
   return (
     <SafeAreaView>
-      <FlatList
-        data={filteredShoppingByTitle(sortedItems, filteredShopping)}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => <ShoppingTile item={item} />}
-      />
-      <Button
-        title="retour à la liste actuel"
-        onPress={() => goToShoppingDetails()}
-      />
+      <View style={styles.itemContainer}>
+        <Text style={styles.title}>{'liste des courses'}</Text>
+        <FlatList
+          style={styles.containerList}
+          data={filteredShoppingByTitle(sortedItems, filteredShopping)}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => <ShoppingTile item={item} />}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <ActionButton
+          onPress={() => goToShoppingDetails()}
+          text={'liste actuelle'}
+        />
+      </View>
     </SafeAreaView>
   );
 };
+
+const styless = StyleSheet.create({
+  itemContainer: {
+    flexDirection: 'column',
+    width: '100%',
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+  },
+  containerList: {
+    paddingTop: 10,
+    height: '87%',
+  },
+  buttonContainer: {
+    bottom: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    paddingTop: 15,
+  },
+});
 export default ShoppingListScreen;

@@ -22,7 +22,7 @@ import {useAppSelector} from '../../redux/hooks';
 import Popover from 'react-native-popover-view';
 import AddToShopping from '../shopping/AddToShopping';
 import {RootState} from '../../redux/store';
-
+import styles from '../../style';
 const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
   const [showPopover, setShowPopover] = useState(false);
@@ -73,74 +73,31 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   }, [dispatch]);
 
   return (
-    <View style={styles.itemContainer}>
+    <View style={styles.listItemContainer}>
       <View style={styles.container}>
-        <TouchableOpacity onLongPress={() => openEditModal(item)}>
-          <Text style={styles.name}>{item.name} </Text>
-        </TouchableOpacity>
-        <View style={styles.btnContainer}>
+        <View style={styles.itemTileContent}>
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
-            <Icon name="trash" size={20} style={styles.btn} />
+            <Icon name="trash" size={20} style={styles.icone} />
           </TouchableOpacity>
-          <Popover
-            isVisible={showPopover}
-            onRequestClose={() => setShowPopover(false)}
-            from={
-              <TouchableOpacity onPress={() => quantityModal(item)}>
-                <Icon name="cart-arrow-down" size={20} style={styles.btn} />
-              </TouchableOpacity>
-            }>
-            <View style={styles.popoverContent}>
-              <Text>{'hello'}</Text>
-            </View>
-          </Popover>
+          <TouchableOpacity onLongPress={() => openEditModal(item)}>
+            <Text style={styles.name}>{item.name} </Text>
+          </TouchableOpacity>
         </View>
+        <Popover
+          isVisible={showPopover}
+          onRequestClose={() => setShowPopover(false)}
+          from={
+            <TouchableOpacity onPress={() => quantityModal(item)}>
+              <Icon name="cart-arrow-down" size={20} style={styles.icone} />
+            </TouchableOpacity>
+          }>
+          <View style={styles.popoverContent}>
+            <Text>{'hello'}</Text>
+          </View>
+        </Popover>
       </View>
     </View>
   );
 };
-const styles = StyleSheet.create({
-  itemContainer: {
-    width: '100%',
-    alignItems: 'center',
-    paddingBottom: 10,
-  },
-  popoverContent: {
-    width: 130,
-    backgroundColor: 'white',
-    borderRadius: 10,
-  },
-  container: {
-    flexDirection: 'row',
-    width: '95%',
-    paddingTop: 12,
-    height: 50,
-    justifyContent: 'space-between',
-    paddingLeft: 30,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    // Shadow for iOS
-    shadowOpacity: 0.08,
-    shadowOffset: {
-      width: 0,
-      height: 20,
-    },
-    shadowRadius: 10,
-    // Shadow for Android
-    elevation: 5,
-  },
-  name: {
-    fontSize: 16,
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingRight: 30,
-  },
-  btn: {
-    paddingLeft: 20,
-    color: '#900',
-  },
-});
 
 export default ItemTile;
