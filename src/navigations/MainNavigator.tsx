@@ -5,8 +5,7 @@ import PlanningScreen from '../screen/PlanningScreen';
 import {StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ShoppingStack from './ShoppingStack';
-import RecipesStack from "./RecipeStack";
-import RecipesScreen from "../screen/RecipesScreen";
+import RecipesStack from './RecipeStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,7 +14,6 @@ export default class MainNavigator extends React.Component {
     return (
       <Tab.Navigator
         screenOptions={({route}) => ({
-          id: route.name,
           tabBarIcon: ({focused, color, size}) => {
             let iconName = 'default-icon';
             switch (route.name) {
@@ -57,10 +55,10 @@ export default class MainNavigator extends React.Component {
             ...styles.shadow,
           },
         })}>
-        <Tab.Screen name="recettes" component={RecipesStack} />
-        <Tab.Screen name="ingrédients" component={ItemsScreen} />
-        <Tab.Screen name="liste de course" component={ShoppingStack} />
-        <Tab.Screen name="Agenda" component={PlanningScreen} />
+        <Tab.Screen name="recettes" component={RecipesStack} key="recipe" />
+        <Tab.Screen name="ingrédients" component={ItemsScreen} key="item" />
+        <Tab.Screen name="liste de course" component={ShoppingStack} key="shopping" />
+        <Tab.Screen name="Agenda" component={PlanningScreen} key="planning" />
       </Tab.Navigator>
 
     );
