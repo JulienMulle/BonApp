@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Button, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Button, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 // @ts-ignore
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/Interface';
@@ -24,18 +24,19 @@ const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
   return (
     <View style={styles.container}>
       <View style={styles.recipeCard}>
-        <Pressable onLongPress={() => openDeleteRecipeModal()}>
-          <Image
-            resizeMode="contain"
-            source={{uri: recipe.picture || noImage}}
-            style={styles.recipeImage}
-          />
-        </Pressable>
-        <View style={styles.recipeTitle}>
-          <Text>{recipe.title}</Text>
-        </View>
+          <TouchableOpacity
+            onLongPress={() => openDeleteRecipeModal()}
+            onPress={goRecipeDetails}>
+            <Image
+              resizeMode="contain"
+              source={{uri: recipe.picture || noImage}}
+              style={styles.recipeImage}
+            />
+            <View style={styles.recipeTitle}>
+              <Text>{recipe.title}</Text>
+            </View>
+          </TouchableOpacity>
         <View style={styles.buttonContainer}>
-          <Button title="Détail" onPress={() => goRecipeDetails()} />
           <Button title="ajouter" />
         </View>
       </View>

@@ -8,10 +8,11 @@ export default function RecipesStack() {
   const StackRecipe = createNativeStackNavigator();
   return (
     <StackRecipe.Navigator screenOptions={{headerShown: false}}>
-      <StackRecipe.Screen name="Recette" component={RecipesScreen} />
+      <StackRecipe.Screen name="Recette" component={RecipesScreen} key="recipe" />
       <StackRecipe.Screen
         name="RecipeDetailsScreen"
         component={RecipeDetailsScreen}
+        key="recipeDetails"
       />
     </StackRecipe.Navigator>
   );

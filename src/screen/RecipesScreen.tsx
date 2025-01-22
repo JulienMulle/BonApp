@@ -11,7 +11,7 @@ import RecipeCard from '../components/recipe/RecipeCard';
 import RecipeForm from '../components/recipe/RecipeForm';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DeleteModal from '../components/DeleteModal';
-import {rootState} from '../redux/store';
+import {RootState} from '../redux/store';
 import {fetchRecipes} from '../redux/actions/RecipesActions';
 import {
   openFormModal,
@@ -28,14 +28,14 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const RecipesScreen: FC = () => {
   const dispatch = useAppDispatch();
-  const refreshing = useAppSelector((state: rootState) => selectRefreshing(state));
-  const isFormVisible = useAppSelector((state: rootState) =>
+  const refreshing = useAppSelector((state: RootState) => selectRefreshing(state));
+  const isFormVisible = useAppSelector((state: RootState) =>
     selectIsFormVisible(state),
   );
-  const isDeleteModalVisible = useAppSelector((state: rootState) =>
+  const isDeleteModalVisible = useAppSelector((state: RootState) =>
     selectIsdeleteModal(state),
   );
-  const filteredRecipe = useAppSelector((state: rootState) => state.recipe.search);
+  const filteredRecipe = useAppSelector((state: RootState) => state.recipe.search);
   const sortedRecipes = useAppSelector(selectSortedRecipes);
 
   useEffect(() => {

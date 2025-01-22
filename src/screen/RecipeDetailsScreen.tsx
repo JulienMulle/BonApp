@@ -26,7 +26,7 @@ import {
 } from '../redux/actions/RecipesActions';
 import {useNavigation} from '@react-navigation/native';
 import {clearEditedRecipe} from '../redux/selectors/RecipeSelector';
-import {rootState} from '../redux/store';
+import {RootState} from '../redux/store';
 import ItemTile from '../components/item/ItemTile';
 import AssociationWithItem from '../components/recipe/AssociationWithItem';
 import RecipeForm from '../components/recipe/RecipeForm';
@@ -35,12 +35,12 @@ const RecipeDetailsModal: FC = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const recipeDetails = useSelector(
-    (state: rootState) => state.recipe.recipeDetails,
+    (state: RootState) => state.recipe.recipeDetails,
   );
-  const isEdited = useSelector((state: rootState) =>
+  const isEdited = useSelector((state: RootState) =>
     selectIsFormVisible(state),
   );
-  const isAssociate = useSelector((state: rootState) =>
+  const isAssociate = useSelector((state: RootState) =>
     selectIsAssociationModal(state),
   );
   const returnToRecipeScreen = () => {
