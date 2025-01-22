@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  TextInput,
-} from 'react-native';
+import {Text, FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import {

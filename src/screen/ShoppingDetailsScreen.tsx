@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {FlatList, SafeAreaView, Text, View} from 'react-native';
 import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
 import {fetchAllShopping} from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';

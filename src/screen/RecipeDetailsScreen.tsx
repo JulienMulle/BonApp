@@ -30,6 +30,7 @@ import {RootState} from '../redux/store';
 import ItemTile from '../components/item/ItemTile';
 import AssociationWithItem from '../components/recipe/AssociationWithItem';
 import RecipeForm from '../components/recipe/RecipeForm';
+import ActionButton from '../components/ActionButton';
 
 const RecipeDetailsModal: FC = () => {
   const dispatch = useDispatch();
@@ -88,10 +89,11 @@ const RecipeDetailsModal: FC = () => {
             )}
             <Text>{recipeDetails.title}</Text>
             <Text>{recipeDetails.description}</Text>
-            <Button
-              title="ajouter ingredient"
+            <ActionButton
               onPress={() => dispatch(openAssociationModal())}
+              text={'ajouter ingredient'}
             />
+
             {recipeDetails.items?.map(item => (
               <ItemTile
                 key={item.id}

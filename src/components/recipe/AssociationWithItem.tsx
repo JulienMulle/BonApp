@@ -19,7 +19,7 @@ import {
   associationItemToRecipe,
   fetchRecipe,
 } from '../../redux/actions/RecipesActions';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 
 const AssociationWithItem: FC = () => {
   const dispatch = useAppDispatch();

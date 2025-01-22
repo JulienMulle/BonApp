@@ -57,10 +57,13 @@ export default class MainNavigator extends React.Component {
         })}>
         <Tab.Screen name="recettes" component={RecipesStack} key="recipe" />
         <Tab.Screen name="ingrédients" component={ItemsScreen} key="item" />
-        <Tab.Screen name="liste de course" component={ShoppingStack} key="shopping" />
+        <Tab.Screen
+          name="liste de course"
+          component={ShoppingStack}
+          key="shopping"
+        />
         <Tab.Screen name="Agenda" component={PlanningScreen} key="planning" />
       </Tab.Navigator>
-
     );
   }
 }

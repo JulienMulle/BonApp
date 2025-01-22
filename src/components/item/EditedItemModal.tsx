@@ -19,7 +19,7 @@ import {
 } from '../../redux/selectors/ItemSelector';
 import {fetchItems, updatedItem} from '../../redux/actions/ItemsActions';
 import {clearEditedRecipe} from '../../redux/selectors/RecipeSelector';
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 
 const EditedItemModal: FC = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +27,9 @@ const EditedItemModal: FC = () => {
   const isEditItemVisible = useAppSelector((state: RootState) =>
     selectIsEditItemVisible(state),
   );
-  const editedItem = useAppSelector((state: RootState) => state.items.editedItem);
+  const editedItem = useAppSelector(
+    (state: RootState) => state.items.editedItem,
+  );
   const editionItems = async (id: number, newName: string) => {
     dispatch(updatedItem({id, newName}));
     dispatch(closeEditItemModal());

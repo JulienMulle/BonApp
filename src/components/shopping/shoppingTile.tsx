@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {Shopping} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import styles from '../../style';

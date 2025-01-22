@@ -38,7 +38,11 @@ const RecipeForm: FC = () => {
   const newRecipe = useAppSelector(
     (state: RootState) => state.recipe.newRecipe,
   );
-  useEffect(() => { if (recipeToEdit && !file) { dispatch(setNewRecipe({ ...recipeToEdit, picture: recipeToEdit.picture })); } }, [dispatch, recipeToEdit, file]);
+  useEffect(() => {
+    if (recipeToEdit && !file) {
+      dispatch(setNewRecipe({...recipeToEdit, picture: recipeToEdit.picture}));
+    }
+  }, [dispatch, recipeToEdit, file]);
 
   const createRecipe = (newRecipe: Recipe) => {
     if (isEdited) {
@@ -79,7 +83,7 @@ const RecipeForm: FC = () => {
         if (!response.didCancel && !response.errorMessage) {
           const selectedImageUri = response.assets[0].uri;
           setFile(selectedImageUri);
-          dispatch(setNewRecipe({ ...newRecipe, picture: selectedImageUri }));
+          dispatch(setNewRecipe({...newRecipe, picture: selectedImageUri}));
         }
       });
     } else {
@@ -88,7 +92,7 @@ const RecipeForm: FC = () => {
         if (!response.didCancel && !response.errorMessage) {
           const selectedImageUri = response.assets[0].uri;
           setFile(selectedImageUri);
-          dispatch(setNewRecipe({ ...newRecipe, picture: selectedImageUri }));
+          dispatch(setNewRecipe({...newRecipe, picture: selectedImageUri}));
         }
       });
     }

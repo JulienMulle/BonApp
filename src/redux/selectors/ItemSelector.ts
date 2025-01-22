@@ -37,4 +37,3 @@ export const setSearch = createAction('items/setSearch');
 export const setNewItem = createAction('items/setNewItem');
 export const setEdition = createAction<string>('items/setEdition');
 export const setEditItem = createAction('items/setEditItem');
-

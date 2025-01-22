@@ -14,7 +14,9 @@ const DeleteModal: FC = () => {
   const isDeleteModalVisible = useAppSelector((state: RootState) =>
     selectIsdeleteModal(state),
   );
-  const recipeToDelete = useAppSelector((state: RootState)=> state.recipe.recipeDetails);
+  const recipeToDelete = useAppSelector(
+    (state: RootState) => state.recipe.recipeDetails,
+  );
 
   const removeRecipe = async (id: number) => {
     dispatch(deletedRecipe(id));
@@ -27,7 +29,7 @@ const DeleteModal: FC = () => {
       <View style={styles.modalView}>
         <Text>Confirmer la suppression de la recette </Text>
         <View style={styles.buttonContainer}>
-          <Button title="oui" onPress={()=>removeRecipe(recipeToDelete.id)} />
+          <Button title="oui" onPress={() => removeRecipe(recipeToDelete.id)} />
           <Button title="non" onPress={() => dispatch(closedDeleteModal())} />
         </View>
       </View>

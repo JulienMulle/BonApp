@@ -16,26 +16,30 @@ import {fetchRecipes} from '../redux/actions/RecipesActions';
 import {
   openFormModal,
   selectRefreshing,
-  setSearch
-} from "../redux/selectors/RecipeSelector";
+  setSearch,
+} from '../redux/selectors/RecipeSelector';
 import {
   filteredRecipesByTitle,
   selectIsdeleteModal,
   selectIsFormVisible,
   selectSortedRecipes,
 } from '../redux/selectors/RecipeSelector';
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
 
 const RecipesScreen: FC = () => {
   const dispatch = useAppDispatch();
-  const refreshing = useAppSelector((state: RootState) => selectRefreshing(state));
+  const refreshing = useAppSelector((state: RootState) =>
+    selectRefreshing(state),
+  );
   const isFormVisible = useAppSelector((state: RootState) =>
     selectIsFormVisible(state),
   );
   const isDeleteModalVisible = useAppSelector((state: RootState) =>
     selectIsdeleteModal(state),
   );
-  const filteredRecipe = useAppSelector((state: RootState) => state.recipe.search);
+  const filteredRecipe = useAppSelector(
+    (state: RootState) => state.recipe.search,
+  );
   const sortedRecipes = useAppSelector(selectSortedRecipes);
 
   useEffect(() => {

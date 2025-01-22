@@ -11,7 +11,10 @@ export default function ShoppingStack() {
         name="ShoppingDetailsScreen"
         component={ShoppingDetailsScreen}
       />
-      <StackShopping.Screen name="ShoppingListScreen" component={ShoppingListScreen} />
+      <StackShopping.Screen
+        name="ShoppingListScreen"
+        component={ShoppingListScreen}
+      />
     </StackShopping.Navigator>
   );
 }

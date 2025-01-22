@@ -54,7 +54,7 @@ export const deletedRecipe = createAsyncThunk(
   'recipe/deletedRecipe',
   async (recipeId: number) => {
     try {
-        console.log(recipeId)
+      console.log(recipeId);
       const response = await deleteRecipe(recipeId);
       return response;
     } catch (error) {

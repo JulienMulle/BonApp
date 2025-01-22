@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {Item, ShoppingItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {deletedAssociation} from '../../redux/actions/ShoppingActions';
