@@ -73,7 +73,6 @@ const ItemsList: FC = () => {
       </TouchableOpacity>
       {isEditItemVisible && <EditedItemModal />}
       {isItemFormVisibile && <ItemForm />}
-      {isQuantityModalVisible && <AddToShopping />}
     </SafeAreaView>
   );
 };

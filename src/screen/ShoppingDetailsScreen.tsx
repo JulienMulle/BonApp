@@ -27,6 +27,8 @@ const ShoppingDetailsScreen: React.FC = () => {
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
+    console.log(shoppingIsActive);
+    shoppingIsActive;
   }, [dispatch]);
 
   return (

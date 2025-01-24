@@ -45,7 +45,7 @@ const ShoppingItemTile: React.FC<ShoppingItemTileProps> = ({item}) => {
             </TouchableOpacity>
           }>
           <View style={styles.popoverContent}>
-            <AddToShopping item={item} />
+            <AddToShopping />
           </View>
         </Popover>
       </View>

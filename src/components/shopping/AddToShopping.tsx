@@ -1,32 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import {RootState} from '../../redux/store';
 import {
   itemForQuantity,
-  selectIsQuantityVisible,
   selectShoppingIsActive,
 } from '../../redux/selectors/ShoppingSelector';
 import {updateQuantity} from '../../redux/actions/ShoppingActions';
 import {ShoppingItemTileProps} from '../../interface/Interface';
 
-const addToShopping: React.FC<ShoppingItemTileProps> = ({item}) => {
+const addToShopping: React.FC<ShoppingItemTileProps> = () => {
   const dispatch = useAppDispatch();
-  const itemSelected = useAppSelector(
-    (state: RootState) => state.shopping.itemToQuantity,
-  );
   const shoppingIsActive = useAppSelector(selectShoppingIsActive);
-  const itemQuantity = shoppingIsActive.items.find(
-    item => item.id === itemSelected.id,
-  );
+  const itemQuantity = useAppSelector(itemForQuantity);
   const quantity = (delta: number) => {
     const updatedQuantity: number =
       Number(itemQuantity.ShoppingItem.quantity) + delta;
     dispatch(
       updateQuantity({
         shoppingId: shoppingIsActive.id,
-        itemId: itemSelected.id,
+        itemId: itemQuantity.id,
         updatedQuantity,
       }),
     );
@@ -38,7 +32,7 @@ const addToShopping: React.FC<ShoppingItemTileProps> = ({item}) => {
         <TouchableOpacity onPress={() => quantity(-1)}>
           <Icon name="minus" size={20} color="#900" />
         </TouchableOpacity>
-        <Text style={styles.name}>{item.ShoppingItem.quantity}</Text>
+        <Text style={styles.name}>{itemQuantity?.ShoppingItem?.quantity}</Text>
         <TouchableOpacity onPress={() => quantity(1)}>
           <Icon name="plus" size={20} color="#900" />
         </TouchableOpacity>

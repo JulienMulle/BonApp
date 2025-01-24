@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Item, Shopping} from '../../interface/Interface';
 import {
+  associationItem,
   createShopping,
   deletedAssociation,
   fetchAllShopping,
@@ -67,6 +68,30 @@ const shoppingSlice = createSlice({
     });
     builder.addCase(fetchShopping.rejected, state => {
       state.refreshing = false;
+    });
+    builder.addCase(associationItem.fulfilled, (state, action) => {
+      const {shopping_id, item_id, quantity} = action.payload;
+      const createAssociation = state.shopping.find(
+        shop => shop.id === shopping_id,
+      );
+      if (createAssociation) {
+        const existingItem = createAssociation.items.find(
+          item => item.id === item_id,
+        );
+        if (existingItem) {
+          existingItem.ShoppingItem.quantity += quantity;
+        } else {
+          createAssociation.items.push({
+            ShoppingItem: {
+              shopping_id: shopping_id,
+              item_id: item_id,
+              quantity: quantity,
+            },
+            id: item_id,
+            name: '',
+          });
+        }
+      }
     });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
       const {shopping_id, item_id} = action.payload;

@@ -86,7 +86,9 @@ export const deleteShopping = async (id: number): Promise<Shopping> => {
 export const associateItem = async (
   shoppingId: number,
   itemId: number,
+  quantity: number,
 ): Promise<Shopping> => {
+  console.log('action', shoppingId, itemId, quantity);
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/associateItem/${itemId}`,
@@ -95,6 +97,11 @@ export const associateItem = async (
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          itemId: itemId,
+          shoppingId: shoppingId,
+          quantity: Number(quantity),
+        }),
       },
     );
     if (!response.ok) {

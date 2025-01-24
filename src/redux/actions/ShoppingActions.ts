@@ -37,7 +37,7 @@ export const fetchShopping = createAsyncThunk(
 
 export const createShopping = createAsyncThunk(
   'shopping/create shopping',
-  async ({newShopping}: {newShopping: Shopping}): Promise<Shopping> => {
+  async (newShopping: Shopping): Promise<Shopping> => {
     try {
       const response = await createdShopping(newShopping);
       return response;
@@ -68,6 +68,7 @@ export const updateShopping = createAsyncThunk(
 export const deletedShopping = createAsyncThunk(
   'shopping/delete shopping',
   async (shoppingId: number): Promise<Shopping> => {
+    console.log(shoppingId);
     try {
       const response = await deleteShopping(shoppingId);
       return response;
@@ -77,17 +78,22 @@ export const deletedShopping = createAsyncThunk(
   },
 );
 
-export const associationItem = createAsyncThunk(
-  'shopping/associate Item',
+export const associationItem = createAsyncThunk<
+  Shopping,
+  {shoppingId: number; itemId: number; quantity: number}
+>(
+  'shopping/associateItem',
   async ({
     shoppingId,
     itemId,
+    quantity,
   }: {
     shoppingId: number;
     itemId: number;
+    quantity: number;
   }): Promise<Shopping> => {
     try {
-      const association = await associateItem(shoppingId, itemId);
+      const association = await associateItem(shoppingId, itemId, quantity);
       return association;
     } catch (error) {
       throw error;

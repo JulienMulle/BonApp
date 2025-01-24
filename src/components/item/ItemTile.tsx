@@ -9,19 +9,19 @@ import {
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {
-  addedQuantity,
-  associateItem,
-  createdShopping,
-} from '../../api/endpointShopping';
-import {
+  selectHasActiveShopping,
   selectShoppingIsActive,
   setItemToQuantity,
 } from '../../redux/selectors/ShoppingSelector';
-import {fetchAllShopping} from '../../redux/actions/ShoppingActions';
+import {
+  associationItem,
+  createShopping,
+  fetchAllShopping,
+} from '../../redux/actions/ShoppingActions';
 import {useAppSelector} from '../../redux/hooks';
 import Popover from 'react-native-popover-view';
 import AddToShopping from '../shopping/AddToShopping';
-import {RootState} from '../../redux/store';
+import store, {RootState} from '../../redux/store';
 import styles from '../../style';
 const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
@@ -35,37 +35,38 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
     dispatch(fetchItems());
   };
   const shoppingIsActive = useAppSelector(selectShoppingIsActive);
-  const addingItemToShopping = async (itemId: number) => {
-    try {
-      if (shoppingIsActive?.isActive) {
-        await associateItem(shoppingIsActive.id, itemId);
-        await addedQuantity(shoppingIsActive.id, itemId, 1);
-      } else {
-        const newShoppingList = {
-          title: 'Liste de course du ',
-          date: Date.now(),
-          isActive: true,
-        };
-        const newShopping = await createdShopping(newShoppingList);
-        const shoppingId = newShopping.id;
-        await associateItem(shoppingId, itemId);
-        await addedQuantity(shoppingId, itemId, 1);
-      }
-      dispatch(fetchAllShopping());
-    } catch (error) {
-      console.error(
-        "Erreur lors de la création de la liste de courses et de l'ajout de l'item :",
-        error,
+  const isShoppingActive = useAppSelector(selectHasActiveShopping);
+  const addingItemToShopping = item => {
+    if (!isShoppingActive) {
+      const newShoppingList = {
+        title: 'Liste de course du ',
+        date: Date.now(),
+        isActive: true,
+      };
+      dispatch(createShopping(newShoppingList)).then(() => {
+        const updatedShoppingIsActive = selectShoppingIsActive(
+          store.getState(),
+        );
+        dispatch(
+          associationItem({
+            shoppingId: updatedShoppingIsActive.id,
+            itemId: item.id,
+            quantity: 1,
+          }),
+        );
+        dispatch(setItemToQuantity(item));
+      });
+    } else {
+      dispatch(
+        associationItem({
+          shoppingId: shoppingIsActive.id,
+          itemId: item.id,
+          quantity: 1,
+        }),
       );
+      dispatch(setItemToQuantity(item));
     }
-  };
-  const itemSelected = useAppSelector(
-    (state: RootState) => state.shopping.itemToQuantity,
-  );
-  const quantityModal = (item: Item) => {
-    console.log(item);
-    dispatch(setItemToQuantity(item));
-    addingItemToShopping(item.id);
+    dispatch(fetchAllShopping());
     setShowPopover(true);
   };
   useEffect(() => {
@@ -87,12 +88,12 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
           isVisible={showPopover}
           onRequestClose={() => setShowPopover(false)}
           from={
-            <TouchableOpacity onPress={() => quantityModal(item)}>
+            <TouchableOpacity onPress={() => addingItemToShopping(item)}>
               <Icon name="cart-arrow-down" size={20} style={styles.icone} />
             </TouchableOpacity>
           }>
           <View style={styles.popoverContent}>
-            <Text>{'hello'}</Text>
+            <AddToShopping />
           </View>
         </Popover>
       </View>

@@ -1,6 +1,6 @@
 import {RootState} from '../store';
 import {createAction, createSelector} from '@reduxjs/toolkit';
-import {Shopping} from '../../interface/Interface';
+import {Item, Shopping} from '../../interface/Interface';
 
 export const selectAllShopping = (state: RootState) => state.shopping.shopping;
 export const filteredShoppingByTitle = (
@@ -24,13 +24,27 @@ export const selectSortedAllShopping = createSelector(
   [selectAllShopping],
   shopps => [...shopps].sort(alphaNumericSort),
 );
-
+export const selectHasActiveShopping = createSelector(
+  [(state: RootState) => state.shopping.shopping],
+  shopping => shopping.some(shop => shop.isActive === true),
+);
 export const selectShoppingIsActive = (state: RootState) => {
   return state.shopping.shopping.find(shop => shop.isActive === true);
 };
 export const selectRefreshing = (state: RootState) => state.shopping.refreshing;
 export const selectIsQuantityVisible = (state: RootState) =>
   state.shopping.isQuantityModalVisible;
+export const selectItemToQuantity = (state: RootState) =>
+  state.shopping.itemToQuantity;
 export const openQuantityModal = createAction('shopping/openModalToAdd');
 export const closeQuantityModal = createAction('shopping/closeModallToAdd');
 export const setItemToQuantity = createAction('shopping/setItemToQuantity');
+export const itemForQuantity = createSelector(
+  [selectShoppingIsActive, selectItemToQuantity],
+  (shoppingIsActive, itemToQuantity) => {
+    if (shoppingIsActive && itemToQuantity !== undefined) {
+      return shoppingIsActive.items.find(item => item.id === itemToQuantity.id);
+    }
+    return null;
+  },
+);
