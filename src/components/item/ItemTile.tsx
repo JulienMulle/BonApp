@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {Item, ItemTileProps} from '../../interface/Interface';
+import {Item, ItemTileProps, ItemWithShop} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch} from 'react-redux';
 import {
@@ -9,7 +9,6 @@ import {
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {
-  selectHasActiveShopping,
   selectShoppingIsActive,
   setItemToQuantity,
 } from '../../redux/selectors/ShoppingSelector';
@@ -17,12 +16,14 @@ import {
   associationItem,
   createShopping,
   fetchAllShopping,
+  fetchShopping,
 } from '../../redux/actions/ShoppingActions';
 import {useAppSelector} from '../../redux/hooks';
 import Popover from 'react-native-popover-view';
 import AddToShopping from '../shopping/AddToShopping';
-import store, {RootState} from '../../redux/store';
 import styles from '../../style';
+import {Placement} from 'react-native-popover-view/dist/Types';
+
 const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch();
   const [showPopover, setShowPopover] = useState(false);
@@ -34,43 +35,37 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
     dispatch(deletedItem(id));
     dispatch(fetchItems());
   };
-  const shoppingIsActive = useAppSelector(selectShoppingIsActive);
-  const isShoppingActive = useAppSelector(selectHasActiveShopping);
+  const shoppingListActive = useAppSelector(selectShoppingIsActive);
   const addingItemToShopping = item => {
-    if (!isShoppingActive) {
+    if (!shoppingListActive) {
       const newShoppingList = {
         title: 'Liste de course du ',
         date: Date.now(),
         isActive: true,
       };
-      dispatch(createShopping(newShoppingList)).then(() => {
-        const updatedShoppingIsActive = selectShoppingIsActive(
-          store.getState(),
-        );
-        dispatch(
-          associationItem({
-            shoppingId: updatedShoppingIsActive.id,
-            itemId: item.id,
-            quantity: 1,
-          }),
-        );
-        dispatch(setItemToQuantity(item));
-      });
-    } else {
-      dispatch(
-        associationItem({
-          shoppingId: shoppingIsActive.id,
-          itemId: item.id,
-          quantity: 1,
-        }),
-      );
-      dispatch(setItemToQuantity(item));
+      dispatch(createShopping(newShoppingList));
     }
-    dispatch(fetchAllShopping());
-    setShowPopover(true);
+    dispatch(
+      associationItem({
+        shoppingId: shoppingListActive.id,
+        itemId: item.id,
+        quantity: 1,
+      }),
+    );
+    dispatch(
+      setItemToQuantity({
+        item_id: item.id,
+        shopping_id: shoppingListActive.id,
+        quantity: 1,
+        name: item.name,
+      }),
+    );
+    dispatch(fetchShopping());
+    //setShowPopover(true);
   };
   useEffect(() => {
     dispatch(fetchAllShopping());
+    shoppingListActive;
   }, [dispatch]);
 
   return (
@@ -86,6 +81,7 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
         </View>
         <Popover
           isVisible={showPopover}
+          placement={Placement.BOTTOM}
           onRequestClose={() => setShowPopover(false)}
           from={
             <TouchableOpacity onPress={() => addingItemToShopping(item)}>

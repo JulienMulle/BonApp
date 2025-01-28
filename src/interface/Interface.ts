@@ -8,8 +8,18 @@ export interface Item {
 export interface ItemShop {
   shopping_id: number;
   item_id: number;
+  quantity: number;
   unit?: string;
-  quantity?: number;
+}
+export interface ItemWithShop extends Omit<Item, 'id'>, ItemShop {
+  name: string;
+}
+export interface Shopping {
+  id: number;
+  title: string;
+  date: Date;
+  isActive: boolean;
+  items: ItemWithShop[];
 }
 
 export interface Category {
@@ -43,12 +53,4 @@ export interface ShoppingItemTileProps {
   item?: Item;
   shopList?: Shopping;
   openModal?: () => void;
-}
-
-export interface Shopping {
-  id: number;
-  title: string;
-  date: Date;
-  isActive: boolean;
-  items: Item[];
 }

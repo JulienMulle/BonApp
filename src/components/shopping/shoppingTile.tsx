@@ -28,7 +28,7 @@ const ShoppingTile: React.FC<{item: Shopping}> = ({item}) => {
             }}>
             <Icon name="trash" size={20} style={styles.icone} />
           </TouchableOpacity>
-          <Text style={styles.name}>{item.title}</Text>
+          <Text style={styles.name}>{'hello'}</Text>
           <Text style={styles.date}>{formatDateFr}</Text>
         </View>
       </View>

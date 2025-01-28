@@ -1,17 +1,16 @@
 import React, {useEffect} from 'react';
 import {FlatList, SafeAreaView, Text, View} from 'react-native';
 import {selectShoppingIsActive} from '../redux/selectors/ShoppingSelector';
-import {fetchAllShopping} from '../redux/actions/ShoppingActions';
+import {editShopping, fetchShopping} from '../redux/actions/ShoppingActions';
 import {useNavigation} from '@react-navigation/native';
-import {editedShopping} from '../api/endpointShopping';
 import ShoppingItemTile from '../components/shopping/shoppingItemTile';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import ActionButton from '../components/ActionButton';
 import styles from '../style';
 
 const ShoppingDetailsScreen: React.FC = () => {
-  const navigation = useNavigation();
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
   const shoppingIsActive = useAppSelector(selectShoppingIsActive);
   const goToShoppingLists = () => {
     navigation.navigate('ShoppingListScreen');
@@ -22,23 +21,23 @@ const ShoppingDetailsScreen: React.FC = () => {
       date: shoppingIsActive.date,
       isActive: false,
     };
-    editedShopping(shoppingIsActive.id, checked);
+    dispatch(editShopping({id: shoppingIsActive.id, shopping: checked}));
     goToShoppingLists();
   };
   useEffect(() => {
-    dispatch(fetchAllShopping());
-    console.log(shoppingIsActive);
+    dispatch(fetchShopping());
     shoppingIsActive;
+    console.log(shoppingIsActive);
   }, [dispatch]);
 
   return (
     <SafeAreaView>
       <View style={styles.itemContainer}>
-        <Text style={styles.title}>{shoppingIsActive?.title}</Text>
+        <Text style={styles.title}>{shoppingIsActive.title}</Text>
         <FlatList
           style={styles.containerList}
-          data={shoppingIsActive?.items}
-          keyExtractor={item => item?.id?.toString() ?? ''}
+          data={shoppingIsActive.items}
+          keyExtractor={item => item?.item_id?.toString() ?? ''}
           renderItem={({item}) => <ShoppingItemTile item={item} />}
         />
       </View>

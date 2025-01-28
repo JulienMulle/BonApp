@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {Item, ShoppingItemTileProps} from '../../interface/Interface';
+import {
+  Item,
+  ItemShop,
+  ItemWithShop,
+  ShoppingItemTileProps,
+} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {deletedAssociation} from '../../redux/actions/ShoppingActions';
 import {useAppDispatch} from '../../redux/hooks';
@@ -16,6 +21,7 @@ const ShoppingItemTile: React.FC<ShoppingItemTileProps> = ({item}) => {
     dispatch(deletedAssociation({shoppingId, itemId}));
   };
   const quantityModal = (item: Item) => {
+    console.log(item);
     dispatch(setItemToQuantity(item));
     setShowPopover(true);
   };
@@ -45,7 +51,7 @@ const ShoppingItemTile: React.FC<ShoppingItemTileProps> = ({item}) => {
             </TouchableOpacity>
           }>
           <View style={styles.popoverContent}>
-            <AddToShopping />
+            <AddToShopping item={item} />
           </View>
         </Popover>
       </View>

@@ -46,29 +46,26 @@ export const createShopping = createAsyncThunk(
     }
   },
 );
-
-export const updateShopping = createAsyncThunk(
-  'shopping/patch shopping',
-  async ({
-    id,
-    shoppingUdpated,
-  }: {
-    id: number;
-    shoppingUdpated: FormData;
-  }): Promise<Shopping> => {
-    try {
-      const response = editedShopping(id, shoppingUdpated);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  },
-);
+export const editShopping = createAsyncThunk<
+  Shopping,
+  {id: number; shopping: {title: string; date: Date; isActive: boolean}},
+  {rejectValue: string}
+>('shopping/editShopping', async ({id, shopping}, {rejectWithValue}) => {
+  try {
+    const updatedShopping = await editedShopping(id, shopping);
+    return updatedShopping;
+  } catch (error) {
+    console.error(
+      'Erreur lors de la modification de la liste de courses :',
+      error,
+    );
+    return rejectWithValue('Échec de la modification de la liste de courses');
+  }
+});
 
 export const deletedShopping = createAsyncThunk(
   'shopping/delete shopping',
   async (shoppingId: number): Promise<Shopping> => {
-    console.log(shoppingId);
     try {
       const response = await deleteShopping(shoppingId);
       return response;
@@ -80,7 +77,7 @@ export const deletedShopping = createAsyncThunk(
 
 export const associationItem = createAsyncThunk<
   Shopping,
-  {shoppingId: number; itemId: number; quantity: number}
+  {shoppingId: number; itemId: number; quantity: number; name: string}
 >(
   'shopping/associateItem',
   async ({
@@ -91,6 +88,7 @@ export const associationItem = createAsyncThunk<
     shoppingId: number;
     itemId: number;
     quantity: number;
+    name: string;
   }): Promise<Shopping> => {
     try {
       const association = await associateItem(shoppingId, itemId, quantity);

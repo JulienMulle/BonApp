@@ -15,6 +15,7 @@ export const getAllShopping = async (): Promise<Shopping[]> => {
 export const getShopping = async (id: number): Promise<Shopping> => {
   try {
     const response = await axios.get(`http://10.0.2.2:5000/shopping/${id}`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -88,7 +89,6 @@ export const associateItem = async (
   itemId: number,
   quantity: number,
 ): Promise<Shopping> => {
-  console.log('action', shoppingId, itemId, quantity);
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/associateItem/${itemId}`,
@@ -120,7 +120,6 @@ export const addedQuantity = async (
   itemId: number,
   quantity: number,
 ): Promise<Shopping> => {
-  console.log('action', shoppingId, itemId, quantity);
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/Item/${itemId}`,
