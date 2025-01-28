@@ -21,7 +21,8 @@ export const selectSortedItems = createSelector([selectItems], items =>
   [...items].sort(alphaNumericSort),
 );
 export const selectRefreshing = (state: RootState) => state.items.refreshing;
-
+export const selectItemById = (state: RootState) =>
+  state.items.items.find(item => item.id === item.id);
 export const editionItem = (state: RootState) => state.items.isEdit;
 export const openedEdtionItem = createAction('items/openedEdtionItem');
 export const closeEditionItem = createAction('items/closeEditionItem');
@@ -35,5 +36,6 @@ export const openItemFormModal = createAction('items/openItemFormModal');
 export const closeItemFormModal = createAction('items/closeItemFormModal');
 export const setSearch = createAction('items/setSearch');
 export const setNewItem = createAction('items/setNewItem');
+export const setClearItem = createAction('items/setClearItem');
 export const setEdition = createAction<string>('items/setEdition');
 export const setEditItem = createAction('items/setEditItem');

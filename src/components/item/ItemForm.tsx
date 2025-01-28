@@ -6,6 +6,7 @@ import {
   Modal,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,52 +14,57 @@ import {createdItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {RootState} from '../../redux/store';
 import {
   closeItemFormModal,
-  selectIsItemFormVisible,
+  setClearItem,
   setNewItem,
 } from '../../redux/selectors/ItemSelector';
 
 const ItemForm: FC = () => {
   const dispatch = useDispatch();
-  const isItemFormVisible = useSelector((state: RootState) =>
-    selectIsItemFormVisible(state),
-  );
   const name = useSelector((state: RootState) => state.items.newItem);
   const NewItem = (name: string) => {
-    dispatch(createdItem({newItem: name}));
-    setTimeout(() => {
-      dispatch(setNewItem(''));
-    }, 5);
-    dispatch(closeItemFormModal());
-  };
-  const itemFormClose = () => {
-    dispatch(closeItemFormModal());
+    dispatch(createdItem({item: name}));
+    dispatch(setNewItem(''));
     dispatch(fetchItems());
+    dispatch(closeItemFormModal());
   };
   return (
-    <Modal visible={isItemFormVisible}>
-      <View style={styles.modalView}>
-        <TextInput
-          autoFocus={true}
-          onChangeText={addItem => dispatch(setNewItem(addItem))}
-          value={name}
-          placeholder={'nouvel article'}
-        />
-        <TouchableOpacity onPress={itemFormClose}>
-          <Icon size={30} name="times-circle" />
-        </TouchableOpacity>
-        <Button title="Ajouter" onPress={() => NewItem(name)} />
-      </View>
-    </Modal>
+    <View style={styles.modalView}>
+      <TextInput
+        style={styles.inputContainer}
+        autoFocus={true}
+        onChangeText={addItem => dispatch(setNewItem(addItem))}
+        value={name}
+        placeholder={'nouvel article'}
+      />
+      <TouchableOpacity style={styles.btnAdd} onPress={() => NewItem(name)}>
+        <Icon name="arrow-circle-right" size={30}></Icon>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   modalView: {
-    margin: 20,
-    borderRadius: 20,
-    padding: 35,
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'white',
+  },
+  inputContainer: {
+    borderWidth: 1,
+    width: 200,
+    height: 40,
+    marginTop: 10,
+    marginLeft: 10,
+  },
+  btnAdd: {
+    marginTop: 10,
+    marginRight: 10,
+    paddingTop: 4,
+    paddingLeft: 4,
+    width: 64,
+    height: 40,
   },
 });
 

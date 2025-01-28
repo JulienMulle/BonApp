@@ -12,9 +12,9 @@ export const fetchItems = createAsyncThunk('items/load', async () => {
 });
 export const createdItem = createAsyncThunk(
   'items/createItem',
-  async ({newItem}: {newItem: string}) => {
+  async ({item}: {item: string}) => {
     try {
-      const response = await createItem(newItem);
+      const response = await createItem(item);
       return response;
     } catch (error) {
       throw error;

@@ -74,6 +74,7 @@ const itemSlice = createSlice({
         state.refreshing = false;
       })
       .addCase(createdItem.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.items.push(action.payload);
       })
       .addCase(updatedItem.fulfilled, (state, action) => {
