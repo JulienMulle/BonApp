@@ -43,19 +43,20 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
           title: 'Liste de course du ',
           date: Date.now(),
           isActive: true,
+          itemId: item.id,
         }),
       );
-      isShoppingActive;
+    } else {
+      dispatch(
+        associationItem({
+          shoppingId: shoppingIsActive.id,
+          itemId: item.id,
+          quantity: 1,
+          name: item.name,
+        }),
+      );
     }
-    dispatch(
-      associationItem({
-        shoppingId: shoppingIsActive.id,
-        itemId: item.id,
-        quantity: 1,
-        name: item.name,
-      }),
-    );
-    //setShowPopover(true);
+    setShowPopover(true);
   };
 
   return (

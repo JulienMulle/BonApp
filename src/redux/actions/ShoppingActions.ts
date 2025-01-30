@@ -72,9 +72,9 @@ export const updateShopping = createAsyncThunk(
   },
 );
 
-export const deletedShopping = createAsyncThunk(
+export const deletedShopping = createAsyncThunk<number>(
   'shopping/delete shopping',
-  async (shoppingId: number): Promise<Shopping> => {
+  async (shoppingId: number): Promise<Shopping[]> => {
     try {
       const response = await deleteShopping(shoppingId);
       return response;

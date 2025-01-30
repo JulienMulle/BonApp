@@ -41,23 +41,4 @@ const ShoppingListScreen: React.FC = () => {
   );
 };
 
-const styless = StyleSheet.create({
-  itemContainer: {
-    flexDirection: 'column',
-    width: '100%',
-    justifyContent: 'flex-end',
-    paddingBottom: 10,
-  },
-  containerList: {
-    paddingTop: 10,
-    height: '87%',
-  },
-  buttonContainer: {
-    bottom: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    paddingTop: 15,
-  },
-});
 export default ShoppingListScreen;

@@ -13,8 +13,8 @@ const ShoppingTile: React.FC<{item: Shopping}> = ({item}) => {
   const dispatch = useDispatch();
   const dateToString = new Date(item.date);
   const formatDateFr = dateToString.toLocaleDateString('fr-FR');
-  const deleteShopping = ({itemid}) => {
-    dispatch(deletedShopping(itemid));
+  const deleteShopping = item => {
+    dispatch(deletedShopping(item.id));
     dispatch(fetchAllShopping);
   };
 
@@ -24,7 +24,7 @@ const ShoppingTile: React.FC<{item: Shopping}> = ({item}) => {
         <View style={styles.itemTileContent}>
           <TouchableOpacity
             onPress={() => {
-              deleteShopping(item.id);
+              deleteShopping(item);
             }}>
             <Icon name="trash" size={20} style={styles.icone} />
           </TouchableOpacity>

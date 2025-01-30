@@ -43,6 +43,7 @@ export const createdShopping = async (
         title: newShopping.title,
         date: newShopping.date,
         isActive: newShopping.isActive,
+        itemId: newShopping.itemId,
       }),
     });
     if (!response.ok) {
@@ -83,9 +84,11 @@ export const editedShopping = async (shopping: Shopping): Promise<Shopping> => {
   }
 };
 
-export const deleteShopping = async (id: number): Promise<Shopping> => {
+export const deleteShopping = async (shoppingId: number): Promise<number> => {
   try {
-    const response = await axios.delete(`http://10.0.2.2:5000/shopping/${id}`);
+    const response = await axios.delete(
+      `http://10.0.2.2:5000/shopping/${shoppingId}`,
+    );
     return response.data;
   } catch (error) {
     throw error;

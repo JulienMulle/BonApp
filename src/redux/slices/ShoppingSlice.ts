@@ -1,9 +1,10 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import {Item, Shopping} from '../../interface/Interface';
 import {
   associationItem,
   createShopping,
   deletedAssociation,
+  deletedShopping,
   fetchAllShopping,
   fetchShopping,
   fetchShoppingActive,
@@ -16,7 +17,6 @@ const shoppingSlice = createSlice({
   initialState: {
     shoppingList: {} as Shopping,
     shopping: [] as Shopping[],
-    sortedAllShopping: [] as Shopping[],
     newShopping: {} as Shopping,
     shoppingDetails: {} as Shopping,
     editedShopping: {} as Shopping,
@@ -104,6 +104,10 @@ const shoppingSlice = createSlice({
           state.shoppingDetails.items = shoppingList.items;
         }
       }
+    });
+    builder.addCase(deletedShopping.fulfilled, (state, action) => {
+      const shoppingList = action.payload;
+      state.shopping = shoppingList as unknown as Shopping[];
     });
   },
 });
