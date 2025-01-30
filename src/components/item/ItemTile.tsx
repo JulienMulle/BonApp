@@ -55,7 +55,7 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
         name: item.name,
       }),
     );
-    setShowPopover(true);
+    //setShowPopover(true);
   };
 
   return (

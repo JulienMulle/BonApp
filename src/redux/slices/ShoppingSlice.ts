@@ -49,7 +49,6 @@ const shoppingSlice = createSlice({
       const newShopping = action.payload;
       state.shopping.push(newShopping);
       state.shoppingDetails = newShopping;
-      console.log(state.shoppingDetails);
     });
     builder.addCase(fetchShopping.fulfilled, (state, action) => {
       state.shoppingList = action.payload;
@@ -68,6 +67,14 @@ const shoppingSlice = createSlice({
     builder.addCase(associationItem.fulfilled, (state, action) => {
       const shoppingActive = {...state.shoppingDetails};
       const shoppingList = action.payload;
+      /*const index = state.shopping.findIndex(
+        shop => shop.id === shoppingList.id,
+      );
+      if (index !== -1) {
+        state.shopping[index] = shoppingList;
+      }
+      à garder pour une eventuelle evol des patch des anciennes listes
+      */
       if (shoppingActive.id === shoppingList.id) {
         state.shoppingDetails = shoppingList;
       }

@@ -139,7 +139,6 @@ export const deletedAssociation = createAsyncThunk(
   }): Promise<Shopping> => {
     try {
       const association = await deleteAssociation(shoppingId, itemId);
-      console.log(association);
       return association;
     } catch (error) {
       throw error;

@@ -177,7 +177,6 @@ export const deleteAssociation = async (
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error('Erreur lors de la requête :', error);

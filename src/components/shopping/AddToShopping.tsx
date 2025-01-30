@@ -25,12 +25,6 @@ const addToShopping: React.FC<ShoppingItemTileProps> = () => {
       }),
     );
   };
-  useEffect(() => {
-    shoppingIsActive;
-    console.log(itemSelected);
-    console.log(itemQuantity);
-    console.log(shoppingIsActive);
-  }, []);
 
   return (
     <View>
