@@ -48,7 +48,7 @@ export interface ShoppingItemTileProps {
 export interface Shopping {
   id: number;
   title: string;
-  date: Date;
+  date: string | number;
   isActive: boolean;
   items: Item[];
 }

@@ -28,8 +28,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Popover from 'react-native-popover-view';
 import {Placement} from 'react-native-popover-view/dist/Types';
-import styles from '../style';
-import {useAppSelector} from '../redux/hooks';
+import {fetchAllShopping} from '../redux/actions/ShoppingActions';
 
 const ItemsList: FC = () => {
   const dispatch = useDispatch();
@@ -49,6 +48,7 @@ const ItemsList: FC = () => {
   };
   useEffect(() => {
     dispatch(fetchItems());
+    dispatch(fetchAllShopping());
   }, [dispatch]);
 
   return (

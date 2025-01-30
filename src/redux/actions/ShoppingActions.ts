@@ -8,6 +8,7 @@ import {
   associateItem,
   deleteAssociation,
   addedQuantity,
+  getShoppingActive,
 } from '../../api/endpointShopping';
 import {Shopping} from '../../interface/Interface';
 
@@ -35,6 +36,18 @@ export const fetchShopping = createAsyncThunk(
   },
 );
 
+export const fetchShoppingActive = createAsyncThunk(
+  'shopping/isActive',
+  async (): Promise<Shopping> => {
+    try {
+      const shoppingIsActive = await getShoppingActive();
+      return shoppingIsActive;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
 export const createShopping = createAsyncThunk(
   'shopping/create shopping',
   async (newShopping: Shopping): Promise<Shopping> => {
@@ -49,15 +62,9 @@ export const createShopping = createAsyncThunk(
 
 export const updateShopping = createAsyncThunk(
   'shopping/patch shopping',
-  async ({
-    id,
-    shoppingUdpated,
-  }: {
-    id: number;
-    shoppingUdpated: FormData;
-  }): Promise<Shopping> => {
+  async (shoppingUdpated: Shopping): Promise<Shopping> => {
     try {
-      const response = editedShopping(id, shoppingUdpated);
+      const response = await editedShopping(shoppingUdpated);
       return response;
     } catch (error) {
       throw error;
@@ -68,7 +75,6 @@ export const updateShopping = createAsyncThunk(
 export const deletedShopping = createAsyncThunk(
   'shopping/delete shopping',
   async (shoppingId: number): Promise<Shopping> => {
-    console.log(shoppingId);
     try {
       const response = await deleteShopping(shoppingId);
       return response;
@@ -78,10 +84,7 @@ export const deletedShopping = createAsyncThunk(
   },
 );
 
-export const associationItem = createAsyncThunk<
-  Shopping,
-  {shoppingId: number; itemId: number; quantity: number}
->(
+export const associationItem = createAsyncThunk<Shopping>(
   'shopping/associateItem',
   async ({
     shoppingId,
@@ -136,6 +139,7 @@ export const deletedAssociation = createAsyncThunk(
   }): Promise<Shopping> => {
     try {
       const association = await deleteAssociation(shoppingId, itemId);
+      console.log(association);
       return association;
     } catch (error) {
       throw error;

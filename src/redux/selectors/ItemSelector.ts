@@ -39,3 +39,6 @@ export const setNewItem = createAction('items/setNewItem');
 export const setClearItem = createAction('items/setClearItem');
 export const setEdition = createAction<string>('items/setEdition');
 export const setEditItem = createAction('items/setEditItem');
+export const setItemToQuantity = createAction('items/setItemToQuantity');
+export const selectItemForQuantity = (state: RootState) =>
+  state.items.itemToQuantity;

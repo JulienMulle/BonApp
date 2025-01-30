@@ -6,25 +6,24 @@ import {useDispatch} from 'react-redux';
 import {
   openEditItemModal,
   setEditItem,
+  setItemToQuantity,
 } from '../../redux/selectors/ItemSelector';
 import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {
   selectHasActiveShopping,
-  selectShoppingIsActive,
-  setItemToQuantity,
+  selectShoppingDetails,
 } from '../../redux/selectors/ShoppingSelector';
 import {
   associationItem,
   createShopping,
-  fetchAllShopping,
 } from '../../redux/actions/ShoppingActions';
 import {useAppSelector} from '../../redux/hooks';
 import Popover from 'react-native-popover-view';
 import AddToShopping from '../shopping/AddToShopping';
-import store, {RootState} from '../../redux/store';
 import styles from '../../style';
+import {AppDispatch} from '../../redux/store';
 const ItemTile: React.FC<ItemTileProps> = ({item}) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [showPopover, setShowPopover] = useState(false);
   const openEditModal = (item: Item) => {
     dispatch(openEditItemModal());
@@ -34,44 +33,30 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
     dispatch(deletedItem(id));
     dispatch(fetchItems());
   };
-  const shoppingIsActive = useAppSelector(selectShoppingIsActive);
+  const shoppingIsActive = useAppSelector(selectShoppingDetails);
   const isShoppingActive = useAppSelector(selectHasActiveShopping);
   const addingItemToShopping = item => {
+    dispatch(setItemToQuantity(item));
     if (!isShoppingActive) {
-      const newShoppingList = {
-        title: 'Liste de course du ',
-        date: Date.now(),
-        isActive: true,
-      };
-      dispatch(createShopping(newShoppingList)).then(() => {
-        const updatedShoppingIsActive = selectShoppingIsActive(
-          store.getState(),
-        );
-        dispatch(
-          associationItem({
-            shoppingId: updatedShoppingIsActive.id,
-            itemId: item.id,
-            quantity: 1,
-          }),
-        );
-        dispatch(setItemToQuantity(item));
-      });
-    } else {
       dispatch(
-        associationItem({
-          shoppingId: shoppingIsActive.id,
-          itemId: item.id,
-          quantity: 1,
+        createShopping({
+          title: 'Liste de course du ',
+          date: Date.now(),
+          isActive: true,
         }),
       );
-      dispatch(setItemToQuantity(item));
+      isShoppingActive;
     }
-    dispatch(fetchAllShopping());
+    dispatch(
+      associationItem({
+        shoppingId: shoppingIsActive.id,
+        itemId: item.id,
+        quantity: 1,
+        name: item.name,
+      }),
+    );
     setShowPopover(true);
   };
-  useEffect(() => {
-    dispatch(fetchAllShopping());
-  }, [dispatch]);
 
   return (
     <View style={styles.listItemContainer}>

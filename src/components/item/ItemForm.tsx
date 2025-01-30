@@ -1,20 +1,11 @@
 import React, {FC} from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  Button,
-  Modal,
-  TouchableOpacity,
-  View,
-  Text,
-} from 'react-native';
+import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {createdItem, fetchItems} from '../../redux/actions/ItemsActions';
 import {RootState} from '../../redux/store';
 import {
   closeItemFormModal,
-  setClearItem,
   setNewItem,
 } from '../../redux/selectors/ItemSelector';
 

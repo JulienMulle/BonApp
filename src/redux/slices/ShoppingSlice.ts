@@ -6,7 +6,9 @@ import {
   deletedAssociation,
   fetchAllShopping,
   fetchShopping,
+  fetchShoppingActive,
   updateQuantity,
+  updateShopping,
 } from '../actions/ShoppingActions';
 
 const shoppingSlice = createSlice({
@@ -31,19 +33,6 @@ const shoppingSlice = createSlice({
     closeModallToAdd: state => {
       state.isQuantityModalVisible = false;
     },
-    setItemToQuantity: (state, action) => {
-      state.itemToQuantity = action.payload;
-    },
-    updateItemQuantity: (
-      state,
-      action: PayloadAction<{itemId: number; quantity: number}>,
-    ) => {
-      const {itemId, quantity} = action.payload;
-      const item = state.shoppingList.items.find(item => item.id === itemId);
-      if (item) {
-        item.ShoppingItem.quantity = quantity;
-      }
-    },
   },
   extraReducers: builder => {
     builder.addCase(fetchAllShopping.fulfilled, (state, action) => {
@@ -57,7 +46,10 @@ const shoppingSlice = createSlice({
       state.refreshing = false;
     });
     builder.addCase(createShopping.fulfilled, (state, action) => {
-      state.shopping.push(action.payload);
+      const newShopping = action.payload;
+      state.shopping.push(newShopping);
+      state.shoppingDetails = newShopping;
+      console.log(state.shoppingDetails);
     });
     builder.addCase(fetchShopping.fulfilled, (state, action) => {
       state.shoppingList = action.payload;
@@ -69,57 +61,40 @@ const shoppingSlice = createSlice({
     builder.addCase(fetchShopping.rejected, state => {
       state.refreshing = false;
     });
+    builder.addCase(fetchShoppingActive.fulfilled, (state, action) => {
+      const newActiveShopping = action.payload;
+      state.shoppingDetails = newActiveShopping;
+    });
     builder.addCase(associationItem.fulfilled, (state, action) => {
-      const {shopping_id, item_id, quantity} = action.payload;
-      const createAssociation = state.shopping.find(
-        shop => shop.id === shopping_id,
-      );
-      if (createAssociation) {
-        const existingItem = createAssociation.items.find(
-          item => item.id === item_id,
-        );
-        if (existingItem) {
-          existingItem.ShoppingItem.quantity += quantity;
-        } else {
-          createAssociation.items.push({
-            ShoppingItem: {
-              shopping_id: shopping_id,
-              item_id: item_id,
-              quantity: quantity,
-            },
-            id: item_id,
-            name: '',
-          });
-        }
+      const shoppingActive = {...state.shoppingDetails};
+      const shoppingList = action.payload;
+      if (shoppingActive.id === shoppingList.id) {
+        state.shoppingDetails = shoppingList;
       }
     });
     builder.addCase(deletedAssociation.fulfilled, (state, action) => {
-      const {shopping_id, item_id} = action.payload;
-      const shoppingToUpdate = state.shopping.find(
-        shop => shop.id === shopping_id,
-      );
-      if (shoppingToUpdate) {
-        shoppingToUpdate.items = shoppingToUpdate.items.filter(
-          item => item.id !== item_id,
-        );
+      const newShoppingList = action.payload;
+      const shoppingToUpdate = {...state.shoppingDetails};
+      if (shoppingToUpdate.id === newShoppingList.id) {
+        state.shoppingDetails = newShoppingList;
+      }
+    });
+    builder.addCase(updateShopping.fulfilled, (state, action) => {
+      const shoppingUpdated = action.payload;
+      if (!shoppingUpdated.isActive) {
+        state.shoppingDetails = {} as Shopping;
       }
     });
     builder.addCase(updateQuantity.fulfilled, (state, action) => {
       const {shopping_id, item_id, quantity} = action.payload;
-      const shoppingToUpdate = state.shopping.find(shop => {
-        if (shop.items && shop.items.length > 0) {
-          return shop.items.some(
-            item => item.ShoppingItem?.shopping_id === shopping_id,
-          );
-        }
-        return false;
-      });
-      if (shoppingToUpdate) {
-        const itemTodelete = shoppingToUpdate.items.find(
+      const shoppingList = {...state.shoppingDetails};
+      if (shoppingList.id === shopping_id) {
+        const itemTodelete = shoppingList.items.find(
           item => item.id === item_id,
         );
         if (itemTodelete) {
           itemTodelete.ShoppingItem.quantity = quantity;
+          state.shoppingDetails.items = shoppingList.items;
         }
       }
     });

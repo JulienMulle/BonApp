@@ -2,18 +2,18 @@ import React, {useEffect} from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {RootState} from '../../redux/store';
-import {
-  itemForQuantity,
-  selectShoppingIsActive,
-} from '../../redux/selectors/ShoppingSelector';
+import {selectShoppingDetails} from '../../redux/selectors/ShoppingSelector';
 import {updateQuantity} from '../../redux/actions/ShoppingActions';
 import {ShoppingItemTileProps} from '../../interface/Interface';
+import {selectItemForQuantity} from '../../redux/selectors/ItemSelector';
 
 const addToShopping: React.FC<ShoppingItemTileProps> = () => {
   const dispatch = useAppDispatch();
-  const shoppingIsActive = useAppSelector(selectShoppingIsActive);
-  const itemQuantity = useAppSelector(itemForQuantity);
+  const shoppingIsActive = useAppSelector(selectShoppingDetails);
+  const itemSelected = useAppSelector(selectItemForQuantity);
+  const itemQuantity = shoppingIsActive.items.find(
+    item => item.id === itemSelected.id,
+  );
   const quantity = (delta: number) => {
     const updatedQuantity: number =
       Number(itemQuantity.ShoppingItem.quantity) + delta;
@@ -25,6 +25,12 @@ const addToShopping: React.FC<ShoppingItemTileProps> = () => {
       }),
     );
   };
+  useEffect(() => {
+    shoppingIsActive;
+    console.log(itemSelected);
+    console.log(itemQuantity);
+    console.log(shoppingIsActive);
+  }, []);
 
   return (
     <View>

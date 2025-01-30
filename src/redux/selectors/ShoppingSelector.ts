@@ -31,20 +31,11 @@ export const selectHasActiveShopping = createSelector(
 export const selectShoppingIsActive = (state: RootState) => {
   return state.shopping.shopping.find(shop => shop.isActive === true);
 };
+export const selectShoppingDetails = (state: RootState) => {
+  return state.shopping.shoppingDetails;
+};
 export const selectRefreshing = (state: RootState) => state.shopping.refreshing;
 export const selectIsQuantityVisible = (state: RootState) =>
   state.shopping.isQuantityModalVisible;
-export const selectItemToQuantity = (state: RootState) =>
-  state.shopping.itemToQuantity;
 export const openQuantityModal = createAction('shopping/openModalToAdd');
 export const closeQuantityModal = createAction('shopping/closeModallToAdd');
-export const setItemToQuantity = createAction('shopping/setItemToQuantity');
-export const itemForQuantity = createSelector(
-  [selectShoppingIsActive, selectItemToQuantity],
-  (shoppingIsActive, itemToQuantity) => {
-    if (shoppingIsActive && itemToQuantity !== undefined) {
-      return shoppingIsActive.items.find(item => item.id === itemToQuantity.id);
-    }
-    return null;
-  },
-);

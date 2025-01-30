@@ -13,6 +13,7 @@ const itemSlice = createSlice({
     items: [] as Item[],
     sortedItems: [] as Item[],
     editedItem: {} as Item,
+    itemToQuantity: {} as Item,
     search: '',
     newItem: '',
     refreshing: false,
@@ -41,6 +42,9 @@ const itemSlice = createSlice({
     },
     searchItem: (state, action) => {
       state.search = action.payload;
+    },
+    setItemToQuantity: (state, action) => {
+      state.itemToQuantity = action.payload;
     },
     setSearch: (state, action) => {
       state.search = action.payload;
@@ -74,7 +78,6 @@ const itemSlice = createSlice({
         state.refreshing = false;
       })
       .addCase(createdItem.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.items.push(action.payload);
       })
       .addCase(updatedItem.fulfilled, (state, action) => {
@@ -90,7 +93,7 @@ const itemSlice = createSlice({
       .addCase(deletedItem.fulfilled, (state, action) => {
         const itemIdToDelete = action.payload;
         const itemIndex = state.items.findIndex(
-          item => item.id === itemIdToDelete,
+          item => item.id === itemIdToDelete.id,
         );
         if (itemIndex !== -1) {
           state.items.splice(itemIndex, 1);

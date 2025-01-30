@@ -21,6 +21,15 @@ export const getShopping = async (id: number): Promise<Shopping> => {
   }
 };
 
+export const getShoppingActive = async (): Promise<Shopping> => {
+  try {
+    const response = await axios.get(`http://10.0.2.2:5000/shoppingIsActive`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const createdShopping = async (
   newShopping: Shopping,
 ): Promise<Shopping> => {
@@ -47,22 +56,22 @@ export const createdShopping = async (
   }
 };
 
-export const editedShopping = async (
-  id: number,
-  shopping: {title: string; date: Date; isActive: boolean},
-): Promise<Shopping> => {
+export const editedShopping = async (shopping: Shopping): Promise<Shopping> => {
   try {
-    const response = await fetch(`http://10.0.2.2:5000/shopping/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `http://10.0.2.2:5000/shopping/${shopping.id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: shopping.title,
+          date: shopping.date,
+          isActive: shopping.isActive,
+        }),
       },
-      body: JSON.stringify({
-        title: shopping.title,
-        date: shopping.date,
-        isActive: shopping.isActive,
-      }),
-    });
+    );
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
@@ -88,7 +97,6 @@ export const associateItem = async (
   itemId: number,
   quantity: number,
 ): Promise<Shopping> => {
-  console.log('action', shoppingId, itemId, quantity);
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/associateItem/${itemId}`,
@@ -120,7 +128,6 @@ export const addedQuantity = async (
   itemId: number,
   quantity: number,
 ): Promise<Shopping> => {
-  console.log('action', shoppingId, itemId, quantity);
   try {
     const response = await fetch(
       `http://10.0.2.2:5000/shopping/${shoppingId}/Item/${itemId}`,
@@ -170,6 +177,7 @@ export const deleteAssociation = async (
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     console.error('Erreur lors de la requête :', error);
