@@ -21,64 +21,44 @@ import {fetchItems, updatedItem} from '../../redux/actions/ItemsActions';
 import {clearEditedRecipe} from '../../redux/selectors/RecipeSelector';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 
-const EditedItemModal: FC = () => {
+const EditedItemModal: FC<{setShowEditModal: (visible: boolean) => void}> = ({
+  setShowEditModal,
+}) => {
   const dispatch = useAppDispatch();
-  const isEdited = useAppSelector((state: RootState) => editionItem(state));
-  const isEditItemVisible = useAppSelector((state: RootState) =>
-    selectIsEditItemVisible(state),
-  );
   const editedItem = useAppSelector(
     (state: RootState) => state.items.editedItem,
   );
   const editionItems = async (id: number, newName: string) => {
     dispatch(updatedItem({id, newName}));
-    dispatch(closeEditItemModal());
-    setTimeout(() => {
-      dispatch(fetchItems());
-    }, 5);
+    setShowEditModal(false);
   };
   const closeView = () => {
-    dispatch(closeEditItemModal());
-    dispatch(clearEditedRecipe());
+    setShowEditModal(false);
   };
   return (
-    <Modal visible={isEditItemVisible} transparent animationType="slide">
-      {!isEdited && (
-        <View style={styles.modalView}>
-          <TouchableOpacity onPress={() => dispatch(openedEdtionItem())}>
-            <Text>{editedItem.name}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => closeView()}>
-            <Icon name="times-circle" size={20} />
-          </TouchableOpacity>
-        </View>
-      )}
-      {isEdited && (
-        <View style={styles.modalView}>
-          <TouchableOpacity onPress={() => dispatch(closeEditionItem())}>
-            <Icon name="times-circle" size={20} />
-          </TouchableOpacity>
-          <TextInput
-            value={editedItem.name}
-            onChangeText={newName => dispatch(setEdition(newName))}
-          />
-          <TouchableOpacity
-            onPress={() => editionItems(editedItem.id, editedItem.name)}>
-            <Icon name="music" size={20} />
-          </TouchableOpacity>
-        </View>
-      )}
-    </Modal>
+    <View style={styles.modalView}>
+      <TouchableOpacity onPress={() => closeView()}>
+        <Icon name="times-circle" size={20} />
+      </TouchableOpacity>
+      <TextInput
+        value={editedItem.name}
+        onChangeText={newName => dispatch(setEdition(newName))}
+      />
+      <TouchableOpacity
+        onPress={() => editionItems(editedItem.id, editedItem.name)}>
+        <Icon name="music" size={20} />
+      </TouchableOpacity>
+    </View>
   );
 };
 export default EditedItemModal;
 
 const styles = StyleSheet.create({
   modalView: {
-    margin: 20,
-    borderRadius: 20,
-    padding: 35,
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'white',
   },
 });

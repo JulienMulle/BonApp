@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Item, ItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch} from 'react-redux';
@@ -22,12 +22,19 @@ import Popover from 'react-native-popover-view';
 import AddToShopping from '../shopping/AddToShopping';
 import styles from '../../style';
 import {AppDispatch} from '../../redux/store';
+import EditedItemModal from './EditedItemModal';
+import {Placement} from 'react-native-popover-view/dist/Types';
+
 const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch<AppDispatch>();
   const [showPopover, setShowPopover] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const openEditModal = (item: Item) => {
-    dispatch(openEditItemModal());
+    setShowEditModal(true);
     dispatch(setEditItem(item));
+  };
+  const closeEditModal = () => {
+    setShowEditModal(false);
   };
   const deleteItem = (id: number) => {
     dispatch(deletedItem(id));
@@ -66,9 +73,20 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
           <TouchableOpacity onPress={() => deleteItem(item.id)}>
             <Icon name="trash" size={20} style={styles.icone} />
           </TouchableOpacity>
-          <TouchableOpacity onLongPress={() => openEditModal(item)}>
-            <Text style={styles.name}>{item.name} </Text>
-          </TouchableOpacity>
+          <Popover
+            popoverStyle={styless.popOverContainer}
+            isVisible={showEditModal}
+            onRequestClose={() => closeEditModal()}
+            placement={Placement.BOTTOM}
+            from={
+              <TouchableOpacity onLongPress={() => openEditModal(item)}>
+                <Text style={styles.name}>{item.name} </Text>
+              </TouchableOpacity>
+            }>
+            <View>
+              <EditedItemModal setShowEditModal={setShowEditModal} />
+            </View>
+          </Popover>
         </View>
         <Popover
           isVisible={showPopover}
@@ -86,5 +104,19 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
     </View>
   );
 };
+
+const styless = StyleSheet.create({
+  container: {
+    height: '92%',
+  },
+  add: {
+    alignItems: 'center',
+  },
+  popOverContainer: {
+    width: 250,
+    height: 60,
+    borderRadius: 5,
+  },
+});
 
 export default ItemTile;

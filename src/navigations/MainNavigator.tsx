@@ -16,6 +16,7 @@ export default class MainNavigator extends React.Component {
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
             let iconName = 'default-icon';
+            let badgeCount = 0;
             switch (route.name) {
               case 'recettes':
                 iconName = focused ? 'book' : 'book';
@@ -25,6 +26,7 @@ export default class MainNavigator extends React.Component {
                 break;
               case 'liste de course':
                 iconName = focused ? 'shopping-cart' : 'shopping-cart';
+                badgeCount = 3;
                 break;
               case 'Agenda':
                 iconName = focused ? 'calendar' : 'calendar';

@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import ItemTile from '../components/item/ItemTile';
 import ItemForm from '../components/item/ItemForm';
-import EditedItemModal from '../components/item/EditedItemModal';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import {fetchItems} from '../redux/actions/ItemsActions';
@@ -18,7 +17,6 @@ import {
   closeItemFormModal,
   filterItemsByName,
   openItemFormModal,
-  selectIsEditItemVisible,
   selectIsItemFormVisible,
   selectRefreshing,
   selectSortedItems,
@@ -33,10 +31,6 @@ import {fetchAllShopping} from '../redux/actions/ShoppingActions';
 const ItemsList: FC = () => {
   const dispatch = useDispatch();
   const refreshing = useSelector((state: RootState) => selectRefreshing(state));
-
-  const isEditItemVisible = useSelector((state: RootState) =>
-    selectIsEditItemVisible(state),
-  );
   const isItemFormVisibile = useSelector((state: RootState) =>
     selectIsItemFormVisible(state),
   );
@@ -85,7 +79,6 @@ const ItemsList: FC = () => {
           <ItemForm />
         </View>
       </Popover>
-      {isEditItemVisible && <EditedItemModal />}
     </SafeAreaView>
   );
 };

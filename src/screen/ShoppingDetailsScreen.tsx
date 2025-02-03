@@ -16,7 +16,14 @@ const ShoppingDetailsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const shoppingIsActive = useAppSelector(selectShoppingDetails);
   const goToShoppingLists = () => {
-    navigation.navigate('ShoppingListScreen');
+    navigation.navigate('ShoppingListScreen' as never);
+  };
+  const formatDateString = () => {
+    const date = new Date(shoppingIsActive.date);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
   const checkedShopping = () => {
     const checked = {
@@ -36,7 +43,10 @@ const ShoppingDetailsScreen: React.FC = () => {
   return (
     <SafeAreaView>
       <View style={styles.itemContainer}>
-        <Text style={styles.title}>{shoppingIsActive?.title}</Text>
+        <View>
+          <Text style={styles.title}>{shoppingIsActive.title}</Text>
+          <Text style={styles.title}>{formatDateString()}</Text>
+        </View>
         <FlatList
           style={styles.containerList}
           data={shoppingIsActive?.items}
