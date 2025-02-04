@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {RootState} from '../../redux/store';
+import {AppDispatch, RootState} from '../../redux/store';
 import {
   closeEditionItem,
   closeEditItemModal,
@@ -20,32 +20,27 @@ import {
 import {fetchItems, updatedItem} from '../../redux/actions/ItemsActions';
 import {clearEditedRecipe} from '../../redux/selectors/RecipeSelector';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {Item} from '../../interface/Interface';
 
 const EditedItemModal: FC<{setShowEditModal: (visible: boolean) => void}> = ({
   setShowEditModal,
 }) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch<AppDispatch>();
   const editedItem = useAppSelector(
     (state: RootState) => state.items.editedItem,
   );
-  const editionItems = async (id: number, newName: string) => {
-    dispatch(updatedItem({id, newName}));
+  const editionItems = (item: Item) => {
+    dispatch(updatedItem(item));
     setShowEditModal(false);
   };
-  const closeView = () => {
-    setShowEditModal(false);
-  };
+
   return (
     <View style={styles.modalView}>
-      <TouchableOpacity onPress={() => closeView()}>
-        <Icon name="times-circle" size={20} />
-      </TouchableOpacity>
       <TextInput
         value={editedItem.name}
         onChangeText={newName => dispatch(setEdition(newName))}
       />
-      <TouchableOpacity
-        onPress={() => editionItems(editedItem.id, editedItem.name)}>
+      <TouchableOpacity onPress={() => editionItems(editedItem)}>
         <Icon name="music" size={20} />
       </TouchableOpacity>
     </View>

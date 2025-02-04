@@ -81,14 +81,12 @@ const itemSlice = createSlice({
         state.items.push(action.payload);
       })
       .addCase(updatedItem.fulfilled, (state, action) => {
-        const {id, updatedItemData} = action.payload;
-        const itemIndex = state.items.findIndex(item => item.id === id);
-        if (itemIndex !== -1) {
-          state.items[itemIndex] = {
-            ...state.items[itemIndex],
-            ...updatedItemData,
-          };
-        }
+        const updatedItemData = action.payload;
+        const itemList = [...state.items];
+        const itemIndex = itemList.find(item => item.id === updatedItemData.id);
+        state.items = state.items.map(item =>
+          item.id === updatedItemData.id ? updatedItemData : item,
+        );
       })
       .addCase(deletedItem.fulfilled, (state, action) => {
         const itemIdToDelete = action.payload;

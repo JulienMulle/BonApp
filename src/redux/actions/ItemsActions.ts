@@ -5,6 +5,7 @@ import {
   editItem,
   createItem,
 } from '../../api/endpointItem';
+import {Item} from '../../interface/Interface';
 
 export const fetchItems = createAsyncThunk('items/load', async () => {
   const items = await getItems();
@@ -23,9 +24,9 @@ export const createdItem = createAsyncThunk(
 );
 export const updatedItem = createAsyncThunk(
   'items/updateItem',
-  async ({id, newName}: {id: number; newName: string}) => {
+  async (newItem: Item) => {
     try {
-      const response = editItem(id, newName);
+      const response = editItem(newItem);
       return response;
     } catch (error) {
       throw error;

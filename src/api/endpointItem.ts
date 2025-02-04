@@ -30,15 +30,18 @@ export const createItem = async (name: string) => {
   }
 };
 
-export const editItem = async (id: number, editedItem: string) => {
+export const editItem = async (updatedItem: Item) => {
   try {
-    const response = await fetch(`http://10.0.2.2:5000/item/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `http://10.0.2.2:5000/item/${updatedItem.id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({name: updatedItem.name}),
       },
-      body: JSON.stringify({name: editedItem}),
-    });
+    );
     if (!response.ok) {
       throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
     }
