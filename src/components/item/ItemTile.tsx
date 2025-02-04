@@ -4,7 +4,6 @@ import {Item, ItemTileProps} from '../../interface/Interface';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch} from 'react-redux';
 import {
-  openEditItemModal,
   setEditItem,
   setItemToQuantity,
 } from '../../redux/selectors/ItemSelector';
@@ -38,7 +37,6 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   };
   const deleteItem = (id: number) => {
     dispatch(deletedItem(id));
-    dispatch(fetchItems());
   };
   const shoppingIsActive = useAppSelector(selectShoppingDetails);
   const isShoppingActive = useAppSelector(selectHasActiveShopping);

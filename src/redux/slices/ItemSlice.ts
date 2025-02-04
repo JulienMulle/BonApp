@@ -78,24 +78,17 @@ const itemSlice = createSlice({
         state.refreshing = false;
       })
       .addCase(createdItem.fulfilled, (state, action) => {
-        state.items.push(action.payload);
+        state.items = action.payload;
       })
       .addCase(updatedItem.fulfilled, (state, action) => {
         const updatedItemData = action.payload;
-        const itemList = [...state.items];
-        const itemIndex = itemList.find(item => item.id === updatedItemData.id);
         state.items = state.items.map(item =>
           item.id === updatedItemData.id ? updatedItemData : item,
         );
       })
       .addCase(deletedItem.fulfilled, (state, action) => {
         const itemIdToDelete = action.payload;
-        const itemIndex = state.items.findIndex(
-          item => item.id === itemIdToDelete.id,
-        );
-        if (itemIndex !== -1) {
-          state.items.splice(itemIndex, 1);
-        }
+        state.items = itemIdToDelete;
       });
   },
 });

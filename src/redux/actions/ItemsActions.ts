@@ -13,7 +13,7 @@ export const fetchItems = createAsyncThunk('items/load', async () => {
 });
 export const createdItem = createAsyncThunk(
   'items/createItem',
-  async ({item}: {item: string}) => {
+  async ({item}: {item: string}): Promise<Item[]> => {
     try {
       const response = await createItem(item);
       return response;

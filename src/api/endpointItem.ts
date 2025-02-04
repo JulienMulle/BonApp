@@ -11,7 +11,7 @@ export const getItems = async (): Promise<Item[]> => {
   }
 };
 
-export const createItem = async (name: string) => {
+export const createItem = async (name: string): Promise<Item[]> => {
   try {
     const response = await fetch('http://10.0.2.2:5000/item/', {
       method: 'POST',
@@ -51,9 +51,9 @@ export const editItem = async (updatedItem: Item) => {
   }
 };
 
-export const deleteItem = async (id: number): Promise<Item> => {
+export const deleteItem = async (id: number): Promise<Item[]> => {
   try {
-    const response = await axios.delete<Item>(
+    const response = await axios.delete<Item[]>(
       `http://10.0.2.2:5000/item/${id}`,
     );
     return response.data;
