@@ -78,7 +78,11 @@ const itemSlice = createSlice({
         state.refreshing = false;
       })
       .addCase(createdItem.fulfilled, (state, action) => {
-        state.items = action.payload;
+        const newItem = action.payload;
+        const itemExist = state.items.some(item => item.id === newItem.id);
+        if (!itemExist) {
+          state.items.push(newItem);
+        }
       })
       .addCase(updatedItem.fulfilled, (state, action) => {
         const updatedItemData = action.payload;
@@ -88,7 +92,7 @@ const itemSlice = createSlice({
       })
       .addCase(deletedItem.fulfilled, (state, action) => {
         const itemIdToDelete = action.payload;
-        state.items = itemIdToDelete;
+        state.items = state.items.filter(item => item.id !== itemIdToDelete);
       });
   },
 });

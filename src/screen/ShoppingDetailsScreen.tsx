@@ -45,7 +45,6 @@ const ShoppingDetailsScreen: React.FC = () => {
       <View style={styles.itemContainer}>
         <View>
           <Text style={styles.title}>{shoppingIsActive.title}</Text>
-          <Text style={styles.title}>{formatDateString()}</Text>
         </View>
         <FlatList
           style={styles.containerList}

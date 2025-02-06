@@ -11,6 +11,7 @@ import {
   updateQuantity,
   updateShopping,
 } from '../actions/ShoppingActions';
+import {RootState} from '../store';
 
 const shoppingSlice = createSlice({
   name: 'shopping',
@@ -32,6 +33,9 @@ const shoppingSlice = createSlice({
     },
     closeModallToAdd: state => {
       state.isQuantityModalVisible = false;
+    },
+    updateShoppingList: (state, action) => {
+      state.shoppingDetails.items = action.payload;
     },
   },
   extraReducers: builder => {

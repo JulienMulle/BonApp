@@ -11,7 +11,7 @@ export const getItems = async (): Promise<Item[]> => {
   }
 };
 
-export const createItem = async (name: string): Promise<Item[]> => {
+export const createItem = async (name: string): Promise<Item> => {
   try {
     const response = await fetch('http://10.0.2.2:5000/item/', {
       method: 'POST',
@@ -51,12 +51,12 @@ export const editItem = async (updatedItem: Item) => {
   }
 };
 
-export const deleteItem = async (id: number): Promise<Item[]> => {
+export const deleteItem = async (id: number): Promise<number> => {
   try {
-    const response = await axios.delete<Item[]>(
+    const response = await axios.delete<number>(
       `http://10.0.2.2:5000/item/${id}`,
     );
-    return response.data;
+    return response.status;
   } catch (error) {
     console.error("Erreur lors de la suppression de l'élément:", error);
     throw error;

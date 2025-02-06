@@ -13,9 +13,9 @@ export const fetchItems = createAsyncThunk('items/load', async () => {
 });
 export const createdItem = createAsyncThunk(
   'items/createItem',
-  async ({item}: {item: string}): Promise<Item[]> => {
+  async (name: string): Promise<Item> => {
     try {
-      const response = await createItem(item);
+      const response = await createItem(name);
       return response;
     } catch (error) {
       throw error;
@@ -38,7 +38,9 @@ export const deletedItem = createAsyncThunk(
   async (itemId: number) => {
     try {
       const response = await deleteItem(itemId);
-      return response;
+      if (response === 204) {
+        return itemId;
+      }
     } catch (error) {
       throw error;
     }

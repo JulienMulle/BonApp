@@ -7,14 +7,16 @@ import {
   setEditItem,
   setItemToQuantity,
 } from '../../redux/selectors/ItemSelector';
-import {deletedItem, fetchItems} from '../../redux/actions/ItemsActions';
+import {deletedItem} from '../../redux/actions/ItemsActions';
 import {
   selectHasActiveShopping,
   selectShoppingDetails,
+  setUpdateShoppingList,
 } from '../../redux/selectors/ShoppingSelector';
 import {
   associationItem,
   createShopping,
+  fetchShoppingActive,
 } from '../../redux/actions/ShoppingActions';
 import {useAppSelector} from '../../redux/hooks';
 import Popover from 'react-native-popover-view';
@@ -26,6 +28,8 @@ import {Placement} from 'react-native-popover-view/dist/Types';
 
 const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const dispatch = useDispatch<AppDispatch>();
+  const shoppingIsActive = useAppSelector(selectShoppingDetails);
+  const isShoppingActive = useAppSelector(selectHasActiveShopping);
   const [showPopover, setShowPopover] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const openEditModal = (item: Item) => {
@@ -35,32 +39,37 @@ const ItemTile: React.FC<ItemTileProps> = ({item}) => {
   const closeEditModal = () => {
     setShowEditModal(false);
   };
-  const deleteItem = (id: number) => {
-    dispatch(deletedItem(id));
+  const deleteItem = async (id: number) => {
+    await dispatch(deletedItem(id)).unwrap();
+    const itemInShopping = shoppingIsActive.items.some(item => item.id === id);
+    if (itemInShopping) {
+      const newShoppingDetails = shoppingIsActive.items.filter(
+        item => item.id !== id,
+      );
+      dispatch(setUpdateShoppingList(newShoppingDetails));
+    }
   };
-  const shoppingIsActive = useAppSelector(selectShoppingDetails);
-  const isShoppingActive = useAppSelector(selectHasActiveShopping);
-  const addingItemToShopping = item => {
+
+  const addingItemToShopping = async item => {
     dispatch(setItemToQuantity(item));
     if (!isShoppingActive) {
-      dispatch(
+      await dispatch(
         createShopping({
           title: 'Liste de course du ',
           date: Date.now(),
           isActive: true,
           itemId: item.id,
         }),
-      );
-    } else {
-      dispatch(
-        associationItem({
-          shoppingId: shoppingIsActive.id,
-          itemId: item.id,
-          quantity: 1,
-          name: item.name,
-        }),
-      );
+      ).unwrap();
     }
+    dispatch(
+      associationItem({
+        shoppingId: shoppingIsActive.id,
+        itemId: item.id,
+        quantity: 1,
+        name: item.name,
+      }),
+    );
     setShowPopover(true);
   };
 

@@ -34,6 +34,9 @@ export const selectShoppingIsActive = (state: RootState) => {
 export const selectShoppingDetails = (state: RootState) => {
   return state.shopping.shoppingDetails;
 };
+export const setUpdateShoppingList = createAction(
+  'shopping/updateShoppingList',
+);
 export const selectRefreshing = (state: RootState) => state.shopping.refreshing;
 export const selectIsQuantityVisible = (state: RootState) =>
   state.shopping.isQuantityModalVisible;

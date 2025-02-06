@@ -13,9 +13,8 @@ const ItemForm: FC = () => {
   const dispatch = useDispatch();
   const name = useSelector((state: RootState) => state.items.newItem);
   const NewItem = (name: string) => {
-    dispatch(createdItem({item: name}));
+    dispatch(createdItem(name));
     dispatch(setNewItem(''));
-    dispatch(fetchItems());
     dispatch(closeItemFormModal());
   };
   return (
