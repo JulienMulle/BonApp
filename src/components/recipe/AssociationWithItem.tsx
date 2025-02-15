@@ -43,7 +43,7 @@ const AssociationWithItem: FC = () => {
   };
   useEffect(() => {
     dispatch(fetchItems());
-  }, [dispatch]);
+  }, []);
   return (
     <Modal visible={isAssociate} animationType="slide">
       <View style={styles.closeButton}>
@@ -57,11 +57,13 @@ const AssociationWithItem: FC = () => {
           numColumns={2}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
-            <View style={styles.container}>
-              <TouchableOpacity onPress={() => addItem(item.id)}>
+            <TouchableOpacity
+              style={styles.container}
+              onPress={() => addItem(item.id)}>
+              <View>
                 <Text>{item.name}</Text>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
           )}
         />
       </View>

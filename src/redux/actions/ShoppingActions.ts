@@ -9,7 +9,7 @@ import {
   deleteAssociation,
   addedQuantity,
   getShoppingActive,
-} from '../../api/endpointShopping';
+} from '../services/endpointShopping';
 import {Shopping} from '../../interface/Interface';
 
 export const fetchAllShopping = createAsyncThunk(

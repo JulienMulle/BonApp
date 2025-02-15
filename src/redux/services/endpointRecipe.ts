@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Recipe} from '../interface/Interface';
+import {Recipe} from '../../interface/Interface';
 
 export const getRecipes = async (): Promise<Recipe[]> => {
   try {

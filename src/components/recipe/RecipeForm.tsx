@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -14,58 +14,35 @@ import {RootState} from '../../redux/store';
 import {
   closeFormModal,
   closeIsEdit,
-  selectIsEdit,
   selectIsFormVisible,
   setNewRecipe,
 } from '../../redux/selectors/RecipeSelector';
-import {
-  createdRecipe,
-  updatedRecipe,
-  fetchRecipe,
-} from '../../redux/actions/RecipesActions';
+import {createdRecipe} from '../../redux/actions/RecipesActions';
 import {Recipe} from '../../interface/Interface';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+// @ts-ignore
+import noImage from '../../assets/noImage.jpg';
 const RecipeForm: FC = () => {
-  const recipeToEdit = useAppSelector(
-    (state: RootState) => state.recipe.editedRecipe,
-  );
-  const [file, setFile] = useState(recipeToEdit.picture);
+  const [file, setFile] = useState();
   const dispatch = useAppDispatch();
-  const isEdited = useAppSelector((state: RootState) => selectIsEdit(state));
   const isFormVisible = useAppSelector((state: RootState) =>
     selectIsFormVisible(state),
   );
   const newRecipe = useAppSelector(
     (state: RootState) => state.recipe.newRecipe,
   );
-  useEffect(() => {
-    if (recipeToEdit && !file) {
-      dispatch(setNewRecipe({...recipeToEdit, picture: recipeToEdit.picture}));
-    }
-  }, [dispatch, recipeToEdit, file]);
 
   const createRecipe = (newRecipe: Recipe) => {
-    if (isEdited) {
-      const formData = new FormData();
-      formData.append('title', newRecipe.title);
-      formData.append('description', newRecipe.description);
-      formData.append('picture', {
-        uri: file,
-        type: 'image/jpeg',
-        name: 'recipe_image.jpg',
-      });
-      dispatch(updatedRecipe({id: newRecipe.id, recipeUpdated: formData}));
-    } else {
-      const formData = new FormData();
-      formData.append('title', newRecipe.title);
-      formData.append('description', newRecipe.description);
-      formData.append('picture', {
-        uri: file,
-        type: 'image/jpeg',
-        name: 'recipe_image.jpg',
-      });
-      dispatch(createdRecipe({newRecipe: formData}));
-    }
+    const formData = new FormData();
+    formData.append('title', newRecipe.title);
+    formData.append('description', newRecipe.description);
+    formData.append('picture', {
+      uri: file,
+      type: 'image/jpeg',
+      name: 'recipe_image.jpg',
+    });
+    dispatch(createdRecipe({newRecipe: formData}));
+    dispatch(setNewRecipe(null));
     closeModal();
   };
   const closeModal = () => {
@@ -92,7 +69,12 @@ const RecipeForm: FC = () => {
         if (!response.didCancel && !response.errorMessage) {
           const selectedImageUri = response.assets[0].uri;
           setFile(selectedImageUri);
-          dispatch(setNewRecipe({...newRecipe, picture: selectedImageUri}));
+          dispatch(
+            setNewRecipe({
+              ...newRecipe,
+              picture: selectedImageUri ? selectedImageUri : noImage,
+            }),
+          );
         }
       });
     }
@@ -112,7 +94,6 @@ const RecipeForm: FC = () => {
           onChangeText={text =>
             dispatch(setNewRecipe({...newRecipe, title: text}))
           }
-          value={newRecipe.title}
           placeholder="titre"
         />
         <TextInput
@@ -124,7 +105,6 @@ const RecipeForm: FC = () => {
           onChangeText={description =>
             dispatch(setNewRecipe({...newRecipe, description: description}))
           }
-          value={newRecipe.description}
           placeholder="description"
         />
         <View style={styles.buttonContainer}>

@@ -4,7 +4,7 @@ import {
   getItems,
   editItem,
   createItem,
-} from '../../api/endpointItem';
+} from '../services/endpointItem';
 import {Item} from '../../interface/Interface';
 
 export const fetchItems = createAsyncThunk('items/load', async () => {

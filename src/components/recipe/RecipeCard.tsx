@@ -14,7 +14,6 @@ import {openDeleteModal} from '../../redux/selectors/RecipeSelector';
 import {fetchRecipe} from '../../redux/actions/RecipesActions';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch} from '../../redux/hooks';
-import ActionButton from '../ActionButton';
 
 const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
   const dispatch = useAppDispatch();
@@ -35,7 +34,7 @@ const RecipeCard: FC<RecipesCardProps> = ({recipe}) => {
           onPress={goRecipeDetails}>
           <Image
             resizeMode="contain"
-            source={{uri: recipe.picture || noImage}}
+            source={{uri: recipe.picture ? recipe.picture : noImage}}
             style={styles.recipeImage}
           />
           <View style={styles.recipeTitle}>

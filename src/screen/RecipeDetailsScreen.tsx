@@ -17,7 +17,7 @@ import {
   openFormModal,
   selectIsAssociationModal,
   selectIsFormVisible,
-  setRecipe,
+  setRecipeForEditing,
 } from '../redux/selectors/RecipeSelector';
 import {
   fetchRecipe,
@@ -46,16 +46,14 @@ const RecipeDetailsModal: FC = () => {
   );
   const returnToRecipeScreen = () => {
     navigation.goBack();
-    dispatch(fetchRecipes());
-    dispatch(clearEditedRecipe());
   };
   const deleteAssociation = async (id: number) => {
     dispatch(removeAssociation({itemId: id, recipeId: recipeDetails.id}));
     dispatch(fetchRecipe(recipeDetails.id));
   };
   const editedRecipe = () => {
+    dispatch(setRecipeForEditing(recipeDetails));
     dispatch(openedIsEdit());
-    dispatch(setRecipe(recipeDetails));
     dispatch(openFormModal());
   };
 

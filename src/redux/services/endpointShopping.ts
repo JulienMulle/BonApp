@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Shopping} from '../interface/Interface';
+import {Shopping} from '../../interface/Interface';
 
 export const getAllShopping = async (): Promise<Shopping[]> => {
   try {

@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ItemsScreen from '../screen/ItemsScreen';
 import PlanningScreen from '../screen/PlanningScreen';
 import {StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import ShoppingStack from './ShoppingStack';
 import RecipesStack from './RecipeStack';
 
@@ -19,17 +19,17 @@ export default class MainNavigator extends React.Component {
             let badgeCount = 0;
             switch (route.name) {
               case 'recettes':
-                iconName = focused ? 'book' : 'book';
+                iconName = focused ? 'book-open' : 'book';
                 break;
               case 'ingrédients':
-                iconName = focused ? 'list-ul' : 'list-ul';
+                iconName = focused ? 'list-alt' : 'list-ul';
                 break;
               case 'liste de course':
-                iconName = focused ? 'shopping-cart' : 'shopping-cart';
+                iconName = 'shopping-cart';
                 badgeCount = 3;
                 break;
               case 'Agenda':
-                iconName = focused ? 'calendar' : 'calendar';
+                iconName = 'calendar';
                 break;
               default:
                 break;

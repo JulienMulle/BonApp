@@ -7,7 +7,7 @@ import {
   associateItemWithRecipe,
   deleteItemAssociationWithRecipe,
   getRecipe,
-} from '../../api/endpointRecipe';
+} from '../services/endpointRecipe';
 
 export const fetchRecipes = createAsyncThunk('recipes/load', async () => {
   try {
