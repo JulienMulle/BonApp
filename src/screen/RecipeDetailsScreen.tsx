@@ -14,8 +14,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   openAssociationModal,
   openedIsEdit,
+  openEditModal,
   openFormModal,
   selectIsAssociationModal,
+  selectIsEdit,
   selectIsFormVisible,
   setRecipeForEditing,
 } from '../redux/selectors/RecipeSelector';
@@ -31,6 +33,7 @@ import ItemTile from '../components/item/ItemTile';
 import AssociationWithItem from '../components/recipe/AssociationWithItem';
 import RecipeForm from '../components/recipe/RecipeForm';
 import ActionButton from '../components/ActionButton';
+import RecipeEditForm from '../components/recipe/RecipeEditForm';
 
 const RecipeDetailsModal: FC = () => {
   const dispatch = useDispatch();
@@ -38,9 +41,7 @@ const RecipeDetailsModal: FC = () => {
   const recipeDetails = useSelector(
     (state: RootState) => state.recipe.recipeDetails,
   );
-  const isEdited = useSelector((state: RootState) =>
-    selectIsFormVisible(state),
-  );
+  const isEdited = useSelector((state: RootState) => selectIsEdit(state));
   const isAssociate = useSelector((state: RootState) =>
     selectIsAssociationModal(state),
   );
@@ -54,7 +55,6 @@ const RecipeDetailsModal: FC = () => {
   const editedRecipe = () => {
     dispatch(setRecipeForEditing(recipeDetails));
     dispatch(openedIsEdit());
-    dispatch(openFormModal());
   };
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const RecipeDetailsModal: FC = () => {
           </View>
         </ScrollView>
       )}
-      {isEdited && <RecipeForm />}
+      {isEdited && <RecipeEditForm />}
     </SafeAreaView>
   );
 };

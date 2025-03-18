@@ -35,6 +35,7 @@ export const openAssociationModal = createAction('recipe/openAssociationModal');
 export const closeAssociationModal = createAction(
   'recipe/closeAssociationModal',
 );
+export const openEditModal = createAction('recipe/openEditModal');
 export const openFormModal = createAction('recipe/openFormModal');
 export const closeFormModal = createAction('recipe/closeFormModal');
 export const openDeleteModal = createAction('recipe/openedDeleteModal');

@@ -10,7 +10,10 @@ import {
 // @ts-ignore
 import noImage from '../../assets/noImage.jpg';
 import {RecipesCardProps} from '../../interface/Interface';
-import {openDeleteModal} from '../../redux/selectors/RecipeSelector';
+import {
+  openDeleteModal,
+  setRecipeForEditing,
+} from '../../redux/selectors/RecipeSelector';
 import {fetchRecipe} from '../../redux/actions/RecipesActions';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch} from '../../redux/hooks';

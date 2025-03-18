@@ -37,7 +37,7 @@ const ItemsList: FC = () => {
   const filteredItem = useSelector((state: RootState) => state.items.search);
   const sortedItems = useSelector(selectSortedItems);
   const CloseFormModal = () => {
-    dispatch(setNewItem(''));
+    dispatch(setNewItem(null));
     dispatch(closeItemFormModal());
   };
   useEffect(() => {

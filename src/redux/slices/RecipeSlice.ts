@@ -32,12 +32,6 @@ const recipeSlice = createSlice({
     closedIsEdit: state => {
       state.isEdit = false;
     },
-    openedDeleteModal: state => {
-      state.isDeleteModalVisible = true;
-    },
-    closeDeleteModal: state => {
-      state.isDeleteModalVisible = false;
-    },
     openAssociationModal: state => {
       state.isAssociationModalVisible = true;
     },
@@ -89,8 +83,16 @@ const recipeSlice = createSlice({
         state.recipes.push(action.payload);
       })
       .addCase(updatedRecipe.fulfilled, (state, action) => {
-        const {id, updatedRecipe} = action.payload;
-        const recipeIndex = state.recipes.findIndex(recipe => recipe.id === id);
+        const updatedRecipe = action.payload;
+        if (updatedRecipe.id === state.editedRecipe.id) {
+          state.recipeDetails = {
+            ...state.recipeDetails,
+            ...updatedRecipe,
+          };
+        }
+        const recipeIndex = state.recipes.findIndex(
+          recipe => recipe.id === updatedRecipe.id,
+        );
         if (recipeIndex !== -1) {
           state.recipes[recipeIndex] = {
             ...state.recipes[recipeIndex],

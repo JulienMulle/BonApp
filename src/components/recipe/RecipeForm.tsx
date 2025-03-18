@@ -28,6 +28,9 @@ const RecipeForm: FC = () => {
   const isFormVisible = useAppSelector((state: RootState) =>
     selectIsFormVisible(state),
   );
+  const editRecipe = useAppSelector(
+    (state: RootState) => state.recipe.editedRecipe,
+  );
   const newRecipe = useAppSelector(
     (state: RootState) => state.recipe.newRecipe,
   );
@@ -46,7 +49,6 @@ const RecipeForm: FC = () => {
     closeModal();
   };
   const closeModal = () => {
-    dispatch(closeIsEdit());
     dispatch(closeFormModal());
   };
   const selectFile = async (mode: string) => {
@@ -91,13 +93,14 @@ const RecipeForm: FC = () => {
           autoFocus={true}
           autoCapitalize={'sentences'}
           style={styles.input}
+          defaultValue={editRecipe.title}
           onChangeText={text =>
             dispatch(setNewRecipe({...newRecipe, title: text}))
           }
           placeholder="titre"
         />
         <TextInput
-          autoCapitalize={'sentences'}
+          autoCapitalize="sentences"
           multiline={true}
           numberOfLines={5}
           maxLength={50}

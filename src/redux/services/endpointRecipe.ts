@@ -44,9 +44,6 @@ export const editeRecipe = async (id: number, editedRecipe: FormData) => {
   try {
     const response = await fetch(`http://10.0.2.2:5000/recipe/${id}`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body: editedRecipe,
     });
     if (!response.ok) {
